@@ -1,23 +1,25 @@
 #pragma once
 #include <ostream>
-#include "Point.hpp"
+#include "Vector.hpp"
+#include "Plane.hpp"
 
 class Ray
 {
 private:
-    Point _origin, _direction;
+    Vector _origin, _direction;
 
 public:
-    Ray(Point origin, Point direction);
+    Ray(Vector origin, Vector direction);
 
     // accessors
-    Point origin() const;
-    Point direction() const;
-    bool hit(Point point) const;
+    Vector origin() const;
+    Vector direction() const;
+    bool hit(Vector point) const;
+    bool hit(Plane plane) const;
 
-    Point getPoint(int length) const;
-    Point getPoint(double length) const;
-    Point getPoint(float length) const;
+    Vector getPoint(int length) const;
+    Vector getPoint(double length) const;
+    Vector getPoint(float length) const;
 
     friend std::ostream &operator<<(std::ostream &out, const Ray &ray);
 };

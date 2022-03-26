@@ -1,11 +1,11 @@
 #pragma once
-#include "Point.hpp"
+#include "Vector.hpp"
 
 class Plane
 {
 private:
-    Point _origin, _normal;
+    Vector _origin, _normal;
 
 public:
-    Plane(Point origin, Point normal);
+    Plane(Vector origin, Vector normal);
 };

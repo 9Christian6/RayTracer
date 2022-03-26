@@ -18,11 +18,11 @@ INCLUDE_DIRECTORIES(
 add_executable(RayTracer 
 src/main.cpp
 src/Ray.cpp
-src/Point.cpp
+src/Vector.cpp
 src/PrecisionFraction.cpp
 src/Plane.cpp
 include/Ray.hpp
-include/Point.hpp
+include/Vector.hpp
 include/PrecisionFraction.hpp
 include/Exception.hpp
 include/Plane.hpp)
