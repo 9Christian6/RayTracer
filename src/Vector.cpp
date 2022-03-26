@@ -105,9 +105,16 @@ bool operator==(const Vector &lhs, const Vector &rhs)
     return (lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == rhs.z());
 }
 
-bool Vector::parallel(const Vector &vec) const
+bool Vector::orthogonal(const Vector &vec) const
 {
     return ((*this) * vec) == 0;
+}
+
+Vector Vector::normalize() const
+{
+    pfrac::PrecisionFraction length = pfrac::sqrt(_x * _x + _y * _y + _z * _z);
+    Vector result{*this};
+    return result * (1 / length.approxRealValue());
 }
 
 std::ostream &operator<<(std::ostream &stream, Vector point)
