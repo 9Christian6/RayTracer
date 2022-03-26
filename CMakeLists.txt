@@ -21,6 +21,7 @@ src/Ray.cpp
 src/Vector.cpp
 src/PrecisionFraction.cpp
 src/Plane.cpp
+include/fEquals.hpp
 include/Ray.hpp
 include/Vector.hpp
 include/PrecisionFraction.hpp
