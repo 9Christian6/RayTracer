@@ -46,7 +46,7 @@ bool Ray::hit(Vector point) const
 
 bool Ray::hit(Plane plane) const
 {
-    throw Exception{"not implemented"};
+    throw Exception{"Not Implemented"};
 }
 
 Vector Ray::getPoint(int length) const

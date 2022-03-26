@@ -25,9 +25,11 @@ public:
     float y_f() const;
     float z_f() const;
 
+    bool parallel(const Vector &vec) const;
+
     friend Vector operator+(const Vector &lhs, const Vector &rhs);
     friend Vector operator-(const Vector &lhs, const Vector &rhs);
-    friend Vector operator*(const Vector &lhs, const Vector &rhs);
+    friend pfrac::PrecisionFraction operator*(const Vector &lhs, const Vector &rhs);
     friend Vector operator*(const Vector &lhs, int length);
     friend Vector operator*(const Vector &lhs, float length);
     friend Vector operator*(const Vector &lhs, double length);

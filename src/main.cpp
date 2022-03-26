@@ -3,10 +3,12 @@
 #include <Eigen/Core>
 #include "Ray.hpp"
 #include "Vector.hpp"
+#include "Plane.hpp"
 #include "Exception.hpp"
 
 int main(int, char **)
 {
+    Plane testPlane{Vector{0, 0, 0}, Vector{0, 1, 0}};
     Vector point0{0, 0, 0};
     Vector point1{1, 0, 0};
     Vector point2{0, 1, 0};
@@ -16,6 +18,5 @@ int main(int, char **)
     Vector point6{1, 1, 0};
     Vector point7{1, 1, 1};
     Ray ray{point0, point1};
-    std::cout << (point0.x() == 0) << "\n"
-              << (point0.x() != 0) << "\n";
+    std::cout << point1.parallel(point7) << "\n";
 }

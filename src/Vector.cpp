@@ -3,7 +3,6 @@
 Vector::Vector() : _x{0}, _y{0}, _z{0} {};
 Vector::Vector(int x, int y, int z) : _x{x}, _y{y}, _z{z} {};
 Vector::Vector(double x, double y, double z) : _x{x}, _y{y}, _z{z} {};
-// Point::Point(float x, float y, float z) : _x{x}, _y{y}, _z{z} {};
 Vector::Vector(pfrac::PrecisionFraction x, pfrac::PrecisionFraction y, pfrac::PrecisionFraction z) : _x{x}, _y{y}, _z{z} {};
 
 pfrac::PrecisionFraction Vector::x() const
@@ -61,9 +60,9 @@ Vector operator-(const Vector &lhs, const Vector &rhs)
     return Vector(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
 }
 
-Vector operator*(const Vector &lhs, const Vector &rhs)
+pfrac::PrecisionFraction operator*(const Vector &lhs, const Vector &rhs)
 {
-    return Vector(lhs.x() * rhs.x(), lhs.y() * rhs.y(), lhs.z() * rhs.z());
+    return lhs.x() * rhs.x() + lhs.y() * rhs.y() + lhs.z() * rhs.z();
 }
 
 Vector operator*(const Vector &lhs, int length)
@@ -104,6 +103,11 @@ Vector operator/(const Vector &lhs, const Vector &rhs)
 bool operator==(const Vector &lhs, const Vector &rhs)
 {
     return (lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == rhs.z());
+}
+
+bool Vector::parallel(const Vector &vec) const
+{
+    return ((*this) * vec) == 0;
 }
 
 std::ostream &operator<<(std::ostream &stream, Vector point)
