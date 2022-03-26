@@ -1,4 +1,5 @@
 #include "PrecisionFraction.hpp"
+#include <math.h>
 #include <iostream>
 
 namespace pfrac

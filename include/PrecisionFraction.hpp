@@ -64,6 +64,11 @@ namespace pfrac
         std::string _fracStr;
     };
 
+    inline PrecisionFraction sqrt(const PrecisionFraction &frac)
+    {
+        return PrecisionFraction{std::sqrt(frac.approxRealValue())};
+    }
+
     inline PrecisionFraction abs(const PrecisionFraction &f)
     {
         mpq_t temp;
