@@ -46,7 +46,9 @@ bool Ray::hit(Vector point) const
 
 bool Ray::hit(Plane plane) const
 {
-    throw Exception{"Not Implemented"};
+    if (_direction * plane.normal() == 0)
+        return (plane.conatins(_origin));
+    return true;
 }
 
 Vector Ray::getPoint(int length) const
