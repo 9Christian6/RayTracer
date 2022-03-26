@@ -125,6 +125,17 @@ Vector Ray::getHit(const Vector &point) const
     throw Exception{"getHit was called without the Ray hitting the point"};
 }
 
+Vector Ray::getHit(const Plane &plane) const
+{
+    if (!hit(plane))
+        throw Exception{"getHit was called without Ray hitting plane"};
+    if (isIn(plane))
+        return _origin;
+    pfrac::PrecisionFraction denom{plane.normal() * _direction};
+    pfrac::PrecisionFraction t{((plane.origin() - _origin) * plane.normal()) / denom};
+    return getPoint(t);
+}
+
 Vector Ray::getPoint(int length) const
 {
     return _origin + (_direction * length);
@@ -136,6 +147,11 @@ Vector Ray::getPoint(double length) const
 }
 
 Vector Ray::getPoint(float length) const
+{
+    return _origin + (_direction * length);
+}
+
+Vector Ray::getPoint(pfrac::PrecisionFraction length) const
 {
     return _origin + (_direction * length);
 }

@@ -22,11 +22,13 @@ public:
 
     // hit getters
     Vector getHit(const Vector &point) const;
+    Vector getHit(const Plane &plane) const;
 
     // point getters
     Vector getPoint(int length) const;
     Vector getPoint(double length) const;
     Vector getPoint(float length) const;
+    Vector getPoint(pfrac::PrecisionFraction length) const;
 
     friend std::ostream &operator<<(std::ostream &out, const Ray &ray);
 };
