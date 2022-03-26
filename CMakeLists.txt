@@ -20,10 +20,12 @@ src/main.cpp
 src/Ray.cpp
 src/Point.cpp
 src/PrecisionFraction.cpp
+src/Plane.cpp
 include/Ray.hpp
 include/Point.hpp
 include/PrecisionFraction.hpp
-include/Exception.hpp)
+include/Exception.hpp
+include/Plane.hpp)
 
 target_link_libraries(RayTracer PRIVATE gmp gmpxx)
 target_link_libraries(RayTracer PRIVATE eigen)
