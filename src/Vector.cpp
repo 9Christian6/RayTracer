@@ -117,6 +117,11 @@ Vector Vector::normalize() const
     return result * (1 / length.approxRealValue());
 }
 
+bool Vector::parallel(const Vector &vec) const
+{
+    return (this->normalize() == vec.normalize());
+}
+
 std::ostream &operator<<(std::ostream &stream, Vector point)
 {
     stream << "(" << point.x() << ", " << point.y() << ", " << point.z() << ")";

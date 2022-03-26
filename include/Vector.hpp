@@ -26,7 +26,7 @@ public:
     float z_f() const;
 
     bool orthogonal(const Vector &vec) const;
-    // bool parallel(const Vector &vec) const;
+    bool parallel(const Vector &vec) const;
     Vector normalize() const;
 
     friend Vector operator+(const Vector &lhs, const Vector &rhs);
