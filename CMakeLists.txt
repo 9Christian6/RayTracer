@@ -21,12 +21,14 @@ src/Ray.cpp
 src/Vector.cpp
 src/PrecisionFraction.cpp
 src/Plane.cpp
+src/Sphere.cpp
 include/fEquals.hpp
 include/Ray.hpp
 include/Vector.hpp
 include/PrecisionFraction.hpp
 include/Exception.hpp
-include/Plane.hpp)
+include/Plane.hpp
+include/Sphere.hpp)
 
 target_link_libraries(RayTracer PRIVATE gmp gmpxx)
 target_link_libraries(RayTracer PRIVATE eigen)
