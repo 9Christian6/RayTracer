@@ -1,6 +1,7 @@
 #include "PrecisionFraction.hpp"
 #include <math.h>
 #include <iostream>
+#include "fEquals.hpp"
 
 namespace pfrac
 {
@@ -161,12 +162,14 @@ namespace pfrac
 
     bool operator==(const PrecisionFraction &lhs, PrecisionFraction &rhs)
     {
-        return mpq_equal(lhs._frac, rhs._frac) != 0;
+        // return mpq_equal(lhs._frac, rhs._frac) != 0;
+        return ccc::equals(lhs, rhs);
     }
 
     bool operator==(const PrecisionFraction &lhs, const PrecisionFraction &rhs)
     {
-        return mpq_equal(lhs._frac, rhs._frac) != 0;
+        // return mpq_equal(lhs._frac, rhs._frac) != 0;
+        return ccc::equals(lhs, rhs);
     }
 
     bool operator!=(const PrecisionFraction &lhs, PrecisionFraction &rhs)
