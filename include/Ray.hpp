@@ -14,9 +14,16 @@ public:
     // accessors
     Vector origin() const;
     Vector direction() const;
-    bool hit(Vector point) const;
-    bool hit(Plane plane) const;
 
+    // hit testers
+    bool hit(const Vector &point) const;
+    bool hit(const Plane &plane) const;
+    bool isIn(const Plane &plane) const;
+
+    // hit getters
+    Vector getHit(const Vector &point) const;
+
+    // point getters
     Vector getPoint(int length) const;
     Vector getPoint(double length) const;
     Vector getPoint(float length) const;
