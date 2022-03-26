@@ -38,6 +38,8 @@ public:
     friend Vector operator*(int length, const Vector &lhs);
     friend Vector operator*(float length, const Vector &lhs);
     friend Vector operator*(double length, const Vector &lhs);
+    friend Vector operator*(pfrac::PrecisionFraction length, const Vector &lhs);
+    friend Vector operator*(const Vector &rhs, pfrac::PrecisionFraction length);
     friend Vector operator/(const Vector &lhs, const Vector &rhs);
     friend bool operator==(const Vector &lhs, const Vector &rhs);
     friend std::ostream &operator<<(std::ostream &out, const Vector point);

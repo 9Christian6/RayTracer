@@ -95,6 +95,16 @@ Vector operator*(double length, const Vector &lhs)
     return Vector(lhs.x() * length, lhs.y() * length, lhs.z() * length);
 }
 
+Vector operator*(pfrac::PrecisionFraction length, const Vector &rhs)
+{
+    return Vector(rhs.x() * length, rhs.y() * length, rhs.z() * length);
+}
+
+Vector operator*(const Vector &lhs, pfrac::PrecisionFraction length)
+{
+    return Vector(lhs.x() * length, lhs.y() * length, lhs.z() * length);
+}
+
 Vector operator/(const Vector &lhs, const Vector &rhs)
 {
     return Vector(lhs.x() / rhs.x(), lhs.y() / rhs.y(), lhs.z() / rhs.z());
