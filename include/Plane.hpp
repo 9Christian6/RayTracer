@@ -8,4 +8,9 @@ private:
 
 public:
     Plane(Vector origin, Vector normal);
+
+    Vector origin() const;
+    Vector normal() const;
+
+    bool conatins(const Vector &point) const;
 };
