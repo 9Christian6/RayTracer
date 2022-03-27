@@ -12,6 +12,7 @@ pfrac::PrecisionFraction Sphere::radius() const
 
 Sphere::Sphere(Vector origin, pfrac::PrecisionFraction radius) : _origin{origin}, _radius{radius}
 {
+    _rs = _radius.square();
 }
 
 bool Sphere::contains(const Vector &point) const
