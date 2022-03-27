@@ -160,6 +160,11 @@ namespace pfrac
         _fracStr = str.get_str();
     }
 
+    PrecisionFraction PrecisionFraction::square() const
+    {
+        return PrecisionFraction{(*this) * (*this)};
+    }
+
     bool operator==(const PrecisionFraction &lhs, PrecisionFraction &rhs)
     {
         // return mpq_equal(lhs._frac, rhs._frac) != 0;

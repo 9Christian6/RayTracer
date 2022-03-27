@@ -32,6 +32,7 @@ namespace pfrac
         void negate();
         void properize();
         void invert();
+        PrecisionFraction square() const;
 
         friend bool operator==(const PrecisionFraction &lhs, PrecisionFraction &rhs);
         friend bool operator==(const PrecisionFraction &lhs, const PrecisionFraction &rhs);
