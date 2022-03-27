@@ -2,6 +2,7 @@
 #include <ostream>
 #include "Vector.hpp"
 #include "Plane.hpp"
+#include "Sphere.hpp"
 
 class Ray
 {
@@ -18,6 +19,7 @@ public:
     // hit testers
     bool hit(const Vector &point) const;
     bool hit(const Plane &plane) const;
+    bool hit(const Sphere &sphere) const;
     bool isIn(const Plane &plane) const;
 
     // hit getters

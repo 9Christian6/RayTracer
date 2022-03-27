@@ -5,6 +5,7 @@ Ray::Ray(Vector origin, Vector direction) : _origin{origin}, _direction{directio
 {
     if (direction == Vector{0, 0, 0})
         throw Exception{"Direction can't be zero"};
+    _direction = _direction.normalize();
 }
 
 Vector Ray::origin() const
@@ -94,6 +95,20 @@ bool Ray::hit(const Plane &plane) const
     if (_direction * plane.normal() == 0)
         return (plane.conatins(_origin));
     return true;
+}
+
+bool Ray::hit(const Sphere &sphere) const
+{
+    // pfrac::PrecisionFraction A{_direction.x().square() + _direction.y().square() + _direction.z().square()};
+    pfrac::PrecisionFraction B{_direction.x() * (_origin.x() - sphere.origin().x())};
+    B += _direction.y() * (_origin.y() - sphere.origin().y());
+    B += _direction.z() * (_origin.z() - sphere.origin().z());
+    B *= 2;
+    pfrac::PrecisionFraction C{(_origin.x() - sphere.origin().x()).square()};
+    C += (_origin.y() - sphere.origin().y()).square();
+    C += (_origin.z() - sphere.origin().z()).square();
+    C -= sphere.radius().square();
+    return ((B.square() - 4 * C) >= 0);
 }
 
 bool Ray::isIn(const Plane &plane) const
