@@ -3,6 +3,7 @@
 #include "Vector.hpp"
 #include "Plane.hpp"
 #include "Sphere.hpp"
+#include <optional>
 
 class Ray
 {
@@ -17,14 +18,10 @@ public:
     Vector direction() const;
 
     // hit testers
-    bool hit(const Vector &point) const;
-    bool hit(const Plane &plane) const;
-    bool hit(const Sphere &sphere) const;
+    std::optional<Vector> hit(const Vector &point) const;
+    std::optional<Vector> hit(const Plane &plane) const;
+    std::optional<Vector> hit(const Sphere &sphere) const;
     bool isIn(const Plane &plane) const;
-
-    // hit getters
-    Vector getHit(const Vector &point) const;
-    Vector getHit(const Plane &plane) const;
 
     // point getters
     Vector getPoint(int length) const;
