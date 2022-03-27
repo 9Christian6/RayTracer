@@ -209,22 +209,26 @@ namespace pfrac
 
     bool operator>=(const PrecisionFraction &lhs, PrecisionFraction &rhs)
     {
-        return (lhs._frac == rhs._frac || lhs._frac > rhs._frac);
+        // return (lhs._frac == rhs._frac || lhs._frac > rhs._frac);
+        return mpq_cmp(lhs._frac, rhs._frac) >= 0;
     }
 
     bool operator<=(const PrecisionFraction &lhs, PrecisionFraction &rhs)
     {
-        return (lhs._frac == rhs._frac || lhs._frac < rhs._frac);
+        // return (lhs._frac == rhs._frac || lhs._frac < rhs._frac);
+        return mpq_cmp(lhs._frac, rhs._frac) <= 0;
     }
 
     bool operator>=(const PrecisionFraction &lhs, const PrecisionFraction &rhs)
     {
-        return (lhs._frac == rhs._frac || lhs._frac > rhs._frac);
+        // return (lhs._frac == rhs._frac || lhs._frac > rhs._frac);
+        return mpq_cmp(lhs._frac, rhs._frac) >= 0;
     }
 
     bool operator<=(const PrecisionFraction &lhs, const PrecisionFraction &rhs)
     {
-        return (lhs._frac == rhs._frac || lhs._frac < rhs._frac);
+        // return (lhs._frac == rhs._frac || lhs._frac < rhs._frac);
+        return mpq_cmp(lhs._frac, rhs._frac) <= 0;
     }
 
     PrecisionFraction operator-(const PrecisionFraction &frac)
