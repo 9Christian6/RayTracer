@@ -9,8 +9,6 @@ private:
 
 public:
     Sphere(Vector origin, pfrac::PrecisionFraction radius);
+    Vector origin() const;
+    pfrac::PrecisionFraction radius() const;
 };
-
-Sphere::Sphere(Vector origin, pfrac::PrecisionFraction radius) : _origin{origin}, _radius{radius}
-{
-}
