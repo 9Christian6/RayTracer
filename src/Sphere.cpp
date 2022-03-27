@@ -25,6 +25,6 @@ bool Sphere::contains(const Vector &point) const
 ostream &
 operator<<(ostream &out, const Sphere &sphere)
 {
-    out << "o: " << sphere.origin() << " r: " << sphere.radius();
+    out << "Sphere\n o: " << sphere.origin() << " r: " << sphere.radius();
     return out;
 }
