@@ -10,6 +10,11 @@ pfrac::PrecisionFraction Sphere::radius() const
     return _radius;
 }
 
+pfrac::PrecisionFraction Sphere::radiusSquare() const
+{
+    return _rs;
+}
+
 Sphere::Sphere(Vector origin, pfrac::PrecisionFraction radius) : _origin{origin}, _radius{radius}
 {
     _rs = _radius.square();
