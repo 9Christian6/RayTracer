@@ -21,6 +21,10 @@ src/Ray.cpp
 src/Vector.cpp
 src/Plane.cpp
 src/Sphere.cpp
+src/Camera.cpp
+src/Vector2.cpp
+include/Vector2.hpp
+include/Camera.hpp
 include/fEquals.hpp
 include/Ray.hpp
 include/Vector.hpp
