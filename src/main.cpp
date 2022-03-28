@@ -5,18 +5,16 @@
 #include "Vector.hpp"
 #include "Plane.hpp"
 #include "Exception.hpp"
+#include "Sphere.hpp"
+#include <cmath>
 
 int main(int, char **)
 {
-    Plane testPlane{Vector{0, 0, 0}, Vector{0, 1, 0}};
-    Vector point0{0, 0, 0};
-    Vector point1{1, 0, 0};
-    Vector point2{0, 1, 0};
-    Vector point3{0, 0, 1};
-    Vector point4{0, 1, 1};
-    Vector point5{1, 0, 1};
-    Vector point6{1, 1, 0};
-    Vector point7{1, 1, 1};
-    Ray ray{point0, point1};
-    std::cout << point1.parallel(point7) << "\n";
+    std::cout.setf(std::ios::boolalpha);
+    Vector origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
+    Ray xRay{origin, xVec};
+    Plane xzPlane{origin, yVec};
+    Sphere sphere{origin, 1};
+    Ray testRay{origin, xVec + yVec};
+    std::cout << testRay.hit(sphere).value() << "\n";
 }

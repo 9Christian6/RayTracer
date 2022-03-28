@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 #include "Ray.hpp"
 #include "Exception.hpp"
 #include <optional>
@@ -53,8 +54,8 @@ std::optional<Vector> hitxy(const Ray &r, const Vector &p)
         return hitx(r, p);
     if (r.direction().x() == 0)
         return hity(r, p);
-    pfrac::PrecisionFraction t0 = (p.x() - r.origin().x()) / r.direction().x();
-    pfrac::PrecisionFraction t1 = (p.y() - r.origin().y()) / r.direction().y();
+    double t0 = (p.x() - r.origin().x()) / r.direction().x();
+    double t1 = (p.y() - r.origin().y()) / r.direction().y();
     if (t0 == t1)
         hit.emplace(r.getPoint(t0));
     return hit;
@@ -69,8 +70,8 @@ std::optional<Vector> hitxz(const Ray &r, const Vector &p)
         return hitz(r, p);
     if (r.direction().z() == 0)
         return hitx(r, p);
-    pfrac::PrecisionFraction t0 = (p.x() - r.origin().x()) / r.direction().x();
-    pfrac::PrecisionFraction t1 = (p.z() - r.origin().z()) / r.direction().z();
+    double t0 = (p.x() - r.origin().x()) / r.direction().x();
+    double t1 = (p.z() - r.origin().z()) / r.direction().z();
     if (t0 == t1)
         hit.emplace(r.getPoint(t0));
     return hit;
@@ -85,8 +86,8 @@ std::optional<Vector> hityz(const Ray &r, const Vector &p)
         return hitx(r, p);
     if (r.direction().z() == 0)
         return hity(r, p);
-    pfrac::PrecisionFraction t0 = (p.z() - r.origin().z()) / r.direction().z();
-    pfrac::PrecisionFraction t1 = (p.y() - r.origin().y()) / r.direction().y();
+    double t0 = (p.z() - r.origin().z()) / r.direction().z();
+    double t1 = (p.y() - r.origin().y()) / r.direction().y();
     if (t0 == t1)
         hit.emplace(r.getPoint(t0));
     return hit;
@@ -101,9 +102,9 @@ std::optional<Vector> Ray::hit(const Vector &p) const
         return hitxz((*this), p);
     if (_direction.z() == 0)
         return hitxy((*this), p);
-    pfrac::PrecisionFraction t0 = (p.x() - _origin.x()) / _direction.x();
-    pfrac::PrecisionFraction t1 = (p.y() - _origin.y()) / _direction.y();
-    pfrac::PrecisionFraction t2 = (p.z() - _origin.z()) / _direction.z();
+    double t0 = (p.x() - _origin.x()) / _direction.x();
+    double t1 = (p.y() - _origin.y()) / _direction.y();
+    double t2 = (p.z() - _origin.z()) / _direction.z();
     if (t0 == t1 && t0 == t2 && t1 == t2)
         hit.emplace(getPoint(t0));
     return hit;
@@ -112,17 +113,17 @@ std::optional<Vector> Ray::hit(const Vector &p) const
 std::optional<Vector> Ray::hit(const Sphere &sphere) const
 {
     std::optional<Vector> hitPoint;
-    pfrac::PrecisionFraction B, C;
+    double B, C;
     B = _direction.x() * (_origin.x() - sphere.origin().x());
     B += _direction.y() * (_origin.y() - sphere.origin().y());
     B += _direction.z() * (_origin.z() - sphere.origin().z());
     B *= 2;
-    C = (_origin.x() - sphere.origin().x()).square();
-    C += (_origin.y() - sphere.origin().y()).square();
-    C += (_origin.z() - sphere.origin().z()).square();
-    C -= sphere.radius().square();
-    pfrac::PrecisionFraction t{0};
-    t = B.square() - (4 * C);
+    C = std::pow((_origin.x() - sphere.origin().x()), 2);
+    C += std::pow((_origin.y() - sphere.origin().y()), 2);
+    C += std::pow((_origin.z() - sphere.origin().z()), 2);
+    C -= std::pow(sphere.radius(), 2);
+    double t{0};
+    t = std::pow(B, 2) - (4 * C);
     if (t >= 0)
     {
         t = sqrt(t);
@@ -138,8 +139,8 @@ std::optional<Vector> Ray::hit(const Plane &plane) const
     std::optional<Vector> hit = {};
     if (_direction * plane.normal() == 0 && !plane.conatins(_origin))
         return hit;
-    pfrac::PrecisionFraction denom{plane.normal() * _direction};
-    pfrac::PrecisionFraction t{((plane.origin() - _origin) * plane.normal()) / denom};
+    double denom{plane.normal() * _direction};
+    double t{((plane.origin() - _origin) * plane.normal()) / denom};
     hit.emplace(getPoint(t));
     return hit;
 }
@@ -168,10 +169,10 @@ Vector Ray::getPoint(float length) const
     return _origin + (_direction * length);
 }
 
-Vector Ray::getPoint(pfrac::PrecisionFraction length) const
-{
-    return _origin + (_direction * length);
-}
+// Vector Ray::getPoint(pfrac::PrecisionFraction length) const
+// {
+//     return _origin + (_direction * length);
+// }
 
 std::ostream &operator<<(std::ostream &out, const Ray &ray)
 {

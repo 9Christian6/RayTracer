@@ -305,11 +305,11 @@ namespace pfrac
     ostream &
     operator<<(ostream &output, const PrecisionFraction &frac)
     {
-        output << frac._frac;
+        // output << frac._frac;
         // if (frac._fracDouble == 0)
         //     output << 0;
         // else
-        //     output << frac._fracDouble;
+        output << frac._fracDouble;
         return output;
     }
 }

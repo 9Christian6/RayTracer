@@ -1,53 +1,38 @@
 #include "Vector.hpp"
+#include <math.h>
 
 Vector::Vector() : _x{0}, _y{0}, _z{0} {};
-Vector::Vector(int x, int y, int z) : _x{x}, _y{y}, _z{z} {};
+Vector::Vector(int x, int y, int z) : _x{(double)x}, _y{(double)y}, _z{(double)z} {};
 Vector::Vector(double x, double y, double z) : _x{x}, _y{y}, _z{z} {};
-Vector::Vector(pfrac::PrecisionFraction x, pfrac::PrecisionFraction y, pfrac::PrecisionFraction z) : _x{x}, _y{y}, _z{z} {};
 
-pfrac::PrecisionFraction Vector::x() const
+double Vector::x() const
 {
     return _x;
 }
 
-pfrac::PrecisionFraction Vector::y() const
+double Vector::y() const
 {
     return _y;
 }
 
-pfrac::PrecisionFraction Vector::z() const
+double Vector::z() const
 {
     return _z;
 }
 
-double Vector::x_d() const
-{
-    return _x._fracDouble;
-}
-
-double Vector::y_d() const
-{
-    return _y._fracDouble;
-}
-
-double Vector::z_d() const
-{
-    return _z._fracDouble;
-}
-
 float Vector::x_f() const
 {
-    return (float)_x._fracDouble;
+    return (float)_x;
 }
 
 float Vector::y_f() const
 {
-    return (float)_y._fracDouble;
+    return (float)_y;
 }
 
 float Vector::z_f() const
 {
-    return (float)_z._fracDouble;
+    return (float)_z;
 }
 
 Vector operator+(const Vector &lhs, const Vector &rhs)
@@ -60,7 +45,7 @@ Vector operator-(const Vector &lhs, const Vector &rhs)
     return Vector(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
 }
 
-pfrac::PrecisionFraction operator*(const Vector &lhs, const Vector &rhs)
+double operator*(const Vector &lhs, const Vector &rhs)
 {
     return lhs.x() * rhs.x() + lhs.y() * rhs.y() + lhs.z() * rhs.z();
 }
@@ -95,16 +80,6 @@ Vector operator*(double length, const Vector &lhs)
     return Vector(lhs.x() * length, lhs.y() * length, lhs.z() * length);
 }
 
-Vector operator*(pfrac::PrecisionFraction length, const Vector &rhs)
-{
-    return Vector(rhs.x() * length, rhs.y() * length, rhs.z() * length);
-}
-
-Vector operator*(const Vector &lhs, pfrac::PrecisionFraction length)
-{
-    return Vector(lhs.x() * length, lhs.y() * length, lhs.z() * length);
-}
-
 Vector operator/(const Vector &lhs, const Vector &rhs)
 {
     return Vector(lhs.x() / rhs.x(), lhs.y() / rhs.y(), lhs.z() / rhs.z());
@@ -122,9 +97,9 @@ bool Vector::orthogonal(const Vector &vec) const
 
 Vector Vector::normalize() const
 {
-    pfrac::PrecisionFraction length = pfrac::sqrt(_x * _x + _y * _y + _z * _z);
+    double length = std::sqrt(_x * _x + _y * _y + _z * _z);
     Vector result{*this};
-    return result * (1 / length.approxRealValue());
+    return result * (1 / length);
 }
 
 bool Vector::parallel(const Vector &vec) const

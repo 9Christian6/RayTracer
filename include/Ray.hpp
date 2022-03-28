@@ -17,7 +17,7 @@ public:
     Vector origin() const;
     Vector direction() const;
 
-    // hit testers
+    // hit getters
     std::optional<Vector> hit(const Vector &point) const;
     std::optional<Vector> hit(const Plane &plane) const;
     std::optional<Vector> hit(const Sphere &sphere) const;
@@ -27,7 +27,6 @@ public:
     Vector getPoint(int length) const;
     Vector getPoint(double length) const;
     Vector getPoint(float length) const;
-    Vector getPoint(pfrac::PrecisionFraction length) const;
 
     friend std::ostream &operator<<(std::ostream &out, const Ray &ray);
 };

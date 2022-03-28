@@ -1,18 +1,19 @@
 #pragma once
 #include "Vector.hpp"
+#include <ostream>
 
 class Sphere
 {
 private:
     Vector _origin;
-    pfrac::PrecisionFraction _radius, _rs;
+    double _radius, _rs;
 
 public:
-    Sphere(Vector origin, pfrac::PrecisionFraction radius);
+    Sphere(Vector origin, double radius);
     Vector origin() const;
-    pfrac::PrecisionFraction radius() const;
-    pfrac::PrecisionFraction radiusSquare() const;
+    double radius() const;
+    double radiusSquare() const;
     bool contains(const Vector &point) const;
 
-    friend ostream &operator<<(ostream &out, const Sphere &sphere);
+    friend std::ostream &operator<<(std::ostream &out, const Sphere &sphere);
 };

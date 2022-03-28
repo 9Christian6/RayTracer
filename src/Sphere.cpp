@@ -1,35 +1,36 @@
 #include "Sphere.hpp"
+#include <math.h>
 
 Vector Sphere::origin() const
 {
     return _origin;
 }
 
-pfrac::PrecisionFraction Sphere::radius() const
+double Sphere::radius() const
 {
     return _radius;
 }
 
-pfrac::PrecisionFraction Sphere::radiusSquare() const
+double Sphere::radiusSquare() const
 {
     return _rs;
 }
 
-Sphere::Sphere(Vector origin, pfrac::PrecisionFraction radius) : _origin{origin}, _radius{radius}
+Sphere::Sphere(Vector origin, double radius) : _origin{origin}, _radius{radius}
 {
-    _rs = _radius.square();
+    _rs = std::pow(_radius, 2);
 }
 
 bool Sphere::contains(const Vector &point) const
 {
-    pfrac::PrecisionFraction xDiff{point.x() - _origin.x()};
-    pfrac::PrecisionFraction yDiff{point.y() - _origin.y()};
-    pfrac::PrecisionFraction zDiff{point.z() - _origin.z()};
-    return (xDiff.square() + yDiff.square() + zDiff.square() == _radius.square());
+    double xDiff{point.x() - _origin.x()};
+    double yDiff{point.y() - _origin.y()};
+    double zDiff{point.z() - _origin.z()};
+    return (std::pow(xDiff, 2) + std::pow(yDiff, 2) + std::pow(zDiff, 2) == std::pow(_radius, 2));
 }
 
-ostream &
-operator<<(ostream &out, const Sphere &sphere)
+std::ostream &
+operator<<(std::ostream &out, const Sphere &sphere)
 {
     out << "Sphere\n o: " << sphere.origin() << " r: " << sphere.radius();
     return out;

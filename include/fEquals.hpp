@@ -1,6 +1,5 @@
 #pragma once
 #include <math.h>
-#include "PrecisionFraction.hpp"
 
 namespace ccc
 {
@@ -16,10 +15,5 @@ namespace ccc
     {
         EQUALS_IMPL(a, b);
     }
-    inline auto equals(const pfrac::PrecisionFraction &a, const pfrac::PrecisionFraction &b)
-    {
-        EQUALS_IMPL(a.approxRealValue(), b.approxRealValue());
-    }
-
 #undef EQUALS_IMPL
 }
