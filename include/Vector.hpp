@@ -23,6 +23,7 @@ public:
     bool orthogonal(const Vector &vec) const;
     bool parallel(const Vector &vec) const;
     Vector normalize() const;
+    Vector cross(const Vector &vec) const;
 
     friend Vector operator+(const Vector &lhs, const Vector &rhs);
     friend Vector operator-(const Vector &lhs, const Vector &rhs);

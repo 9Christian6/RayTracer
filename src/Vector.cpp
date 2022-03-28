@@ -102,6 +102,18 @@ Vector Vector::normalize() const
     return result * (1 / length);
 }
 
+Vector Vector::cross(const Vector &vec) const
+{
+    double a1, a2, a3, b1, b2, b3;
+    a1 = _x;
+    a2 = _y;
+    a3 = _z;
+    b1 = vec.x();
+    b2 = vec.y();
+    b3 = vec.z();
+    return Vector{a2 * b3 - a3 * b2, a3 * b1 - a1 * b3, a1 * b2 - a2 * b1};
+}
+
 bool Vector::parallel(const Vector &vec) const
 {
     return (this->normalize() == vec.normalize());
