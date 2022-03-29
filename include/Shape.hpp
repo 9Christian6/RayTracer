@@ -1,6 +1,7 @@
 #pragma once
 #include "Intersection.hpp"
 #include "Ray.hpp"
+#include <vector>
 
 class Shape
 {
