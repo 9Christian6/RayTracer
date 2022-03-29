@@ -1,4 +1,5 @@
 #include "Camera.hpp"
+#include "Image.hpp"
 #include "math.h"
 
 Camera::Camera(Vector origin, Vector target, Vector upguide, double fov, double aspectRatio) : _position{origin}
@@ -10,8 +11,10 @@ Camera::Camera(Vector origin, Vector target, Vector upguide, double fov, double 
     w = h * aspectRatio;
 };
 
-Ray Camera::makeRay(Vector2 point) const
+Ray Camera::makeRay(const Image img, const Vector2 point) const
 {
-    Vector direction = _forward + point.x() * w * _right + point.y() * h * _up;
+    double xR = (2 * point.x()) / (double)img.width() - 1;
+    double yR = (2 * point.y()) / (double)img.height() - 1;
+    Vector direction = _forward + xR * w * _right + yR * h * _up;
     return Ray{_position, direction.normalize()};
 }

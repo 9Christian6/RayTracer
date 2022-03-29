@@ -2,6 +2,7 @@
 #include "Vector.hpp"
 #include "Vector2.hpp"
 #include "Ray.hpp"
+#include "Image.hpp"
 
 class Camera
 {
@@ -11,5 +12,5 @@ private:
 
 public:
     Camera(Vector origin, Vector target, Vector upguide, double fov, double aspectRatio);
-    Ray makeRay(Vector2 point) const;
+    Ray makeRay(const Image img, const Vector2 point) const;
 };
