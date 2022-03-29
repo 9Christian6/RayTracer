@@ -5,6 +5,9 @@
 #include "Sphere.hpp"
 #include <optional>
 
+#define RAY_T_MIN = 1.001f;
+#define RAY_T_MAX = 1.0e30f;
+
 class Ray
 {
 private:
