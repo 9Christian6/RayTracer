@@ -5,9 +5,9 @@
 class ShapeSet : public Shape
 {
 protected:
-    std::vector<Shape *> shapes;
+    std::vector<Shape *> _shapes;
 
 public:
     ShapeSet();
-    void addShape(Shape *shape);
+    void addShape(Shape &shape);
 };
