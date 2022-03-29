@@ -5,8 +5,7 @@
 #include "Sphere.hpp"
 #include <optional>
 
-#define RAY_T_MIN = 1.001f;
-#define RAY_T_MAX = 1.0e30f;
+class Shape;
 
 class Ray
 {
@@ -16,6 +15,10 @@ private:
 public:
     Ray(Vector origin, Vector direction);
 
+    // constants
+    static constexpr double RAY_T_MIN = 1.001;
+    static constexpr double RAY_T_MAX = 1.0e30;
+
     // accessors
     Vector origin() const;
     Vector direction() const;
@@ -24,6 +27,7 @@ public:
     std::optional<Vector> hit(const Vector &point) const;
     std::optional<Vector> hit(const Plane &plane) const;
     std::optional<Vector> hit(const Sphere &sphere) const;
+    std::optional<Vector> hit(const Shape &shape) const;
     bool isIn(const Plane &plane) const;
 
     // point getters
