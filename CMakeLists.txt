@@ -5,16 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(3rd-party/eigen-3.4.0)
-add_subdirectory(src)
+find_package(PNGwriter 0.7.0)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules)
-find_package(GMP REQUIRED)
-INCLUDE_DIRECTORIES(
-    "${GMP_INCLUDES}"
-    "${CMAKE_SOURCE_DIR}/src"
-)
- 
+add_subdirectory(src)
 add_executable(RayTracer 
 src/main.cpp
 src/Ray.cpp
@@ -23,6 +16,7 @@ src/Plane.cpp
 src/Sphere.cpp
 src/Camera.cpp
 src/Vector2.cpp
+src/Image.cpp
 include/Vector2.hpp
 include/Camera.hpp
 include/fEquals.hpp
@@ -31,9 +25,13 @@ include/Vector.hpp
 include/Exception.hpp
 include/Plane.hpp
 include/Sphere.hpp
-include/Hit.hpp)
+include/Hit.hpp
+include/Image.hpp)
 
-target_link_libraries(RayTracer PRIVATE gmp gmpxx)
-target_link_libraries(RayTracer PRIVATE eigen)
+if(PNGwriter_FOUND)
+  target_link_libraries(RayTracer PRIVATE PNGwriter::PNGwriter)
+endif(PNGwriter_FOUND)
+
+
 target_include_directories(RayTracer PRIVATE include)
 target_include_directories(RayTracer PRIVATE 3rd-party)
