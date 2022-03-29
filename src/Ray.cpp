@@ -169,11 +169,6 @@ Vector Ray::getPoint(float length) const
     return _origin + (_direction * length);
 }
 
-// Vector Ray::getPoint(pfrac::PrecisionFraction length) const
-// {
-//     return _origin + (_direction * length);
-// }
-
 std::ostream &operator<<(std::ostream &out, const Ray &ray)
 {
     out << "Ray\n o: " << ray.origin() << ", d: " << ray.direction();
