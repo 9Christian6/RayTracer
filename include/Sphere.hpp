@@ -1,8 +1,10 @@
 #pragma once
 #include "Vector.hpp"
+#include "Shape.hpp"
 #include <ostream>
 
-class Sphere
+class Ray;
+class Sphere : public Shape
 {
 private:
     Vector _origin;
@@ -14,6 +16,8 @@ public:
     double radius() const;
     double radiusSquare() const;
     bool contains(const Vector &point) const;
+    bool doesIntersect(const Ray &ray) override;
+    bool intersect(Intersection &intersection) override;
 
     friend std::ostream &operator<<(std::ostream &out, const Sphere &sphere);
 };
