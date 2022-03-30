@@ -1,4 +1,5 @@
 #pragma once
+#include <ostream>
 #include "Vector.hpp"
 #include "Ray.hpp"
 #include <memory>
@@ -10,11 +11,15 @@ class Intersection
 private:
     const Ray &_ray;
     double _t;
-    const Shape *_pShape;
+    Shape *_pShape;
 
 public:
-    Intersection(const Ray &ray, const Shape &shape);
-    Intersection(const Ray &ray);
+    Intersection(Ray &ray, Shape *shape);
+    Intersection(Ray &ray);
     bool intersected() const;
+    void setT(double t);
     Vector position();
+    Ray ray() const;
+    double t() const;
+    friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);
 };
