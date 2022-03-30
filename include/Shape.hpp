@@ -1,8 +1,7 @@
 #pragma once
-#include "Intersection.hpp"
-#include "Ray.hpp"
-#include <vector>
 
+class Intersection;
+class Ray;
 class Shape
 {
 private:
