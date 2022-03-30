@@ -5,8 +5,6 @@
 #include "Sphere.hpp"
 #include <optional>
 
-class Shape;
-
 class Ray
 {
 private:
@@ -27,7 +25,6 @@ public:
     std::optional<Vector> hit(const Vector &point) const;
     std::optional<Vector> hit(const Plane &plane) const;
     std::optional<Vector> hit(const Sphere &sphere) const;
-    std::optional<Vector> hit(const Shape &shape) const;
     bool isIn(const Plane &plane) const;
 
     // point getters
@@ -35,5 +32,6 @@ public:
     Vector getPoint(double length) const;
     Vector getPoint(float length) const;
 
+    Ray operator=(const Ray &ray);
     friend std::ostream &operator<<(std::ostream &out, const Ray &ray);
 };

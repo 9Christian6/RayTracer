@@ -170,6 +170,11 @@ Vector Ray::getPoint(float length) const
     return _origin + (_direction * length);
 }
 
+Ray Ray::operator=(const Ray &ray)
+{
+    return Ray{_origin, _direction};
+}
+
 std::ostream &operator<<(std::ostream &out, const Ray &ray)
 {
     out << "Ray\n o: " << ray.origin() << ", d: " << ray.direction();
