@@ -10,7 +10,7 @@ private:
     Vector _origin, _normal;
 
 public:
-    Plane() = default;
+    Plane() = delete;
     Plane(Vector origin, Vector normal);
     Plane(Vector A, Vector B, Vector C);
 
