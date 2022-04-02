@@ -11,6 +11,7 @@ private:
 
 public:
     Plane(Vector origin, Vector normal);
+    Plane(Vector A, Vector B, Vector C);
 
     Vector origin() const;
     Vector normal() const;
