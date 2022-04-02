@@ -15,6 +15,7 @@ Plane::Plane(Vector A, Vector B, Vector C)
     if (A == B || A == C || B == C)
         throw Exception{"Plane needs 3 unique points"};
     _normal = (B - A).cross(C - A).normalize();
+    _origin = A;
 }
 
 Vector Plane::normal() const
