@@ -14,6 +14,8 @@ Plane::Plane(Vector A, Vector B, Vector C)
 {
     if (A == B || A == C || B == C)
         throw Exception{"Plane needs 3 unique points"};
+    if (Ray{A, (B - A)}.hit(C))
+        throw Exception{"Points must not lie on one line"};
     _normal = (B - A).cross(C - A).normalize();
     _origin = A;
 }
