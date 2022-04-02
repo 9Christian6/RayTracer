@@ -14,6 +14,10 @@ public:
 
     Vector origin() const;
     Vector normal() const;
+    double A() const;
+    double B() const;
+    double C() const;
+    double D() const;
 
     bool conatins(const Vector &point) const;
     bool doesIntersect(const Ray &ray) override;

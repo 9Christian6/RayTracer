@@ -20,6 +20,26 @@ Vector Plane::origin() const
     return _origin;
 }
 
+double Plane::A() const
+{
+    return _normal.x();
+}
+
+double Plane::B() const
+{
+    return _normal.y();
+}
+
+double Plane::C() const
+{
+    return _normal.z();
+}
+
+double Plane::D() const
+{
+    return _normal * _origin;
+}
+
 bool Plane::conatins(const Vector &point) const
 {
     return _normal.orthogonal(_origin - point);
