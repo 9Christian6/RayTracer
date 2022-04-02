@@ -11,6 +11,6 @@ private:
     double h, w;
 
 public:
-    Camera(Vector origin, Vector target, Vector upguide, double fov, double aspectRatio);
+    Camera(Vector position, Vector forward, Vector up, double fov, double aspectRatio);
     Ray makeRay(const Image img, const Vector2 point) const;
 };
