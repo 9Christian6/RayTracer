@@ -9,7 +9,6 @@ protected:
     std::vector<Shape *> _shapes;
 
 public:
-    ShapeSet();
     void addShape(Shape &shape);
 
     virtual bool intersect(Intersection &intersection);
