@@ -141,7 +141,7 @@ std::optional<Vector> Ray::hit(const Plane &plane) const
         return hit;
     double denom{plane.normal() * _direction};
     double t{((plane.origin() - _origin) * plane.normal()) / denom};
-    if (t >= 0)
+    if (t <= 0)
         hit.emplace(getPoint(t));
     return hit;
 }
