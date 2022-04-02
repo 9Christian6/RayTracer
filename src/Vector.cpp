@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include "Exception.hpp"
 #include <math.h>
 
 Vector::Vector() : _x{0}, _y{0}, _z{0} {};
@@ -117,6 +118,25 @@ Vector Vector::cross(const Vector &vec) const
     b2 = vec.y();
     b3 = vec.z();
     return Vector{a2 * b3 - a3 * b2, a3 * b1 - a1 * b3, a1 * b2 - a2 * b1};
+}
+
+Vector2 Vector::project(int dim) const
+{
+    switch (dim)
+    {
+    case 0:
+        return Vector2{_y, _z};
+
+    case 1:
+        return Vector2{_x, _z};
+
+    case 2:
+        return Vector2{_x, _y};
+
+    default:
+        throw Exception{"dimention to loose must lie between 0 and 2"};
+        break;
+    }
 }
 
 bool Vector::parallel(const Vector &vec) const

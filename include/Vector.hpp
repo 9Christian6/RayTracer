@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector2.hpp"
 #include <ostream>
 
 class Vector
@@ -25,6 +26,7 @@ public:
     bool parallel(const Vector &vec) const;
     Vector normalize() const;
     Vector cross(const Vector &vec) const;
+    Vector2 project(int dim) const;
 
     friend Vector operator+(const Vector &lhs, const Vector &rhs);
     friend Vector operator-(const Vector &lhs, const Vector &rhs);
