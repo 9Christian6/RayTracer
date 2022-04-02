@@ -90,6 +90,11 @@ bool operator==(const Vector &lhs, const Vector &rhs)
     return (lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == rhs.z());
 }
 
+double Vector::length() const
+{
+    return std::sqrt(_x * _x + _y * _y + _z * _z);
+}
+
 bool Vector::orthogonal(const Vector &vec) const
 {
     return ((*this) * vec) == 0;

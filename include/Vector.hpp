@@ -20,6 +20,7 @@ public:
     float y_f() const;
     float z_f() const;
 
+    double length() const;
     bool orthogonal(const Vector &vec) const;
     bool parallel(const Vector &vec) const;
     Vector normalize() const;
