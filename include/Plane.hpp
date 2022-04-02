@@ -1,7 +1,10 @@
 #pragma once
+#include <ostream>
 #include "Vector.hpp"
+#include "Shape.hpp"
 
-class Plane
+class Ray;
+class Plane : public Shape
 {
 private:
     Vector _origin, _normal;
@@ -13,4 +16,7 @@ public:
     Vector normal() const;
 
     bool conatins(const Vector &point) const;
+    bool doesIntersect(const Ray &ray) override;
+    bool intersect(Intersection &intersection) override;
+    friend std::ostream &operator<<(std::ostream &out, Plane &plane);
 };
