@@ -1,6 +1,7 @@
 #pragma once
 #include <ostream>
 #include "Vector.hpp"
+#include "Vector2.hpp"
 #include "Plane.hpp"
 #include "Sphere.hpp"
 #include <optional>
@@ -12,6 +13,7 @@ private:
 
 public:
     Ray(Vector origin, Vector direction);
+    Ray(Vector2 origin, Vector2 direction);
 
     // constants
     static constexpr double RAY_T_MIN = 1.001;

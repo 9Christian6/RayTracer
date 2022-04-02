@@ -11,6 +11,10 @@ Ray::Ray(Vector origin, Vector direction) : _origin{origin}, _direction{directio
     _direction = _direction.normalize();
 }
 
+Ray::Ray(Vector2 origin, Vector2 direction) : _origin{origin.x(), origin.y(), 0.}, _direction{Vector{direction.x(), direction.y(), 0.}}
+{
+}
+
 Vector Ray::origin() const
 {
     return _origin;
