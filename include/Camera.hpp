@@ -2,7 +2,6 @@
 #include "Vector.hpp"
 #include "Vector2.hpp"
 #include "Ray.hpp"
-#include "Image.hpp"
 #include <ostream>
 
 class Camera
@@ -15,6 +14,6 @@ public:
     Camera(Vector position, Vector forward, Vector up, double fov, double aspectRatio);
     Vector position() const;
     Vector direction() const;
-    Ray makeRay(const Image img, const Vector2 point) const;
+    Ray makeRay(int imgWidth, int imgHeight, const Vector2 point) const;
     friend std::ostream &operator<<(std::ostream &out, const Camera &cam);
 };
