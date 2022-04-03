@@ -59,25 +59,17 @@ bool Plane::conatins(const Vector &point) const
 std::optional<Intersection> Plane::intersect(const Ray &ray)
 {
     std::optional<Intersection> hit{};
-    if (ray.direction() * _normal == 0 && !conatins(ray.origin()))
-        return hit;
     double denom{_normal * ray.direction()};
+    if (denom == 0 && !conatins(ray.origin()))
+        return hit;
     double t{((_origin - ray.origin()) * _normal) / denom};
-    if (t <= 0)
+    if (t >= 0)
     {
         Intersection hitPoint{ray};
         hitPoint.setT(t);
         hit.emplace(hitPoint);
     }
     return hit;
-    // auto hitPoint = intersection.ray().hit(*this);
-    // if (hitPoint)
-    // {
-    //     auto hitVec = (hitPoint.value() - intersection.ray().origin());
-    //     intersection.setT(std::sqrt(hitVec.x() * hitVec.x() + hitVec.y() * hitVec.y() + hitVec.z() * hitVec.z()));
-    //     return true;
-    // }
-    // return false;
 }
 
 std::ostream &operator<<(std::ostream &out, Plane &plane)
