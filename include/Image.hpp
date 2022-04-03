@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <pngwriter.h>
+#include "Camera.hpp"
+#include "Shapeset.hpp"
 
 class Image
 {
@@ -15,5 +17,5 @@ public:
     int height() const;
     void setPixel(int x, int y, bool value);
     bool pixel(int x, int y) const;
-    void print();
+    void print(Camera &cam, ShapeSet &scene);
 };
