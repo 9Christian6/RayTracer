@@ -2,6 +2,7 @@
 #include "Ray.hpp"
 #include "Intersection.hpp"
 #include <math.h>
+#include <optional>
 
 Vector Sphere::origin() const
 {
@@ -31,21 +32,29 @@ bool Sphere::contains(const Vector &point) const
     return (std::pow(xDiff, 2) + std::pow(yDiff, 2) + std::pow(zDiff, 2) == std::pow(_radius, 2));
 }
 
-bool Sphere::doesIntersect(const Ray &ray)
+std::optional<Intersection> Sphere::intersect(const Ray &ray)
 {
-    return ray.hit((*this)).has_value();
-}
-
-bool Sphere::intersect(Intersection &intersection)
-{
-    auto hitPoint = intersection.ray().hit(*this);
-    if (hitPoint)
+    std::optional<Intersection> hitPoint{};
+    double B, C;
+    B = ray.direction().x() * (ray.origin().x() - _origin.x());
+    B += ray.direction().y() * (ray.origin().y() - _origin.y());
+    B += ray.direction().z() * (ray.origin().z() - _origin.z());
+    B *= 2;
+    C = std::pow((ray.origin().x() - _origin.x()), 2);
+    C += std::pow((ray.origin().y() - _origin.y()), 2);
+    C += std::pow((ray.origin().z() - _origin.z()), 2);
+    C -= std::pow(_radius, 2);
+    double t{0};
+    t = std::pow(B, 2) - (4 * C);
+    if (t >= 0)
     {
-        auto hitVec = (hitPoint.value() - intersection.ray().origin());
-        intersection.setT(std::sqrt(hitVec.x() * hitVec.x() + hitVec.y() * hitVec.y() + hitVec.z() * hitVec.z()));
-        return true;
+        t = sqrt(t);
+        t = -B - t;
+        t /= 2;
+        hitPoint.emplace(Intersection{ray});
+        hitPoint.value().setT(t);
     }
-    return false;
+    return hitPoint;
 }
 
 std::ostream &

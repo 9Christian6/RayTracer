@@ -2,6 +2,7 @@
 #include "Vector.hpp"
 #include "Shape.hpp"
 #include <ostream>
+#include <optional>
 
 class Ray;
 class Sphere : public Shape
@@ -16,8 +17,7 @@ public:
     double radius() const;
     double radiusSquare() const;
     bool contains(const Vector &point) const;
-    bool doesIntersect(const Ray &ray) override;
-    bool intersect(Intersection &intersection) override;
+    std::optional<Intersection> intersect(const Ray &ray);
 
     friend std::ostream &operator<<(std::ostream &out, const Sphere &sphere);
 };
