@@ -2,6 +2,7 @@
 #include "Shape.hpp"
 #include "vector"
 #include "Intersection.hpp"
+#include <optional>
 
 class ShapeSet : public Shape
 {
@@ -10,7 +11,5 @@ protected:
 
 public:
     void addShape(Shape &shape);
-
-    virtual bool intersect(Intersection &intersection);
-    virtual bool doesIntersect(const Ray &ray);
+    virtual std::optional<Intersection> intersect(const Ray &ray);
 };
