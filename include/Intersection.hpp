@@ -15,11 +15,12 @@ private:
 
 public:
     Intersection(Ray &ray, Shape *shape);
+    Intersection(const Ray &ray);
     Intersection(Ray &ray);
     bool intersected() const;
     void setT(double t);
     Vector position();
-    Ray ray() const;
+    const Ray ray() const;
     double t() const;
     friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);
 };

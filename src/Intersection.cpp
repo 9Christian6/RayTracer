@@ -9,6 +9,10 @@ Intersection::Intersection(Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NU
 {
 }
 
+Intersection::Intersection(const Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NULL}
+{
+}
+
 bool Intersection::intersected() const
 {
     return (_pShape != NULL);
@@ -19,7 +23,7 @@ Vector Intersection::position()
     return _ray.getPoint(_t);
 }
 
-Ray Intersection::ray() const
+const Ray Intersection::ray() const
 {
     return _ray;
 }
