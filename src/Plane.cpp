@@ -63,7 +63,7 @@ std::optional<Intersection> Plane::intersect(const Ray &ray)
     if (denom == 0 && !conatins(ray.origin()))
         return hit;
     double t{((_origin - ray.origin()) * _normal) / denom};
-    if (t >= 0)
+    if (t <= 0)
     {
         Intersection hitPoint{ray};
         hitPoint.setT(t);
