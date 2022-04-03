@@ -20,6 +20,8 @@ src/Image.cpp
 src/Intersection.cpp
 src/Shapeset.cpp
 src/Polygon.cpp
+src/Line2.cpp
+src/Ray2.cpp
 include/Vector2.hpp
 include/Camera.hpp
 include/fEquals.hpp
@@ -33,7 +35,9 @@ include/Image.hpp
 include/Intersection.hpp
 include/Shape.hpp
 include/Shapeset.hpp
-include/Polygon.hpp)
+include/Polygon.hpp
+include/Line2.hpp
+include/Ray2.hpp)
 
 if(PNGwriter_FOUND)
   target_link_libraries(RayTracer PRIVATE PNGwriter::PNGwriter)
