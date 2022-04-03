@@ -5,6 +5,7 @@
 #include "Vector.hpp"
 #include <math.h>
 #include <ostream>
+#include <optional>
 
 Plane::Plane(Vector origin, Vector normal) : _origin{origin}, _normal{normal}
 {
@@ -55,21 +56,28 @@ bool Plane::conatins(const Vector &point) const
     return _normal.orthogonal(_origin - point);
 }
 
-bool Plane::doesIntersect(const Ray &ray)
+std::optional<Intersection> Plane::intersect(const Ray &ray)
 {
-    return ray.hit((*this)).has_value();
-}
-
-bool Plane::intersect(Intersection &intersection)
-{
-    auto hitPoint = intersection.ray().hit(*this);
-    if (hitPoint)
+    std::optional<Intersection> hit{};
+    if (ray.direction() * _normal == 0 && !conatins(ray.origin()))
+        return hit;
+    double denom{_normal * ray.direction()};
+    double t{((_origin - ray.origin()) * _normal) / denom};
+    if (t <= 0)
     {
-        auto hitVec = (hitPoint.value() - intersection.ray().origin());
-        intersection.setT(std::sqrt(hitVec.x() * hitVec.x() + hitVec.y() * hitVec.y() + hitVec.z() * hitVec.z()));
-        return true;
+        Intersection hitPoint{ray};
+        hitPoint.setT(t);
+        hit.emplace(hitPoint);
     }
-    return false;
+    return hit;
+    // auto hitPoint = intersection.ray().hit(*this);
+    // if (hitPoint)
+    // {
+    //     auto hitVec = (hitPoint.value() - intersection.ray().origin());
+    //     intersection.setT(std::sqrt(hitVec.x() * hitVec.x() + hitVec.y() * hitVec.y() + hitVec.z() * hitVec.z()));
+    //     return true;
+    // }
+    // return false;
 }
 
 std::ostream &operator<<(std::ostream &out, Plane &plane)

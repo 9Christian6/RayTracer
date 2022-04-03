@@ -2,6 +2,7 @@
 #include <ostream>
 #include "Vector.hpp"
 #include "Shape.hpp"
+#include <optional>
 
 class Ray;
 class Plane : public Shape
@@ -22,7 +23,6 @@ public:
     double D() const;
 
     bool conatins(const Vector &point) const;
-    bool doesIntersect(const Ray &ray) override;
-    bool intersect(Intersection &intersection) override;
+    std::optional<Intersection> intersect(const Ray &ray) override;
     friend std::ostream &operator<<(std::ostream &out, Plane &plane);
 };
