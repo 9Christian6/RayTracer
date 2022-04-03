@@ -1,6 +1,7 @@
 #include "Camera.hpp"
 #include "Image.hpp"
 #include "math.h"
+#include <ostream>
 
 Camera::Camera(Vector origin, Vector target, Vector upguide, double fov, double aspectRatio) : _position{origin}
 {
@@ -17,4 +18,20 @@ Ray Camera::makeRay(const Image img, const Vector2 point) const
     double yR = (2 * point.y()) / (double)img.height() - 1;
     Vector direction = _forward + xR * w * _right + yR * h * _up;
     return Ray{_position, direction.normalize()};
+}
+
+Vector Camera::position() const
+{
+    return _position;
+}
+
+Vector Camera::direction() const
+{
+    return _forward;
+}
+
+std::ostream &operator<<(std::ostream &out, const Camera &cam)
+{
+    out << "Camera\nPosition: " << cam.position() << "\nDirection: " << cam.direction() << "\n";
+    return out;
 }
