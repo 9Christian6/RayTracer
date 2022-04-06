@@ -99,25 +99,29 @@ double Vector2::length() const
     return std::sqrt(_x * _x + _y * _y);
 }
 
-std::optional<double> Vector2::scaleToReach(const Vector2 &vec) const
+std::optional<double> scaleDouble(double a, double b)
 {
     std::optional<double> s;
-    if (auto scaleX = scale(_x, vec.x()))
-    {
-        if (auto scaleY = scale(_y, vec.y()))
-        {
-            if (raytracer::equals(scaleX.value(), scaleY.value()))
-                s = scaleX;
-        }
-    }
+    if (!raytracer::equals(a, 0))
+        s.emplace(b / a);
     return s;
 }
 
-std::optional<double> scale(double a, double b)
+std::optional<double> Vector2::scaleToReach(const Vector2 &vec) const
 {
     std::optional<double> s;
-    if (a != 0)
-        s.emplace(b / a);
+    auto scaleX = scaleDouble(_x, vec.x()), scaleY = scaleDouble(_y, vec.y());
+    if (!scaleX.has_value() && !scaleY.has_value())
+        return s;
+    if (!scaleX.has_value() && scaleY.has_value())
+        if (raytracer::equals(_x, 0) && raytracer::equals(vec.x(), 0))
+            s = scaleY;
+    if (scaleX.has_value() && !scaleY.has_value())
+        if (raytracer::equals(_y, 0) && raytracer::equals(vec.y(), 0))
+            s = scaleX;
+    if (scaleX.has_value() && scaleY.has_value())
+        if (raytracer::equals(scaleX.value(), scaleY.value()))
+            s = scaleX;
     return s;
 }
 
