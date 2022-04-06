@@ -1,8 +1,14 @@
 #include "Ray2.hpp"
 #include "Vector2.hpp"
+#include "Exception.hpp"
 #include <ostream>
 
-Ray2::Ray2(Vector2 origin, Vector2 direction) : _origin{origin}, _direction{direction} {};
+Ray2::Ray2(Vector2 origin, Vector2 direction) : _origin{origin}, _direction{direction}
+{
+    if (direction == Vector2{0, 0})
+        throw Exception{"Direction can't be zero"};
+    _direction = _direction.normalize();
+};
 
 Vector2 Ray2::origin() const
 {
