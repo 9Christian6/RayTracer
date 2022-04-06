@@ -22,9 +22,21 @@ Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs)
     return Vector2(lhs.x() + rhs.x(), lhs.y() + rhs.y());
 }
 
+Vector2 operator+=(Vector2 &lhs, const Vector2 &rhs)
+{
+    lhs = lhs + rhs;
+    return lhs + rhs;
+}
+
 Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs)
 {
     return Vector2(lhs.x() - rhs.x(), lhs.y() - rhs.y());
+}
+
+Vector2 operator-=(Vector2 &lhs, const Vector2 &rhs)
+{
+    lhs = lhs - rhs;
+    return lhs - rhs;
 }
 
 Vector2 operator-(const Vector2 &vec)
@@ -99,7 +111,7 @@ double Vector2::length() const
     return std::sqrt(_x * _x + _y * _y);
 }
 
-std::optional<double> scaleDouble(double a, double b)
+std::optional<double> scalarQuotient(double a, double b)
 {
     std::optional<double> s;
     if (!raytracer::equals(a, 0))
@@ -110,17 +122,17 @@ std::optional<double> scaleDouble(double a, double b)
 std::optional<double> Vector2::scaleToReach(const Vector2 &vec) const
 {
     std::optional<double> s;
-    auto scaleX = scaleDouble(_x, vec.x()), scaleY = scaleDouble(_y, vec.y());
-    if (!scaleX.has_value() && !scaleY.has_value())
+    auto scaleX = scalarQuotient(_x, vec.x()), scaleY = scalarQuotient(_y, vec.y());
+    if (!scaleX && !scaleY)
         return s;
-    if (!scaleX.has_value() && scaleY.has_value())
+    if (!scaleX && scaleY)
         if (raytracer::equals(_x, 0) && raytracer::equals(vec.x(), 0))
             s = scaleY;
-    if (scaleX.has_value() && !scaleY.has_value())
+    if (scaleX && !scaleY)
         if (raytracer::equals(_y, 0) && raytracer::equals(vec.y(), 0))
             s = scaleX;
-    if (scaleX.has_value() && scaleY.has_value())
-        if (raytracer::equals(scaleX.value(), scaleY.value()))
+    if (scaleX && scaleY)
+        if (raytracer::equals(*scaleX, *scaleY))
             s = scaleX;
     return s;
 }
