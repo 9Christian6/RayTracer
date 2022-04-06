@@ -12,6 +12,7 @@ private:
     const Ray &_ray;
     double _t;
     Shape *_pShape;
+    Vector _position;
 
 public:
     Intersection(Ray &ray, Shape *shape);

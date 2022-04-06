@@ -31,6 +31,7 @@ const Ray Intersection::ray() const
 void Intersection::setT(double t)
 {
     _t = t;
+    _position = _ray.getPoint(t);
 }
 
 double Intersection::t() const
@@ -41,6 +42,7 @@ double Intersection::t() const
 std::ostream &operator<<(std::ostream &out, Intersection &intersection)
 {
     out << intersection.ray() << "\n"
-        << intersection.t();
+        << intersection.t() << "\n"
+        << intersection.position();
     return out;
 }
