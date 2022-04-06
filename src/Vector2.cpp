@@ -1,5 +1,7 @@
 #include "Vector2.hpp"
 #include "math.h"
+#include "fEquals.hpp"
+#include <optional>
 
 Vector2::Vector2() : _x{0}, _y{0} {};
 Vector2::Vector2(int x, int y) : _x{(double)x}, _y{(double)y} {};
@@ -95,6 +97,28 @@ bool Vector2::parallel(const Vector2 &vec) const
 double Vector2::length() const
 {
     return std::sqrt(_x * _x + _y * _y);
+}
+
+std::optional<double> Vector2::scaleToReach(const Vector2 &vec) const
+{
+    std::optional<double> s;
+    if (auto scaleX = scale(_x, vec.x()))
+    {
+        if (auto scaleY = scale(_y, vec.y()))
+        {
+            if (raytracer::equals(scaleX.value(), scaleY.value()))
+                s = scaleX;
+        }
+    }
+    return s;
+}
+
+std::optional<double> scale(double a, double b)
+{
+    std::optional<double> s;
+    if (a != 0)
+        s.emplace(b / a);
+    return s;
 }
 
 std::ostream &operator<<(std::ostream &stream, Vector2 point)

@@ -1,5 +1,6 @@
 #pragma once
 #include <ostream>
+#include <optional>
 
 class Vector2
 {
@@ -15,6 +16,7 @@ public:
     bool parallel(const Vector2 &vec) const;
     Vector2 normalize() const;
     double length() const;
+    std::optional<double> scaleToReach(const Vector2 &vec) const;
 
     double x() const;
     double y() const;
