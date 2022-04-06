@@ -14,6 +14,7 @@ public:
     std::optional<Vector2> intersect(const Ray2 &ray);
     Vector2 p1() const;
     Vector2 p2() const;
+    double length() const;
 
     friend std::ostream &operator<<(std::ostream &out, const Line2 &ray);
 };
