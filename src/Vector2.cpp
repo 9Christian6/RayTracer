@@ -25,6 +25,11 @@ Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs)
     return Vector2(lhs.x() - rhs.x(), lhs.y() - rhs.y());
 }
 
+Vector2 operator-(const Vector2 &vec)
+{
+    return -1 * vec;
+}
+
 double operator*(const Vector2 &lhs, const Vector2 &rhs)
 {
     return lhs.x() * rhs.x() + lhs.y() * rhs.y();
