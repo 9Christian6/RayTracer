@@ -1,7 +1,7 @@
 #pragma once
 #include <math.h>
 
-namespace ccc
+namespace raytracer
 {
 #define EQUALS_IMPL(__a, __b)          \
     static constexpr auto eps = 10e-5; \
