@@ -33,7 +33,7 @@ void Image::print(Camera &cam, ShapeSet &scene)
             auto ray = cam.makeRay(_width, _height, Vector2{x, y});
             if (scene.intersect(ray))
             {
-                _pixels[x * _width + y] = true;
+                _pixels[y * _width + x] = true;
                 _image.plot(x, y, 1.0, 1.0, 1.0);
             }
         }
