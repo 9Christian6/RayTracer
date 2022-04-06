@@ -87,6 +87,11 @@ bool Vector2::parallel(const Vector2 &vec) const
     return (this->normalize() == vec.normalize());
 }
 
+double Vector2::length() const
+{
+    return std::sqrt(_x * _x + _y * _y);
+}
+
 std::ostream &operator<<(std::ostream &stream, Vector2 point)
 {
     stream << "(" << point.x() << ", " << point.y() << ")";

@@ -14,6 +14,7 @@ public:
     bool orthogonal(const Vector2 &vec) const;
     bool parallel(const Vector2 &vec) const;
     Vector2 normalize() const;
+    double length() const;
 
     double x() const;
     double y() const;
