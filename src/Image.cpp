@@ -26,9 +26,9 @@ void Image::setPixel(int x, int y, bool value)
 
 void Image::print(Camera &cam, ShapeSet &scene)
 {
-    for (int x = 0; x < _width; x++)
+    for (int y = 0; y < _height; y++)
     {
-        for (int y = 0; y < _height; y++)
+        for (int x = 0; x < _width; x++)
         {
             auto ray = cam.makeRay(_width, _height, Vector2{x, y});
             if (scene.intersect(ray))
