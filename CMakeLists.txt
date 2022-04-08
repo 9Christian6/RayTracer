@@ -37,7 +37,9 @@ include/Shape.hpp
 include/Shapeset.hpp
 include/Polygon.hpp
 include/Line2.hpp
-include/Ray2.hpp)
+include/Ray2.hpp
+include/SafeDivision.hpp
+)
 
 if(PNGwriter_FOUND)
   target_link_libraries(RayTracer PRIVATE PNGwriter::PNGwriter)
