@@ -14,10 +14,8 @@ Camera::Camera(Vector origin, Vector target, Vector upguide, double fov, double 
 
 Ray Camera::makeRay(int width, int height, const Vector2 point) const
 {
-    double xR = (2 * point.x()) / (double)width - 1;
-    double yR = (2 * point.y()) / (double)height - 1;
-    // double xR = (2 * point.x()) / (double)img.width() - 1;
-    // double yR = (2 * point.y()) / (double)img.height() - 1;
+    double xR = ((point.x() / (double)width) * 2) - 1;
+    double yR = ((point.y() / (double)height) * 2) - 1;
     Vector direction = _forward + xR * w * _right + yR * h * _up;
     return Ray{_position, direction.normalize()};
 }
