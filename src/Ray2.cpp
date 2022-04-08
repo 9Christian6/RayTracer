@@ -28,9 +28,9 @@ Vector2 Ray2::getPoint(double t) const
 
 std::optional<double> Ray2::getT(const Vector2 &point) const
 {
-    if (raytracer::equals(_direction.x(), 0) && raytracer::equals(point.x(), 0))
+    if (raytracer::equals(_direction.x(), 0) && raytracer::equals(_origin.x(), point.x()))
         return raytracer::scalarQuotient(_direction.y(), point.y() - _origin.y());
-    if (raytracer::equals(_direction.y(), 0) && raytracer::equals(point.y(), 0))
+    if (raytracer::equals(_direction.y(), 0) && raytracer::equals(point.y(), _origin.y()))
         return raytracer::scalarQuotient(_direction.x(), point.x() - _origin.x());
     std::optional<double> t;
     auto t1 = raytracer::scalarQuotient(_direction.x(), point.x() - _origin.x());
