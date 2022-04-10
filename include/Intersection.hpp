@@ -4,24 +4,27 @@
 #include "Ray.hpp"
 #include <memory>
 
-class Shape;
-
-class Intersection
+namespace raytracer
 {
-private:
-    const Ray &_ray;
-    double _t;
-    Shape *_pShape;
-    Vector _position;
+    class Shape;
 
-public:
-    Intersection(Ray &ray, Shape *shape);
-    Intersection(const Ray &ray);
-    Intersection(Ray &ray);
-    bool intersected() const;
-    void setT(double t);
-    Vector position();
-    const Ray ray() const;
-    double t() const;
-    friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);
-};
+    class Intersection
+    {
+    private:
+        const Ray &_ray;
+        double _t;
+        Shape *_pShape;
+        Vector _position;
+
+    public:
+        Intersection(Ray &ray, Shape *shape);
+        Intersection(const Ray &ray);
+        Intersection(Ray &ray);
+        bool intersected() const;
+        void setT(double t);
+        Vector position();
+        const Ray ray() const;
+        double t() const;
+        friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);
+    };
+}

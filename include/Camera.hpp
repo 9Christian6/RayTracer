@@ -4,16 +4,19 @@
 #include "Ray.hpp"
 #include <ostream>
 
-class Camera
+namespace raytracer
 {
-private:
-    Vector _position, _forward, _up, _right;
-    double h, w;
+    class Camera
+    {
+    private:
+        Vector _position, _forward, _up, _right;
+        double h, w;
 
-public:
-    Camera(Vector position, Vector forward, Vector up, double fov, double aspectRatio);
-    Vector position() const;
-    Vector direction() const;
-    Ray makeRay(int imgWidth, int imgHeight, const Vector2 point) const;
-    friend std::ostream &operator<<(std::ostream &out, const Camera &cam);
-};
+    public:
+        Camera(Vector position, Vector forward, Vector up, double fov, double aspectRatio);
+        Vector position() const;
+        Vector direction() const;
+        Ray makeRay(int imgWidth, int imgHeight, const Vector2 point) const;
+        friend std::ostream &operator<<(std::ostream &out, const Camera &cam);
+    };
+}

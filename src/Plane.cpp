@@ -7,80 +7,83 @@
 #include <ostream>
 #include <optional>
 
-Plane::Plane(Vector origin, Vector normal) : _origin{origin}, _normal{normal}
+namespace raytracer
 {
-}
-
-Plane::Plane(Vector A, Vector B, Vector C)
-{
-    if (A == B || A == C || B == C)
-        throw Exception{"Plane needs 3 unique points"};
-    if (Ray{A, (B - A)}.hit(C))
-        throw Exception{"Points must not lie on one line"};
-    _normal = (B - A).cross(C - A).normalize();
-    _origin = A;
-}
-
-Vector Plane::normal() const
-{
-    return _normal;
-}
-
-Vector Plane::origin() const
-{
-    return _origin;
-}
-
-double Plane::A() const
-{
-    return _normal.x();
-}
-
-double Plane::B() const
-{
-    return _normal.y();
-}
-
-double Plane::C() const
-{
-    return _normal.z();
-}
-
-double Plane::D() const
-{
-    return _normal * _origin;
-}
-
-bool Plane::conatins(const Vector &point) const
-{
-    return _normal.orthogonal(_origin - point);
-}
-
-std::optional<Intersection> Plane::intersect(const Ray &ray)
-{
-    std::optional<Intersection> hit{};
-    Intersection hitPoint{ray};
-    double denom{_normal * ray.direction()};
-    if (denom == 0 && !conatins(ray.origin()))
-        return hit;
-    if (denom == 0 && conatins(ray.origin()))
+    Plane::Plane(Vector origin, Vector normal) : _origin{origin}, _normal{normal}
     {
-        hitPoint.setT(1);
+    }
+
+    Plane::Plane(Vector A, Vector B, Vector C)
+    {
+        if (A == B || A == C || B == C)
+            throw Exception{"Plane needs 3 unique points"};
+        if (Ray{A, (B - A)}.hit(C))
+            throw Exception{"Points must not lie on one line"};
+        _normal = (B - A).cross(C - A).normalize();
+        _origin = A;
+    }
+
+    Vector Plane::normal() const
+    {
+        return _normal;
+    }
+
+    Vector Plane::origin() const
+    {
+        return _origin;
+    }
+
+    double Plane::A() const
+    {
+        return _normal.x();
+    }
+
+    double Plane::B() const
+    {
+        return _normal.y();
+    }
+
+    double Plane::C() const
+    {
+        return _normal.z();
+    }
+
+    double Plane::D() const
+    {
+        return _normal * _origin;
+    }
+
+    bool Plane::conatins(const Vector &point) const
+    {
+        return _normal.orthogonal(_origin - point);
+    }
+
+    std::optional<Intersection> Plane::intersect(const Ray &ray)
+    {
+        std::optional<Intersection> hit{};
+        Intersection hitPoint{ray};
+        double denom{_normal * ray.direction()};
+        if (denom == 0 && !conatins(ray.origin()))
+            return hit;
+        if (denom == 0 && conatins(ray.origin()))
+        {
+            hitPoint.setT(1);
+            hit.emplace(hitPoint);
+            return hit;
+        }
+        double t = ((_origin - ray.origin()) * _normal) / denom;
+        if (t <= Ray::RAY_T_MIN || t >= Ray::RAY_T_MAX)
+        {
+            return hit;
+        }
+        hitPoint.setT(t);
         hit.emplace(hitPoint);
         return hit;
     }
-    double t = ((_origin - ray.origin()) * _normal) / denom;
-    if (t <= Ray::RAY_T_MIN || t >= Ray::RAY_T_MAX)
-    {
-        return hit;
-    }
-    hitPoint.setT(t);
-    hit.emplace(hitPoint);
-    return hit;
-}
 
-std::ostream &operator<<(std::ostream &out, Plane &plane)
-{
-    out << "Plane\norigin: " << plane.origin() << "\nnormal: " << plane.normal() << "\n";
-    return out;
+    std::ostream &operator<<(std::ostream &out, Plane &plane)
+    {
+        out << "Plane\norigin: " << plane.origin() << "\nnormal: " << plane.normal() << "\n";
+        return out;
+    }
 }

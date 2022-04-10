@@ -1,16 +1,19 @@
 #include "Shapeset.hpp"
 
-void ShapeSet::addShape(Shape &shape)
+namespace raytracer
 {
-    _shapes.push_back(&shape);
-}
-
-std::optional<Intersection> ShapeSet::intersect(const Ray &ray)
-{
-    for (auto shape : _shapes)
+    void ShapeSet::addShape(Shape &shape)
     {
-        if (auto hitPoint = shape->intersect(ray))
-            return hitPoint;
+        _shapes.push_back(&shape);
     }
-    return std::optional<Intersection>{};
+
+    std::optional<Intersection> ShapeSet::intersect(const Ray &ray)
+    {
+        for (auto shape : _shapes)
+        {
+            if (auto hitPoint = shape->intersect(ray))
+                return hitPoint;
+        }
+        return std::optional<Intersection>{};
+    }
 }

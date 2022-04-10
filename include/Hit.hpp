@@ -1,15 +1,18 @@
 #pragma once
 #include "Vector.hpp"
 
-class Hit
+namespace raytracer
 {
-private:
-    Vector _position, _direction, _normal;
+    class Hit
+    {
+    private:
+        Vector _position, _direction, _normal;
 
-public:
-    Hit();
-};
+    public:
+        Hit();
+    };
 
-Hit::Hit()
-{
+    Hit::Hit()
+    {
+    }
 }

@@ -4,12 +4,15 @@
 #include "Intersection.hpp"
 #include <optional>
 
-class ShapeSet : public Shape
+namespace raytracer
 {
-protected:
-    std::vector<Shape *> _shapes;
+    class ShapeSet : public Shape
+    {
+    protected:
+        std::vector<Shape *> _shapes;
 
-public:
-    void addShape(Shape &shape);
-    virtual std::optional<Intersection> intersect(const Ray &ray);
-};
+    public:
+        void addShape(Shape &shape);
+        virtual std::optional<Intersection> intersect(const Ray &ray);
+    };
+}

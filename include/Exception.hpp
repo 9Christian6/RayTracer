@@ -2,15 +2,18 @@
 #include <exception>
 #include <string>
 
-class Exception : public std::exception
+namespace raytracer
 {
-private:
-    std::string _exception;
-
-public:
-    Exception(std::string message) : _exception{message} {};
-    const char *what() const throw()
+    class Exception : public std::exception
     {
-        return _exception.c_str();
+    private:
+        std::string _exception;
+
+    public:
+        Exception(std::string message) : _exception{message} {};
+        const char *what() const throw()
+        {
+            return _exception.c_str();
+        };
     };
-};
+}

@@ -4,17 +4,20 @@
 #include <optional>
 #include <ostream>
 
-class Line2
+namespace raytracer
 {
-private:
-    Vector2 _p1, _p2;
+    class Line2
+    {
+    private:
+        Vector2 _p1, _p2;
 
-public:
-    Line2(Vector2 p1, Vector2 p2);
-    std::optional<Vector2> intersect(const Ray2 &ray);
-    Vector2 p1() const;
-    Vector2 p2() const;
-    double length() const;
+    public:
+        Line2(Vector2 p1, Vector2 p2);
+        std::optional<Vector2> intersect(const Ray2 &ray);
+        Vector2 p1() const;
+        Vector2 p2() const;
+        double length() const;
 
-    friend std::ostream &operator<<(std::ostream &out, const Line2 &ray);
-};
+        friend std::ostream &operator<<(std::ostream &out, const Line2 &ray);
+    };
+}
