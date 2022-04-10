@@ -4,11 +4,10 @@
 
 namespace raytracer
 {
-    std::optional<double> scalarQuotient(double a, double b)
+    inline std::optional<double> scalarQuotient(double a, double b)
     {
-        std::optional<double> s;
         if (!equals(a, 0))
-            s.emplace(b / a);
-        return s;
+            return b / a;
+        return {};
     }
 }
