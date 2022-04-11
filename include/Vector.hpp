@@ -32,6 +32,7 @@ namespace raytracer
 
         friend Vector operator+(const Vector &lhs, const Vector &rhs);
         friend Vector operator-(const Vector &lhs, const Vector &rhs);
+        friend Vector operator-(const Vector &op);
         friend double operator*(const Vector &lhs, const Vector &rhs);
         friend Vector operator*(const Vector &lhs, int length);
         friend Vector operator*(const Vector &lhs, float length);

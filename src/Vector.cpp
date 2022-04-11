@@ -48,6 +48,11 @@ namespace raytracer
         return Vector(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
     }
 
+    Vector operator-(const Vector &op)
+    {
+        return Vector(-1 * op);
+    }
+
     double operator*(const Vector &lhs, const Vector &rhs)
     {
         return lhs.x() * rhs.x() + lhs.y() * rhs.y() + lhs.z() * rhs.z();
