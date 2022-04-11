@@ -15,7 +15,11 @@ namespace raytracer
         return p1.x() * p2.y() - p1.y() * p2.x();
     }
 
-    Line2::Line2(Vector2 p1, Vector2 p2) : _p1{p1}, _p2{p2} {};
+    Line2::Line2(Vector2 p1, Vector2 p2) : _p1{p1}, _p2{p2}
+    {
+        if (_p1 == _p2)
+            throw Exception{"Two points of Line can't be the same"};
+    };
 
     std::optional<Vector2> Line2::intersect(const Ray2 &ray)
     {
