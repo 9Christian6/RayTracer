@@ -3,6 +3,7 @@
 #include "Ray2.hpp"
 #include "fEquals.hpp"
 #include "SafeDivision.hpp"
+#include "Exception.hpp"
 #include <optional>
 #include <ostream>
 #include <math.h>
@@ -18,22 +19,32 @@ namespace raytracer
 
     std::optional<Vector2> Line2::intersect(const Ray2 &ray)
     {
-        std::optional<Vector2> hitPoint{};
+        auto hit = std::optional<Vector2>();
         Ray2 line{_p1, _p2 - _p1};
-        if (equals(ray.direction().x(), 0))
+        double length = (_p2 - _p1).length();
+        if (line.direction().parallel(ray.direction()))
         {
-            if (equals(ray.direction().y(), 0))
-                return hitPoint;
-            double t = line.origin().y() + line.direction().y() * ray.origin().x() - line.direction().y() * line.origin().x() - line.direction().x() * line.direction().y() - ray.origin().y();
-            t /= ray.direction().y();
-            hitPoint = ray.getPoint(t);
+            if (auto t = line.getT(ray.origin()))
+                hit.emplace(line.scale(*t));
+            return hit;
         }
-        if (auto t = ray.getT(line.getPoint(0.5)))
-            hitPoint = ray.getPoint(*t);
-        double mu = ray.direction().x() * (ray.origin().y() - line.origin().y()) + ray.direction().y() * (line.origin().x() - ray.origin().x());
-        mu /= ray.direction().x() * line.direction().y() - line.direction().x() * ray.direction().y();
-        hitPoint = line.getPoint(mu);
-        return hitPoint;
+        if (equals(line.direction().x(), 0))
+        {
+            double t = (line.origin().x() - ray.origin().x()) / ray.direction().x();
+            hit.emplace(ray.scale(t));
+            return hit;
+        }
+        if (!equals(line.direction().x(), 0))
+        {
+            double t = (line.origin().y() - ray.origin().y());
+            t += (ray.origin().x() * line.direction().y()) / line.direction().x();
+            t -= (line.origin().x() * line.direction().y()) / line.direction().x();
+            t *= line.direction().x();
+            t /= ray.direction().y() * line.direction().x() - ray.direction().x() * line.direction().y();
+            hit.emplace(ray.scale(t));
+            return hit;
+        }
+        return hit;
     }
 
     Vector2 Line2::p1() const
@@ -50,6 +61,15 @@ namespace raytracer
     {
         Vector2 line = _p2 - _p1;
         return line.length();
+    }
+
+    bool Line2::contains(Vector2 &point) const
+    {
+        Ray2 line{_p1, _p2 - _p1};
+        double length = (_p2 - _p1).length();
+        if (auto lambda = line.getT(point))
+            return (*lambda >= 0 && *lambda <= length);
+        return false;
     }
 
     std::ostream &operator<<(std::ostream &out, const Line2 &line)

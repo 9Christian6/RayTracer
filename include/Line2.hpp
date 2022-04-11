@@ -17,6 +17,7 @@ namespace raytracer
         Vector2 p1() const;
         Vector2 p2() const;
         double length() const;
+        bool contains(Vector2 &point) const;
 
         friend std::ostream &operator<<(std::ostream &out, const Line2 &ray);
     };
