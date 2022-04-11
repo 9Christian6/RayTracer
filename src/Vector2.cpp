@@ -89,12 +89,12 @@ namespace raytracer
 
     bool operator==(const Vector2 &lhs, const Vector2 &rhs)
     {
-        return (lhs.x() == rhs.x() && lhs.y() == rhs.y());
+        return (equals(lhs.x(), rhs.x()) && equals(lhs.y(), rhs.y()));
     }
 
     bool Vector2::orthogonal(const Vector2 &vec) const
     {
-        return ((*this) * vec) == 0;
+        return equals(*this * vec, 0);
     }
 
     Vector2 Vector2::normalize() const
