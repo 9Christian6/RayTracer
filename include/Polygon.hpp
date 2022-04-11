@@ -14,6 +14,7 @@ namespace raytracer
     {
     private:
         std::vector<Vector> _points;
+        Vector _normal;
 
     public:
         Polygon() = delete;

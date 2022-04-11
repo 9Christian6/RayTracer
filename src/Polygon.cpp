@@ -20,6 +20,8 @@ namespace raytracer
             if (!plane.conatins(point))
                 throw Exception{"Not all points lie in one plane"};
         }
+        Vector l0{_points[0] - _points[1]}, l1{_points[2] - _points[1]};
+        _normal = l0.cross(l1);
     }
 
     std::optional<Intersection> Polygon::intersect(const Ray &ray)
@@ -62,6 +64,7 @@ namespace raytracer
             }
         if (intersectionCount % 2 == 1)
         {
+            hit.setNormal(plane.normal());
             hitPoint.emplace(hit);
         }
         return hitPoint;
