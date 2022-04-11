@@ -19,25 +19,20 @@ namespace raytracer
     std::optional<Vector2> Line2::intersect(const Ray2 &ray)
     {
         std::optional<Vector2> hitPoint{};
-        Ray2 p{_p1, _p2 - _p1};
-        double dx{ray.direction().x()};
-        double dy{ray.direction().y()};
-        double Px{p.origin().x()};
-        double Pdx{p.direction().x()};
-        double Py{p.origin().y()};
-        double Pdy{p.direction().y()};
-        double oy{ray.origin().y()};
-        double ox{ray.origin().x()};
-        if (p.direction().parallel(ray.direction()))
+        Ray2 line{_p1, _p2 - _p1};
+        if (equals(ray.direction().x(), 0))
         {
-            if (auto t = ray.getT(_p1))
-                hitPoint = ray.getPoint(*t);
-        }
-        auto oneOverdx = scalarQuotient(dx, 1);
-        auto oneOverPdyTimesPdxMinusdx = scalarQuotient(Pdy * (Pdx - dx), 1);
-        double t = (Py + oy - (Px * *oneOverdx) + (ox * *oneOverdx)) * (dx * Pdy) * *oneOverPdyTimesPdxMinusdx;
-        if (t >= 0)
+            if (equals(ray.direction().y(), 0))
+                return hitPoint;
+            double t = line.origin().y() + line.direction().y() * ray.origin().x() - line.direction().y() * line.origin().x() - line.direction().x() * line.direction().y() - ray.origin().y();
+            t /= ray.direction().y();
             hitPoint = ray.getPoint(t);
+        }
+        if (auto t = ray.getT(line.getPoint(0.5)))
+            hitPoint = ray.getPoint(*t);
+        double mu = ray.direction().x() * (ray.origin().y() - line.origin().y()) + ray.direction().y() * (line.origin().x() - ray.origin().x());
+        mu /= ray.direction().x() * line.direction().y() - line.direction().x() * ray.direction().y();
+        hitPoint = line.getPoint(mu);
         return hitPoint;
     }
 
