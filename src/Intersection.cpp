@@ -1,5 +1,6 @@
 #include "Intersection.hpp"
 #include "Ray.hpp"
+#include <math.h>
 
 namespace raytracer
 {
@@ -36,9 +37,21 @@ namespace raytracer
         _position = _ray.getPoint(t);
     }
 
+    void Intersection::setNormal(const Vector &norm)
+    {
+        _normal = norm;
+        double num = _normal * _ray.direction();
+        _angle = std::acos(num) * 180.0 / 3.14159265;
+    }
+
     double Intersection::t() const
     {
         return _t;
+    }
+
+    double Intersection::angle() const
+    {
+        return _angle;
     }
 
     std::ostream &operator<<(std::ostream &out, Intersection &intersection)
