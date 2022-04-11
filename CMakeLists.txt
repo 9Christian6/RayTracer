@@ -22,6 +22,7 @@ src/Shapeset.cpp
 src/Polygon.cpp
 src/Line2.cpp
 src/Ray2.cpp
+src/Color.cpp
 include/Vector2.hpp
 include/Camera.hpp
 include/fEquals.hpp
@@ -39,6 +40,7 @@ include/Polygon.hpp
 include/Line2.hpp
 include/Ray2.hpp
 include/SafeDivision.hpp
+include/Color.hpp
 )
 
 if(PNGwriter_FOUND)
