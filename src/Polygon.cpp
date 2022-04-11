@@ -22,54 +22,9 @@ namespace raytracer
         }
     }
 
-    // bool Polygon::doesIntersect(const Ray &ray)
-    // {
-    //     auto plane = Plane{_points.at(0), _points.at(1), _points.at(2)};
-    //     auto hitPoint = ray.hit(plane);
-    //     if (!hitPoint)
-    //         return false;
-    //     auto hit = hitPoint.value();
-    //     double u, v;
-    //     double nX{plane.normal().x()}, nY{plane.normal().y()}, nZ{plane.normal().z()};
-    //     int dimToLoose;
-    //     if (nX >= nY && nX >= nZ)
-    //     {
-    //         dimToLoose = 0;
-    //         u = nY;
-    //         v = nZ;
-    //     }
-    //     if (nY >= nX && nY >= nZ)
-    //     {
-    //         dimToLoose = 1;
-    //         u = nX;
-    //         v = nZ;
-    //     }
-    //     if (nZ >= nX && nZ >= nY)
-    //     {
-    //         dimToLoose = 2;
-    //         u = nX;
-    //         v = nY;
-    //     }
-    //     std::vector<Vector2> projectedPoints;
-    //     for (auto point : _points)
-    //     {
-    //         Vector2 projected{point.project(dimToLoose)};
-    //         projected = projected - Vector2{u, v};
-    //         projectedPoints.push_back(point.project(dimToLoose));
-    //     }
-    //     for (size_t i = 1; i < projectedPoints.size(); i++)
-    //     {
-    //     }
-    //     return false;
-    // }
-
     std::optional<Intersection> Polygon::intersect(const Ray &ray)
     {
         Plane plane{_points.at(0), _points.at(1), _points.at(2)};
-        // auto hitPoint = plane.intersect(ray);
-        // if (!hitPoint)
-        //     return hitPoint;
-        // auto hit = hitPoint.value();
         if (!plane.intersect(ray))
             return std::optional<Intersection>{};
         auto hit = plane.intersect(ray).value();
