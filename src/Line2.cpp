@@ -25,14 +25,16 @@ namespace raytracer
         if (line.direction().parallel(ray.direction()))
         {
             if (auto t = line.getT(ray.origin()))
-                hit.emplace(line.scale(*t));
+                if (*t >= 0)
+                    hit.emplace(line.scale(*t));
             return hit;
         }
         if (equals(line.direction().x(), 0))
         {
             double t = (line.origin().x() - ray.origin().x()) / ray.direction().x();
-            hit.emplace(ray.scale(t));
-            return hit;
+            auto hitPoint = ray.scale(t);
+            if (contains(hitPoint) && t >= 0)
+                hit.emplace(ray.scale(t));
         }
         if (!equals(line.direction().x(), 0))
         {
@@ -41,8 +43,9 @@ namespace raytracer
             t -= (line.origin().x() * line.direction().y()) / line.direction().x();
             t *= line.direction().x();
             t /= ray.direction().y() * line.direction().x() - ray.direction().x() * line.direction().y();
-            hit.emplace(ray.scale(t));
-            return hit;
+            auto hitPoint = ray.scale(t);
+            if (contains(hitPoint) && t >= 0)
+                hit.emplace(ray.scale(t));
         }
         return hit;
     }
