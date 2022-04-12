@@ -55,6 +55,9 @@ namespace raytracer
             t /= 2;
             hitPoint.emplace(Intersection{ray});
             hitPoint.value().setT(t);
+            Vector hit = ray.getPoint(t);
+            Vector normal = (hit - _origin).normalize();
+            hitPoint.value().setNormal(normal);
         }
         return hitPoint;
     }

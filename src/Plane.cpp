@@ -68,6 +68,7 @@ namespace raytracer
         if (denom == 0 && conatins(ray.origin()))
         {
             hitPoint.setT(1);
+            hitPoint.setNormal(_normal);
             hit.emplace(hitPoint);
             return hit;
         }
@@ -77,6 +78,7 @@ namespace raytracer
             return hit;
         }
         hitPoint.setT(t);
+        hitPoint.setNormal(_normal);
         hit.emplace(hitPoint);
         return hit;
     }
