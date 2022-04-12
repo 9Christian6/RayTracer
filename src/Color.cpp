@@ -38,4 +38,20 @@ namespace raytracer
     {
         return _b;
     }
+
+    Color operator+(const Color &lhs, const Color &rhs)
+    {
+        return Color(lhs.r() + rhs.r(), lhs.g() + rhs.g(), lhs.b() + rhs.b());
+    }
+
+    Color operator*(const Color &lhs, const Color &rhs)
+    {
+        return Color(lhs.r() * rhs.r(), lhs.g() * rhs.g(), lhs.b() * rhs.b());
+    }
+
+    Color operator*(const Color &lhs, float f)
+    {
+        return Color(lhs.r() * f, lhs.g() * f, lhs.b() * f);
+    }
+
 }
