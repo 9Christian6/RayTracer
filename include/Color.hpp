@@ -12,5 +12,11 @@ namespace raytracer
         float r() const;
         float g() const;
         float b() const;
+
+        Color clamp(float min, float max) const;
+
+        friend Color operator+(const Color &lhs, const Color &rhs);
+        friend Color operator*(const Color &lhs, const Color &rhs);
+        friend Color operator*(const Color &op, float f);
     };
 }
