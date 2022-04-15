@@ -64,23 +64,21 @@ namespace raytracer
         Intersection hitPoint{ray};
         double denom{_normal * ray.direction()};
         if (denom == 0 && !conatins(ray.origin()))
-            return hit;
+            return {};
         if (denom == 0 && conatins(ray.origin()))
         {
             hitPoint.setT(1);
             hitPoint.setNormal(_normal);
-            hit.emplace(hitPoint);
-            return hit;
+            return hitPoint;
         }
         double t = ((_origin - ray.origin()) * _normal) / denom;
         if (t <= Ray::RAY_T_MIN || t >= Ray::RAY_T_MAX)
         {
-            return hit;
+            return {};
         }
         hitPoint.setT(t);
         hitPoint.setNormal(_normal);
-        hit.emplace(hitPoint);
-        return hit;
+        return hitPoint;
     }
 
     std::ostream &operator<<(std::ostream &out, Plane &plane)
