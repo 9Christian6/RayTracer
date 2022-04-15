@@ -28,7 +28,7 @@ namespace raytracer
     {
         Plane plane{_points.at(0), _points.at(1), _points.at(2)};
         if (!plane.intersect(ray))
-            return std::optional<Intersection>{};
+            return {};
         auto hit = plane.intersect(ray).value();
         double nX{std::abs(plane.normal().x())}, nY{std::abs(plane.normal().y())}, nZ{std::abs(plane.normal().z())};
         int dimToLoose;
@@ -44,11 +44,11 @@ namespace raytracer
         {
             dimToLoose = 2;
         }
-        std::optional<Intersection> hitPoint;
         auto projectedHit = hit.position().project(dimToLoose);
         int intersectionCount = 0;
         Ray2 testRay{projectedHit, Vector2{1, 0}};
         std::vector<Line2> lines;
+        lines.reserve(_points.size());
         Vector2 p0 = _points[0].project(dimToLoose);
         Vector2 lastPoint = _points.at(_points.size() - 1).project(dimToLoose);
         lines.push_back(Line2{p0, lastPoint});
@@ -65,9 +65,9 @@ namespace raytracer
         if (intersectionCount % 2 == 1)
         {
             hit.setNormal(plane.normal());
-            hitPoint.emplace(hit);
+            return hit;
         }
-        return hitPoint;
+        return {};
     }
 
     std::vector<Vector> Polygon::points() const
