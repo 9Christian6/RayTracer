@@ -36,7 +36,6 @@ namespace raytracer
 
     std::optional<Intersection> Sphere::intersect(const Ray &ray)
     {
-        std::optional<Intersection> hitPoint{};
         double B, C;
         B = ray.direction().x() * (ray.origin().x() - _origin.x());
         B += ray.direction().y() * (ray.origin().y() - _origin.y());
@@ -53,13 +52,14 @@ namespace raytracer
             t = sqrt(t);
             t = -B - t;
             t /= 2;
-            hitPoint.emplace(Intersection{ray});
-            hitPoint.value().setT(t);
+            auto intersection = Intersection{ray};
+            intersection.setT(t);
             Vector hit = ray.getPoint(t);
             Vector normal = (hit - _origin).normalize();
-            hitPoint.value().setNormal(normal);
+            intersection.setNormal(normal);
+            return intersection;
         }
-        return hitPoint;
+        return {};
     }
 
     std::ostream &
