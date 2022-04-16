@@ -6,26 +6,44 @@
 #include "Camera.hpp"
 #include "Image.hpp"
 #include "Intersection.hpp"
+#include "Shapeset.hpp"
+#include "Polygon.hpp"
+#include "Ray2.hpp"
+#include "Line2.hpp"
 #include <cmath>
-// std::cout.setf(std::ios::boolalpha);
 
+using namespace raytracer;
 int main(int, char **)
 {
     Vector origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
-    Camera camera{yVec, zVec + yVec, 2 * yVec, 90, 1};
-    Image image{10, 10};
-    Sphere sphere{10 * zVec, 5};
-    auto xzPlane = Plane{origin, yVec};
-    for (int x = 0; x < image.width(); x++)
-    {
-        for (int y = 0; y < image.height(); y++)
-        {
-            auto ray = camera.makeRay(image, Vector2{x, y});
-            auto hit = ray.hit(sphere);
-            Intersection hitPoint{ray};
-            sphere.intersect(hitPoint);
-            std::cout << hitPoint.t() << "\n";
-        }
-    }
-    image.print();
+    Vector2 origin2{0, 0}, xVec2{1, 0}, yVec2{0, 1};
+    //
+    //
+    //
+    Camera camera{yVec, zVec + yVec, 2 * yVec, 45, 1};
+    Image image{1000, 1000};
+    ShapeSet scene{};
+    //
+    //
+    //
+    Polygon trianlge{{-xVec - yVec + 5 * zVec, xVec - yVec + 5 * zVec, yVec + 5 * zVec}};
+    Polygon square1{{Vector{-1, -1, 6}, Vector{-1, 1, 5}, Vector{1, 1, 5}, Vector{1, -1, 6}}};
+    Polygon square2{{Vector{-1, -1, 5}, Vector{-1, 1, 6}, Vector{1, 1, 6}, Vector{1, -1, 5}}};
+    Sphere sphere{5 * zVec, 1};
+    Plane xzPlane{origin, yVec};
+    Plane yzPlane{-xVec, xVec};
+    //
+    //
+    //
+    // scene.addShape(square2);
+    // scene.addShape(square1);
+    // scene.addShape(trianlge);
+    scene.addShape(sphere);
+    // scene.addShape(xyPlane);
+    scene.addShape(xzPlane);
+    scene.addShape(yzPlane);
+    //
+    //
+    //
+    image.print(camera, scene);
 }
