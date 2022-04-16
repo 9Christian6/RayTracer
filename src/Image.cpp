@@ -1,5 +1,5 @@
 #include "Image.hpp"
-#include "Camera.hpp"
+#include <iostream>
 #include <vector>
 
 namespace raytracer
@@ -33,10 +33,12 @@ namespace raytracer
             for (int x = 0; x < _width; x++)
             {
                 auto ray = cam.makeRay(_width, _height, Vector2{x, y});
-                if (scene.intersect(ray))
+                if (auto intersection = scene.intersect(ray))
                 {
                     _pixels[y * _width + x] = true;
-                    _image.plot(x, y, 1.0, 1.0, 1.0);
+                    double angle = intersection.value().angle();
+                    double color = angle / 180.;
+                    _image.plot(x, y, color, color, color);
                 }
             }
         }
