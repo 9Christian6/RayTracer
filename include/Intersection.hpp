@@ -2,6 +2,7 @@
 #include <ostream>
 #include "Vector.hpp"
 #include "Ray.hpp"
+#include <iostream>
 #include <memory>
 
 namespace raytracer
@@ -18,8 +19,8 @@ namespace raytracer
 
     public:
         Intersection(Ray &ray, Shape *shape);
-        Intersection(const Ray &ray);
-        Intersection(Ray &ray);
+        explicit Intersection(const Ray &ray);
+        // Intersection(Ray &ray);
         bool intersected() const;
         void setT(double t);
         void setNormal(const Vector &norm);
@@ -27,6 +28,8 @@ namespace raytracer
         const Ray ray() const;
         double t() const;
         double angle() const;
+
+        Intersection operator=(const Intersection &intersection) { return {intersection}; };
         friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);
     };
 }

@@ -8,15 +8,15 @@ namespace raytracer
     {
     }
 
-    Intersection::Intersection(Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NULL}
-    {
-    }
+    // Intersection::Intersection(Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NULL}
+    // {
+    // }
 
     Intersection::Intersection(const Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NULL}
     {
     }
 
-    bool Intersection::intersected() const
+        bool Intersection::intersected() const
     {
         return (_pShape != NULL);
     }
