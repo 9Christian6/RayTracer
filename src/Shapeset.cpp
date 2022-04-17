@@ -34,12 +34,5 @@ namespace raytracer
                 temp = i;
         }
         return hits[temp];
-        // if (hits.size() > 0)
-        //     return hits.front();
-        // if (hits.size() > 0)
-        // {
-        //     std::sort(hits.begin(), hits.end(), compareIntersection);
-        //     return hits.front();
-        // }
     }
 }
