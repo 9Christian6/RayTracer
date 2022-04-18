@@ -15,6 +15,11 @@ namespace raytracer
         _shapes.push_back(&shape);
     }
 
+    void ShapeSet::addLight(Light &light)
+    {
+        _lights.push_back(&light);
+    }
+
     std::optional<Intersection> ShapeSet::intersect(const Ray &ray)
     {
         std::vector<Intersection> hits;
@@ -27,12 +32,26 @@ namespace raytracer
         }
         if (hits.size() == 0)
             return {};
-        std::size_t temp = 0;
+        std::size_t minHit = 0;
         for (std::size_t i = 0; i < hits.size(); i++)
         {
-            if (hits[temp].t() > hits[i].t())
-                temp = i;
+            if (hits[minHit].t() > hits[i].t())
+                minHit = i;
         }
-        return hits[temp];
+        return hits[minHit];
+    }
+
+    std::vector<Light> ShapeSet::visibleLights(const Vector &point)
+    {
+        std::vector<Light> visibleLights;
+        for (auto light : _lights)
+        {
+            auto lightRay = Ray{point, light->position() - point};
+            if (!intersect(lightRay))
+            {
+                visibleLights.push_back(*light);
+            }
+        }
+        return visibleLights;
     }
 }
