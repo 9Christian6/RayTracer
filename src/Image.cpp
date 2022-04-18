@@ -35,10 +35,14 @@ namespace raytracer
                 auto ray = cam.makeRay(_width, _height, Vector2{x, y});
                 if (auto intersection = scene.intersect(ray))
                 {
-                    _pixels[y * _width + x] = true;
-                    double angle = intersection.value().angle();
-                    double color = angle / 180.;
-                    _image.plot(x, y, color, color, color);
+                    auto hitPosition = intersection->position();
+                    if (!scene.visibleLights(hitPosition).empty())
+                    {
+                        _pixels[y * _width + x] = true;
+                        double angle = intersection.value().angle();
+                        double color = angle / 180.;
+                        _image.plot(x, y, color, color, color);
+                    }
                 }
             }
         }
