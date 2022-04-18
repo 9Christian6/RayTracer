@@ -9,6 +9,7 @@ namespace raytracer
 
     public:
         Color(float r, float g, float b);
+        Color(const Color &color);
         float r() const;
         float g() const;
         float b() const;
