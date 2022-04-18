@@ -60,7 +60,8 @@ namespace raytracer
         for (auto line : lines)
             if (auto hit = line.intersect(testRay))
             {
-                intersectionCount++;
+                if (!testRay.direction().parallel(line.p2() - line.p1()))
+                    intersectionCount++;
             }
         if (intersectionCount % 2 == 1)
         {
