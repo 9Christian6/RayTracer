@@ -9,7 +9,7 @@ namespace raytracer
         const Vector _position;
 
     public:
-        Light(Vector &direction);
+        Light(Vector &position);
         Vector position() const;
     };
 }
