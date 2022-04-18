@@ -47,7 +47,7 @@ namespace raytracer
         C -= std::pow(_radius, 2);
         double t{0};
         t = std::pow(B, 2) - (4 * C);
-        if (t >= 0)
+        if (t >= Ray::RAY_T_MIN)
         {
             t = sqrt(t);
             t = -B - t;
