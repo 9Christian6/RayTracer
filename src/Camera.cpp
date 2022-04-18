@@ -7,6 +7,8 @@ namespace raytracer
 {
     Camera::Camera(Vector origin, Vector target, Vector upguide, double fov, double aspectRatio) : _position{origin}
     {
+        target = origin + target;
+        upguide = origin + upguide;
         _forward = (target - origin).normalize();
         _right = _forward.cross(upguide).normalize();
         _up = _right.cross(_forward);
