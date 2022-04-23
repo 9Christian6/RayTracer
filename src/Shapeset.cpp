@@ -41,16 +41,15 @@ namespace raytracer
         return hits[minHit];
     }
 
-    std::vector<Light> ShapeSet::visibleLights(const Vector &point)
+    std::vector<Intersection> ShapeSet::visibleLights(const Vector &point)
     {
-        std::vector<Light> visibleLights;
+        std::vector<Intersection> visibleLights;
         for (auto light : _lights)
         {
             auto lightRay = Ray{point, light->position() - point};
-            if (!intersect(lightRay))
-            {
-                visibleLights.push_back(*light);
-            }
+            auto hit = intersect(lightRay);
+            if (!hit)
+                visibleLights.push_back(*hit);
         }
         return visibleLights;
     }
