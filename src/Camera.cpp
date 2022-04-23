@@ -29,6 +29,13 @@ namespace raytracer
         return _position;
     }
 
+    void Camera::setPosition(const Vector &position, const Vector &upguide, const Vector &forward)
+    {
+        _position = position;
+        _up = upguide;
+        _forward = forward;
+    }
+
     Vector Camera::direction() const
     {
         return _forward;
