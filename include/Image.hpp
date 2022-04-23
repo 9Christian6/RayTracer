@@ -19,6 +19,5 @@ namespace raytracer
         int height() const;
         void setPixel(int x, int y, bool value);
         bool pixel(int x, int y) const;
-        void print(Camera &cam, ShapeSet &scene);
     };
 }

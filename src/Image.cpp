@@ -25,27 +25,4 @@ namespace raytracer
     {
         _pixels[x * _width + y] = value;
     }
-
-    void Image::print(Camera &cam, ShapeSet &scene)
-    {
-        for (int y = 0; y < _height; y++)
-        {
-            for (int x = 0; x < _width; x++)
-            {
-                auto ray = cam.makeRay(_width, _height, Vector2{x, y});
-                if (auto intersection = scene.intersect(ray))
-                {
-                    auto hitPosition = intersection->position();
-                    if (!scene.visibleLights(hitPosition).empty())
-                    {
-                        _pixels[y * _width + x] = true;
-                        double angle = intersection.value().angle();
-                        double color = angle / 180.;
-                        _image.plot(x, y, color, color, color);
-                    }
-                }
-            }
-        }
-        _image.close();
-    }
 }
