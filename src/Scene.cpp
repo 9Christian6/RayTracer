@@ -39,4 +39,9 @@ namespace raytracer
     {
         _shapes.addShape(shape);
     }
+
+    void Scene::setCamera(const Vector &position, const Vector &upGuide, const Vector &forward)
+    {
+        _camera.setPosition(position, upGuide, forward);
+    }
 }

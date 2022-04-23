@@ -17,6 +17,7 @@ namespace raytracer
     public:
         Scene(std::vector<Light> lights, ShapeSet &shapes, Camera &cam);
         void addShape(Shape &shape);
+        void setCamera(const Vector &position, const Vector &upGuide, const Vector &forward);
         void render(int width, int height) const;
     };
 
