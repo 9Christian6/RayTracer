@@ -24,6 +24,7 @@ namespace raytracer
         float z_f() const;
 
         double length() const;
+        double angle(const Vector &vector) const;
         bool orthogonal(const Vector &vec) const;
         bool parallel(const Vector &vec) const;
         Vector normalize() const;

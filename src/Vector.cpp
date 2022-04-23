@@ -4,6 +4,8 @@
 
 namespace raytracer
 {
+    static double PI = 3.14159265359;
+
     Vector::Vector() : _x{0}, _y{0}, _z{0} {};
     Vector::Vector(int x, int y, int z) : _x{(double)x}, _y{(double)y}, _z{(double)z} {};
     Vector::Vector(double x, double y, double z) : _x{x}, _y{y}, _z{z} {};
@@ -103,6 +105,13 @@ namespace raytracer
         return std::sqrt(_x * _x + _y * _y + _z * _z);
     }
 
+    double Vector::angle(const Vector &vec) const
+    {
+        double dot = *this * vec;
+        double length = this->length() * vec.length();
+        return std::acos(dot / length) * 180 / PI;
+    }
+
     bool Vector::orthogonal(const Vector &vec) const
     {
         return ((*this) * vec) == 0;
@@ -141,7 +150,7 @@ namespace raytracer
             return Vector2{_x, _y};
 
         default:
-            throw Exception{"dimention to loose must lie between 0 and 2"};
+            throw Exception{"dimension to loose must lie between 0 and 2"};
             break;
         }
     }
