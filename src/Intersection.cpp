@@ -1,5 +1,6 @@
 #include "Intersection.hpp"
 #include "Ray.hpp"
+#include "Color.hpp"
 #include <math.h>
 
 namespace raytracer
@@ -16,7 +17,7 @@ namespace raytracer
     {
     }
 
-        bool Intersection::intersected() const
+    bool Intersection::intersected() const
     {
         return (_pShape != NULL);
     }
@@ -26,9 +27,21 @@ namespace raytracer
         return _ray.getPoint(_t);
     }
 
+    Vector Intersection::normal()
+    {
+        return _normal;
+    }
+
     const Ray Intersection::ray() const
     {
         return _ray;
+    }
+
+    std::optional<Color> Intersection::color() const
+    {
+        if (_color)
+            return Color{*_color};
+        return {};
     }
 
     void Intersection::setT(double t)
@@ -42,6 +55,11 @@ namespace raytracer
         _normal = norm;
         double num = _normal * _ray.direction();
         _angle = std::acos(num) * 180.0 / 3.14159265;
+    }
+
+    void Intersection::setColor(const Color &color)
+    {
+        _color = color;
     }
 
     double Intersection::t() const
