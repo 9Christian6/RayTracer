@@ -19,16 +19,21 @@ namespace raytracer
                 if (auto intersection = _shapes.intersect(ray))
                 {
                     auto hitPosition = intersection->position();
-                    auto lights = _shapes.visibleLights(hitPosition + (1 + Ray::RAY_T_MIN) * intersection->normal());
-                    double color = 1;
-                    if (!lights.empty())
+                    auto hitPositionExtruded = hitPosition + 0.25 * intersection->normal();
+                    double color{0};
+                    for (auto light : _lights)
                     {
-                        for (auto light : lights)
+                        auto lightTest = Ray{hitPosition, light.position()};
+                        if (!_shapes.intersect(lightTest))
                         {
                             Vector eyeDirection = ray.direction();
+                            Vector lightDirection = (light.position() - hitPosition).normalize();
+                            Vector normal = intersection->normal();
+                            double angle = normal.angle(lightDirection);
+                            color += 1 - angle / 180.;
                         }
                     }
-                    img._image.plot(x, y, 1., 1., 1.);
+                    img._image.plot(x, y, color, color, color);
                 }
             }
         }
@@ -38,6 +43,11 @@ namespace raytracer
     void Scene::addShape(Shape &shape)
     {
         _shapes.addShape(shape);
+    }
+
+    void Scene::addLight(Light &light)
+    {
+        _lights.push_back(light);
     }
 
     void Scene::setCamera(const Vector &position, const Vector &upGuide, const Vector &forward)
