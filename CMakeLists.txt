@@ -25,6 +25,7 @@ src/Ray2.cpp
 src/Color.cpp
 src/Light.cpp
 src/Scene.cpp
+src/Material.cpp
 include/Vector2.hpp
 include/Camera.hpp
 include/fEquals.hpp
@@ -45,6 +46,7 @@ include/SafeDivision.hpp
 include/Color.hpp
 include/Light.hpp
 include/Scene.hpp
+include/Material.hpp
 )
 
 if(PNGwriter_FOUND)
