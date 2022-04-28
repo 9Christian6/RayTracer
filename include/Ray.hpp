@@ -18,7 +18,7 @@ namespace raytracer
         Ray(Vector2 origin, Vector2 direction);
 
         // constants
-        static constexpr double RAY_T_MIN = 1.001;
+        static constexpr double RAY_T_MIN = 1.0e-9;
         static constexpr double RAY_T_MAX = 1.0e30;
 
         // accessors
