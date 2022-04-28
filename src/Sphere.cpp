@@ -45,9 +45,8 @@ namespace raytracer
         C += std::pow((ray.origin().y() - _origin.y()), 2);
         C += std::pow((ray.origin().z() - _origin.z()), 2);
         C -= std::pow(_radius, 2);
-        double t{0};
-        t = std::pow(B, 2) - (4 * C);
-        if (t >= Ray::RAY_T_MIN)
+        double t = std::pow(B, 2) - (4 * C);
+        if (t > Ray::RAY_T_MIN && t < Ray::RAY_T_MAX)
         {
             t = sqrt(t);
             t = -B - t;
