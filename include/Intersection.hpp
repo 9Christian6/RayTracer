@@ -27,8 +27,8 @@ namespace raytracer
         void setT(double t);
         void setNormal(const Vector &norm);
         void setColor(const Color &color);
-        Vector position();
-        Vector normal();
+        Vector position() const;
+        Vector normal() const;
         const Ray ray() const;
         double t() const;
         double angle() const;

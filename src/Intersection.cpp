@@ -22,14 +22,14 @@ namespace raytracer
         return (_pShape != NULL);
     }
 
-    Vector Intersection::position()
+    Vector Intersection::position() const
     {
         return _ray.getPoint(_t);
     }
 
-    Vector Intersection::normal()
+    Vector Intersection::normal() const
     {
-        return _normal;
+        return Vector{_normal};
     }
 
     const Ray Intersection::ray() const
