@@ -24,16 +24,10 @@ namespace raytracer
                     double color{0};
                     for (auto light : _lights)
                     {
-                        auto lightDirection = (light.position() - hitPosition);
-                        double lightT = lightDirection.length();
-                        lightDirection = lightDirection.normalize();
-                        auto lightTest = Ray{hitPosition, lightDirection};
-                        auto potentialHits = _shapes.intersect(lightTest);
                         if (isVisible(*intersection, light))
                         {
-                            Vector eyeDirection = ray.direction();
-                            double contributionFactor{0.85};
-                            color += contributionFactor * (normal * lightDirection);
+                            auto lightDirection = (light.position() - hitPosition).normalize();
+                            color += 0.5 * (normal * lightDirection);
                         }
                     }
                     img._image.plot(x, y, color, color, color);
