@@ -26,7 +26,11 @@ namespace raytracer
 
     std::optional<Intersection> Polygon::intersect(const Ray &ray)
     {
-        Plane plane{_points.at(0), _points.at(1), _points.at(2)};
+        Plane plane{_points.at(2), _points.at(1), _points.at(0)};
+        if (_normal * ray.direction() > plane.normal() * ray.direction())
+        {
+            plane = Plane{_points.at(0), _points.at(1), _points.at(2)};
+        }
         if (!plane.intersect(ray))
             return {};
         auto hit = plane.intersect(ray).value();
