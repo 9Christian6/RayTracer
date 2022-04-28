@@ -1,3 +1,4 @@
+#include "Intersection.hpp"
 #include "Scene.hpp"
 #include "Camera.hpp"
 #include "Ray.hpp"
@@ -18,19 +19,21 @@ namespace raytracer
                 auto ray = _camera.makeRay(width, height, Vector2{x, y});
                 if (auto intersection = _shapes.intersect(ray))
                 {
+                    auto normal = intersection->normal();
                     auto hitPosition = intersection->position();
-                    auto hitPositionExtruded = hitPosition + 0.25 * intersection->normal();
                     double color{0};
                     for (auto light : _lights)
                     {
-                        auto lightTest = Ray{hitPosition, light.position()};
-                        if (!_shapes.intersect(lightTest))
+                        auto lightDirection = (light.position() - hitPosition);
+                        double lightT = lightDirection.length();
+                        lightDirection = lightDirection.normalize();
+                        auto lightTest = Ray{hitPosition, lightDirection};
+                        auto potentialHits = _shapes.intersect(lightTest);
+                        if (isVisible(*intersection, light))
                         {
                             Vector eyeDirection = ray.direction();
-                            Vector lightDirection = (light.position() - hitPosition).normalize();
-                            Vector normal = intersection->normal();
-                            double angle = normal.angle(lightDirection);
-                            color += 1 - angle / 180.;
+                            double contributionFactor{0.85};
+                            color += contributionFactor * (normal * lightDirection);
                         }
                     }
                     img._image.plot(x, y, color, color, color);
@@ -38,6 +41,18 @@ namespace raytracer
             }
         }
         img._image.close();
+    }
+
+    bool Scene::isVisible(const Intersection &point, const Light &light) const
+    {
+        Vector position = point.position() + Ray::RAY_T_MIN * point.normal();
+        Ray lightRay{light.position(), position - light.position()};
+        double tLength{(light.position() - point.position()).length()};
+        if (auto lightHit = _shapes.intersect(lightRay))
+        {
+            return (tLength < lightHit->t());
+        }
+        return true;
     }
 
     void Scene::addShape(Shape &shape)

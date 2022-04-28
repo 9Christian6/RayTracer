@@ -1,4 +1,5 @@
 #pragma once
+#include "Intersection.hpp"
 #include "Shapeset.hpp"
 #include "Light.hpp"
 #include "Camera.hpp"
@@ -20,6 +21,7 @@ namespace raytracer
         void addLight(Light &light);
         void setCamera(const Vector &position, const Vector &upGuide, const Vector &forward);
         void render(int width, int height) const;
+        bool isVisible(const Intersection &point, const Light &light) const;
     };
 
 }
