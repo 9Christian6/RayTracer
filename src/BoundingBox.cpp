@@ -7,6 +7,7 @@
 
 namespace raytracer
 {
+
     BoundingBox::BoundingBox(Vector &&minExt, Vector &&maxExt) : _minExt{std::move(minExt)}, _maxExt{std::move(maxExt)}
     {
     }
@@ -23,6 +24,50 @@ namespace raytracer
     {
     }
 
+    enum Dimension
+    {
+        x,
+        y,
+        z
+    };
+
+    bool hitTest(Dimension dim, const Ray &ray, double min, double max)
+    {
+        double tNear = std::numeric_limits<double>::lowest();
+        double tFar = std::numeric_limits<double>::max();
+        double rayO, rayD, t1, t2;
+        switch (dim)
+        {
+        case x:
+            rayO = ray.origin().x();
+            rayD = ray.direction().x();
+            break;
+
+        case y:
+            rayO = ray.origin().y();
+            rayD = ray.direction().y();
+            break;
+
+        case z:
+            rayO = ray.origin().z();
+            rayD = ray.direction().z();
+            break;
+        }
+        t1 = (min - rayO) / rayD;
+        t2 = (max - rayO) / rayD;
+        if (t1 > t2)
+            std::swap(t1, t2);
+        if (t1 > tNear)
+            tNear = t1;
+        if (t2 < tFar)
+            tFar = t2;
+        if (tNear > tFar)
+            return false;
+        if (tFar < 0)
+            return false;
+        return true;
+    }
+
     bool BoundingBox::intersect(const Ray &ray)
     {
         double tNear = std::numeric_limits<double>::lowest();
@@ -30,7 +75,6 @@ namespace raytracer
         double xMin{_minExt.x()}, xMax{_maxExt.x()};
         double yMin{_minExt.y()}, yMax{_maxExt.y()};
         double zMin{_minExt.z()}, zMax{_maxExt.z()};
-        // test for x axis aligned planes
         if (equals(ray.direction().x(), 0.))
         {
             if (ray.origin().x() < xMin || ray.origin().x() > xMax)
@@ -38,21 +82,9 @@ namespace raytracer
         }
         else
         {
-            double t1, t2;
-            t1 = (xMin - ray.origin().x()) / ray.direction().x();
-            t2 = (xMax - ray.origin().x()) / ray.direction().x();
-            if (t1 > t2)
-                std::swap(t1, t2);
-            if (t1 > tNear)
-                tNear = t1;
-            if (t2 < tFar)
-                tFar = t2;
-            if (tNear > tFar)
-                return false;
-            if (tFar < 0)
+            if (!hitTest(Dimension::x, ray, xMin, xMax))
                 return false;
         }
-        // test for y axis aligned planes
         if (equals(ray.origin().y(), 0.))
         {
             if (ray.origin().y() < yMin || ray.origin().y() > yMax)
@@ -60,21 +92,9 @@ namespace raytracer
         }
         else
         {
-            double t1, t2;
-            t1 = (yMin - ray.origin().y()) / ray.direction().y();
-            t2 = (yMax - ray.origin().y()) / ray.direction().y();
-            if (t1 > t2)
-                std::swap(t1, t2);
-            if (t1 > tNear)
-                tNear = t1;
-            if (t2 < tFar)
-                tFar = t2;
-            if (tNear > tFar)
-                return false;
-            if (tFar < 0)
+            if (!hitTest(Dimension::y, ray, yMin, yMax))
                 return false;
         }
-        // test for z axis aligned planes
         if (equals(ray.origin().z(), 0.))
         {
             if (ray.origin().z() < zMin || ray.origin().z() > zMax)
@@ -82,20 +102,10 @@ namespace raytracer
         }
         else
         {
-            double t1, t2;
-            t1 = (zMin - ray.origin().z()) / ray.direction().z();
-            t2 = (zMax - ray.origin().z()) / ray.direction().z();
-            if (t1 > t2)
-                std::swap(t1, t2);
-            if (t1 > tNear)
-                tNear = t1;
-            if (t2 < tFar)
-                tFar = t2;
-            if (tNear > tFar)
-                return false;
-            if (tFar < 0)
+            if (!hitTest(Dimension::z, ray, zMin, zMax))
                 return false;
         }
         return true;
     }
+
 }
