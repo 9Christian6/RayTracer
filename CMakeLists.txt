@@ -49,7 +49,6 @@ include/Light.hpp
 include/Scene.hpp
 include/Material.hpp
 include/BoundingBox.hpp
-include/IIntersectable.hpp
 )
 
 if(PNGwriter_FOUND)
