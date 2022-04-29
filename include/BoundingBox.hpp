@@ -1,17 +1,20 @@
 #pragma once
-#include "Shape.hpp"
 #include "Vector.hpp"
 #include "Ray.hpp"
-#include "Intersection.hpp"
-#include <optional>
+#include "Plane.hpp"
 
 namespace raytracer
 {
-    class BoundingBox : public Shape
+    class BoundingBox
     {
     private:
+        Vector _minExt, _maxExt;
+
     public:
+        BoundingBox(Vector &&minExt, Vector &&maxExt);
+        BoundingBox(Vector &minExt, Vector &&maxExt);
+        BoundingBox(Vector &&minExt, Vector &maxExt);
         BoundingBox(Vector &minExt, Vector &maxExt);
-        std::optional<Intersection> intersect(const Ray &ray);
+        bool intersect(const Ray &ray);
     };
 }
