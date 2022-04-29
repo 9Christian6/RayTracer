@@ -1,4 +1,5 @@
 #include "Image.hpp"
+#include "Color.hpp"
 #include <iostream>
 #include <vector>
 
@@ -24,5 +25,10 @@ namespace raytracer
     void Image::setPixel(int x, int y, bool value)
     {
         _pixels[x * _width + y] = value;
+    }
+
+    void Image::plot(int x, int y, Color &color)
+    {
+        _image.plot(x, y, color.r(), color.g(), color.b());
     }
 }
