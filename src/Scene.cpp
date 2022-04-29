@@ -28,11 +28,11 @@ namespace raytracer
                         if (isVisible(*intersection, light))
                         {
                             auto lightDirection = (light.position() - hitPosition).normalize();
-                            brightness += 0.5 * (normal * lightDirection);
+                            brightness += (normal * lightDirection);
                         }
                     }
-                    *hitColor = *hitColor * brightness;
-                    img._image.plot(x, y, hitColor->r(), hitColor->g(), hitColor->b());
+                    *hitColor = *hitColor * (brightness / _lights.size());
+                    img.plot(x, y, *hitColor);
                 }
             }
         }
