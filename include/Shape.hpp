@@ -12,6 +12,7 @@ namespace raytracer
         std::optional<Color> _color;
 
     public:
+        virtual ~Shape() = default;
         inline void setColor(Color &color)
         {
             _color = color;

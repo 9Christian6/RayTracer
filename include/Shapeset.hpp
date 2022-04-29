@@ -17,6 +17,6 @@ namespace raytracer
         void addShape(Shape &shape);
         void addLight(Light &light);
         virtual std::optional<Intersection> intersect(const Ray &ray);
-        virtual std::vector<Intersection> visibleLights(const Vector &point);
+        std::vector<Intersection> visibleLights(const Vector &point);
     };
 }
