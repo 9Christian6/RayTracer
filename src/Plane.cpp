@@ -78,6 +78,7 @@ namespace raytracer
         }
         hitPoint.setT(t);
         hitPoint.setNormal(_normal);
+        hitPoint.setColor(color());
         return hitPoint;
     }
 

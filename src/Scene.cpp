@@ -21,16 +21,18 @@ namespace raytracer
                 {
                     auto normal = intersection->normal();
                     auto hitPosition = intersection->position();
-                    double color{0};
+                    auto hitColor = intersection->color();
+                    double brightness{0};
                     for (auto light : _lights)
                     {
                         if (isVisible(*intersection, light))
                         {
                             auto lightDirection = (light.position() - hitPosition).normalize();
-                            color += 0.5 * (normal * lightDirection);
+                            brightness += 0.5 * (normal * lightDirection);
                         }
                     }
-                    img._image.plot(x, y, color, color, color);
+                    *hitColor = *hitColor * brightness;
+                    img._image.plot(x, y, hitColor->r(), hitColor->g(), hitColor->b());
                 }
             }
         }

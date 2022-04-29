@@ -52,6 +52,7 @@ namespace raytracer
             t = -B - t;
             t /= 2;
             auto intersection = Intersection{ray};
+            intersection.setColor(color());
             intersection.setT(t);
             Vector hit = ray.getPoint(t);
             Vector normal = (hit - _origin).normalize();

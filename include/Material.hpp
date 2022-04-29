@@ -6,12 +6,13 @@ namespace raytracer
     class Material
     {
     private:
+        Color _color;
+
     public:
         Material();
-        double reflects(const Color &color) const;
+        Material(Color &Color);
+        void setColor(Color color);
+        Color color() const;
+        Color reflects(const Color &color) const;
     };
-
-    Material::Material()
-    {
-    }
 }

@@ -1,22 +1,17 @@
 #pragma once
 #include <optional>
 #include "Color.hpp"
+#include "Material.hpp"
 
 namespace raytracer
 {
     class Intersection;
     class Ray;
-    class Shape
+    class Shape : public Material
     {
     private:
-        std::optional<Color> _color;
-
     public:
         virtual ~Shape() = default;
-        inline void setColor(Color &color)
-        {
-            _color = color;
-        };
         virtual std::optional<Intersection> intersect(const Ray &ray) = 0;
     };
 }
