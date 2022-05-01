@@ -13,11 +13,11 @@ namespace raytracer
         {
             return _r;
         };
-        float g() const;
+        float g() const
         {
             return _g;
         };
-        float b() const;
+        float b() const
         {
             return _b;
         };

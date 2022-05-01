@@ -25,20 +25,6 @@ namespace raytracer
         return Color{newR, newG, newB};
     }
 
-    float Color::r() const
-    {
-        return _r;
-    }
-
-    float Color::g() const
-    {
-        return _g;
-    }
-    float Color::b() const
-    {
-        return _b;
-    }
-
     Color operator+(const Color &lhs, const Color &rhs)
     {
         return Color(lhs.r() + rhs.r(), lhs.g() + rhs.g(), lhs.b() + rhs.b());
