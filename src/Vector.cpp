@@ -160,6 +160,11 @@ namespace raytracer
         return (this->normalize() == vec.normalize());
     }
 
+    Vector Vector::reflect(const Vector &normal) const
+    {
+        return *this - 2 * (*this * normal) * normal;
+    }
+
     std::ostream &operator<<(std::ostream &stream, Vector point)
     {
         stream << "(" << point.x() << ", " << point.y() << ", " << point.z() << ")";
