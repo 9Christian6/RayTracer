@@ -9,10 +9,18 @@ namespace raytracer
 
     public:
         Color(float r, float g, float b);
-        Color(const Color &color);
-        float r() const;
+        float r() const
+        {
+            return _r;
+        };
         float g() const;
+        {
+            return _g;
+        };
         float b() const;
+        {
+            return _b;
+        };
 
         Color clamp(float min, float max) const;
 
