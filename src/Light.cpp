@@ -2,7 +2,7 @@
 
 namespace raytracer
 {
-    Light::Light(Vector &position) : _position{position} {}
+    Light::Light(Vector position) : _position{position} {}
 
     Vector Light::position() const
     {

@@ -6,10 +6,10 @@ namespace raytracer
     class Light
     {
     private:
-        const Vector _position;
+        Vector _position;
 
     public:
-        Light(Vector &position);
+        explicit Light(Vector position);
         Vector position() const;
     };
 }
