@@ -20,8 +20,12 @@ namespace raytracer
         void addShape(Shape &shape);
         void addLight(Light &light);
         void setCamera(const Vector &position, const Vector &upGuide, const Vector &forward);
+        double lambert(const Intersection &hit) const;
+        std::optional<Intersection> specular(const Intersection &hit) const;
         void render(int width, int height) const;
         bool isVisible(const Intersection &point, const Light &light) const;
+        bool isVisible(const Vector &point, const Light &light) const;
+        std::vector<Light> visibleLights(const Intersection &point) const;
     };
 
 }

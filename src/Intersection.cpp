@@ -39,21 +39,27 @@ namespace raytracer
         return _ray;
     }
 
-    std::optional<Color> Intersection::color() const
+    std::optional<Color> Intersection::color(const std::vector<Light> &lights) const
     {
+        double brightness{0};
         if (_color)
-            return Color{*_color};
+        {
+            Color color{*_color};
+            for (auto light : lights)
+            {
+                brightness += lambert(light);
+            }
+            color = color * (brightness / lights.size());
+            return color;
+        }
         return {};
     }
 
-    double Intersection::lambert(const std::vector<Light> &lights) const
+    double Intersection::lambert(const Light &light) const
     {
         double brightness{0};
-        for (auto light : lights)
-        {
-            auto lightDirection = (light.position() - _position).normalize();
-            brightness += _normal * lightDirection;
-        }
+        auto lightDirection = (light.position() - _position).normalize();
+        brightness = _normal * lightDirection;
         return brightness;
     }
 
