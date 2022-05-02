@@ -3,6 +3,8 @@
 #include "Vector.hpp"
 #include "Ray.hpp"
 #include "Color.hpp"
+#include "Light.hpp"
+#include <vector>
 #include <iostream>
 #include <memory>
 
@@ -33,6 +35,7 @@ namespace raytracer
         double t() const;
         double angle() const;
         std::optional<Color> color() const;
+        double lambert(const std::vector<Light> &lights) const;
 
         Intersection operator=(const Intersection &intersection) { return {intersection}; };
         friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);

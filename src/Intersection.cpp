@@ -1,6 +1,8 @@
 #include "Intersection.hpp"
 #include "Ray.hpp"
 #include "Color.hpp"
+#include "Light.hpp"
+#include <vector>
 #include <math.h>
 
 namespace raytracer
@@ -42,6 +44,17 @@ namespace raytracer
         if (_color)
             return Color{*_color};
         return {};
+    }
+
+    double Intersection::lambert(const std::vector<Light> &lights) const
+    {
+        double brightness{0};
+        for (auto light : lights)
+        {
+            auto lightDirection = (light.position() - _position).normalize();
+            brightness += _normal * lightDirection;
+        }
+        return brightness;
     }
 
     void Intersection::setT(double t)
