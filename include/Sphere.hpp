@@ -1,13 +1,14 @@
 #pragma once
 #include "Vector.hpp"
 #include "Shape.hpp"
+#include "Material.hpp"
 #include <ostream>
 #include <optional>
 
 namespace raytracer
 {
     class Ray;
-    class Sphere : public Shape
+    class Sphere : public Shape, public Material
     {
     private:
         Vector _origin;

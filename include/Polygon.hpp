@@ -4,13 +4,14 @@
 #include "Ray.hpp"
 #include "Intersection.hpp"
 #include "Line2.hpp"
+#include "Material.hpp"
 #include <vector>
 #include <optional>
 #include <ostream>
 
 namespace raytracer
 {
-    class Polygon : public Shape
+    class Polygon : public Shape, public Material
     {
     private:
         std::vector<Vector> _points;

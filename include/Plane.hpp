@@ -2,12 +2,13 @@
 #include <ostream>
 #include "Vector.hpp"
 #include "Shape.hpp"
+#include "Material.hpp"
 #include <optional>
 
 namespace raytracer
 {
     class Ray;
-    class Plane : public Shape
+    class Plane : public Shape, public Material
     {
     private:
         Vector _origin, _normal;

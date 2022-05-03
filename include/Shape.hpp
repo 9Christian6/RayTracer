@@ -7,7 +7,7 @@ namespace raytracer
 {
     class Intersection;
     class Ray;
-    class Shape : public Material
+    class Shape
     {
     private:
     public:
