@@ -49,7 +49,7 @@ namespace raytracer
             {
                 brightness += lambert(light);
             }
-            color = color * (brightness / lights.size());
+            color = color * (brightness / lights.size()) * 0.85;
             return color;
         }
         return {};
@@ -89,6 +89,11 @@ namespace raytracer
     double Intersection::angle() const
     {
         return _angle;
+    }
+
+    Ray Intersection::reflectionRay() const
+    {
+        return Ray{_position, _ray.direction().reflect(_normal)};
     }
 
     std::ostream &operator<<(std::ostream &out, Intersection &intersection)
