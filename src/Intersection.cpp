@@ -2,6 +2,7 @@
 #include "Ray.hpp"
 #include "Color.hpp"
 #include "Light.hpp"
+#include "Material.hpp"
 #include <vector>
 #include <math.h>
 
@@ -10,10 +11,6 @@ namespace raytracer
     Intersection::Intersection(Ray &ray, Shape *shape) : _ray{ray}, _pShape{shape}
     {
     }
-
-    // Intersection::Intersection(Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NULL}
-    // {
-    // }
 
     Intersection::Intersection(const Ray &ray) : _ray{ray}, _t{Ray::RAY_T_MAX}, _pShape{NULL}
     {
@@ -79,6 +76,11 @@ namespace raytracer
     void Intersection::setColor(const Color &color)
     {
         _color = color;
+    }
+
+    void Intersection::setMaterial(const Material &material)
+    {
+        _material = material;
     }
 
     double Intersection::t() const

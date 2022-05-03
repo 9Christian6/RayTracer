@@ -1,5 +1,6 @@
 #pragma once
 #include <ostream>
+#include "Material.hpp"
 #include "Vector.hpp"
 #include "Ray.hpp"
 #include "Color.hpp"
@@ -19,6 +20,7 @@ namespace raytracer
         double _t, _angle;
         Shape *_pShape;
         Vector _position, _normal;
+        std::optional<Material> _material;
         std::optional<Color> _color;
 
     public:
@@ -29,6 +31,7 @@ namespace raytracer
         void setT(double t);
         void setNormal(const Vector &norm);
         void setColor(const Color &color);
+        void setMaterial(const Material &material);
         Vector position() const;
         Vector normal() const;
         const Ray ray() const;
