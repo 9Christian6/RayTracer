@@ -19,20 +19,9 @@ namespace raytracer
                 auto ray = _camera.makeRay(width, height, Vector2{x, y});
                 if (auto intersection = _shapes.intersect(ray))
                 {
-                    auto normal = intersection->normal();
-                    auto hitPosition = intersection->position();
-                    auto hitColor = intersection->color();
-                    double brightness{0};
-                    for (auto light : _lights)
-                    {
-                        if (isVisible(*intersection, light))
-                        {
-                            auto lightDirection = (light.position() - hitPosition).normalize();
-                            brightness += (normal * lightDirection);
-                        }
-                    }
-                    *hitColor = *hitColor * (brightness / _lights.size());
-                    img.plot(x, y, *hitColor);
+                    auto lights = visibleLights(*intersection);
+                    if (auto hitColor = intersection->color(lights))
+                        img.plot(x, y, *hitColor);
                 }
             }
         }
@@ -51,6 +40,17 @@ namespace raytracer
         return true;
     }
 
+    std::vector<Light> Scene::visibleLights(const Intersection &point) const
+    {
+        std::vector<Light> lights{};
+        for (auto light : _lights)
+        {
+            if (isVisible(point, light))
+                lights.push_back(light);
+        }
+        return lights;
+    }
+
     void Scene::addShape(Shape &shape)
     {
         _shapes.addShape(shape);
@@ -64,5 +64,11 @@ namespace raytracer
     void Scene::setCamera(const Vector &position, const Vector &upGuide, const Vector &forward)
     {
         _camera.setPosition(position, upGuide, forward);
+    }
+
+    std::optional<Intersection> Scene::specular(const Intersection &hit) const
+    {
+        auto reflectedRay = hit.reflectionRay();
+        return _shapes.intersect(reflectedRay);
     }
 }
