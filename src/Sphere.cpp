@@ -34,7 +34,7 @@ namespace raytracer
         return (std::pow(xDiff, 2) + std::pow(yDiff, 2) + std::pow(zDiff, 2) == std::pow(_radius, 2));
     }
 
-    std::optional<Intersection> Sphere::intersect(const Ray &ray)
+    std::optional<Intersection> Sphere::intersect(const Ray &ray) const
     {
         double B, C;
         B = ray.direction().x() * (ray.origin().x() - _origin.x());
@@ -51,13 +51,10 @@ namespace raytracer
             t = sqrt(t);
             t = -B - t;
             t /= 2;
-            auto intersection = Intersection{ray};
-            intersection.setColor(color());
-            intersection.setT(t);
             Vector hit = ray.getPoint(t);
             Vector normal = (hit - _origin).normalize();
-            intersection.setNormal(normal);
-            return intersection;
+            double angle = normal.angle(ray.direction());
+            return Intersection{ray, t, normal, color(), angle};
         }
         return {};
     }

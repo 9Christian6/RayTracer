@@ -20,7 +20,7 @@ namespace raytracer
         double radius() const;
         double radiusSquare() const;
         bool contains(const Vector &point) const;
-        std::optional<Intersection> intersect(const Ray &ray);
+        std::optional<Intersection> intersect(const Ray &ray) const;
 
         friend std::ostream &operator<<(std::ostream &out, const Sphere &sphere);
     };
