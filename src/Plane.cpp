@@ -9,7 +9,7 @@
 
 namespace raytracer
 {
-    Plane::Plane(Vector origin, Vector normal) : _origin{origin}, _normal{normal}
+    Plane::Plane(Vector origin, Vector normal) : _origin{origin}, _normal{normal.normalize()}
     {
     }
 
@@ -67,19 +67,14 @@ namespace raytracer
             return {};
         if (denom == 0 && conatins(ray.origin()))
         {
-            hitPoint.setT(1);
-            hitPoint.setNormal(_normal);
-            return hitPoint;
+            return Intersection{ray, 1, _normal, color(), _normal.angle(ray.direction())};
         }
         double t = ((_origin - ray.origin()) * _normal) / denom;
         if (t <= Ray::RAY_T_MIN || t >= Ray::RAY_T_MAX)
         {
             return {};
         }
-        hitPoint.setT(t);
-        hitPoint.setNormal(_normal);
-        hitPoint.setColor(color());
-        return hitPoint;
+        return Intersection{ray, t, _normal, color(), _normal.angle(ray.direction())};
     }
 
     std::ostream &operator<<(std::ostream &out, Plane &plane)
