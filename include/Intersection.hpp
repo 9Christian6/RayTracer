@@ -20,18 +20,17 @@ namespace raytracer
         double _t, _angle;
         Shape *_pShape;
         Vector _position, _normal;
-        std::optional<Material> _material;
+        const std::optional<Material> _material;
         std::optional<Color> _color;
 
     public:
         Intersection(Ray &ray, Shape *shape);
         explicit Intersection(const Ray &ray);
-        // Intersection(Ray &ray);
+        explicit Intersection(const Ray &ray, double t, const Vector &normal, const Color &color, double angle);
         bool intersected() const;
         void setT(double t);
         void setNormal(const Vector &norm);
         void setColor(const Color &color);
-        void setMaterial(const Material &material);
         Vector position() const;
         Vector normal() const;
         const Ray ray() const;

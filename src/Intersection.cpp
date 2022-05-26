@@ -16,6 +16,11 @@ namespace raytracer
     {
     }
 
+    Intersection::Intersection(const Ray &ray, double t, const Vector &normal, const Color &color, double angle) : _ray{ray}, _t{t}, _normal{normal}, _color{color}, _angle{angle}
+    {
+        _position = ray.getPoint(t);
+    }
+
     bool Intersection::intersected() const
     {
         return (_pShape != NULL);
@@ -46,8 +51,10 @@ namespace raytracer
             {
                 brightness += lambert(light);
             }
-            color = color * (brightness / lights.size()) * 0.85;
-            return color;
+            brightness /= lights.size();
+            auto reflectionRay = Ray{_position, _ray.direction().reflect(_normal)};
+            auto reflectionIndex = _material->reflects(_ray.direction(), reflectionRay.direction());
+            return color * brightness * reflectionIndex;
         }
         return {};
     }
@@ -76,11 +83,6 @@ namespace raytracer
     void Intersection::setColor(const Color &color)
     {
         _color = color;
-    }
-
-    void Intersection::setMaterial(const Material &material)
-    {
-        _material = material;
     }
 
     double Intersection::t() const
