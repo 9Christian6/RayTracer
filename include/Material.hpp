@@ -1,5 +1,6 @@
 #pragma once
 #include "Color.hpp"
+#include "Vector.hpp"
 
 namespace raytracer
 {
@@ -7,12 +8,13 @@ namespace raytracer
     {
     private:
         Color _color;
+        double _specularity;
 
     public:
         Material();
         Material(Color &Color);
         void setColor(Color color);
         Color color() const;
-        Color reflects(const Color &color) const;
+        double reflects(const Vector &in, const Vector &out) const;
     };
 }

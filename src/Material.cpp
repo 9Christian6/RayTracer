@@ -6,9 +6,9 @@ namespace raytracer
 
     Material::Material(Color &color) : _color(color){};
 
-    Color Material::reflects(const Color &color) const
+    double Material::reflects(const Vector &in, const Vector &out) const
     {
-        return (_color * color).clamp(0, 1);
+        return in.angle(out) / 180.;
     }
 
     Color Material::color() const
