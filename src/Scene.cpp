@@ -6,7 +6,7 @@
 
 namespace raytracer
 {
-    Scene::Scene(std::vector<Light> lights, ShapeSet &shapes, Camera &cam)
+    Scene::Scene(std::vector<Light> lights, ShapeSet shapes, Camera &cam)
         : _lights{lights}, _shapes{shapes}, _camera{cam} {};
 
     void Scene::addShape(Shape &shape)
@@ -26,7 +26,7 @@ namespace raytracer
 
     void Scene::render(int width, int height) const
     {
-        auto img = Image{width, height};
+        Image img{width, height};
         for (int x = 0; x <= width; x++)
         {
             for (int y = 0; y <= height; y++)
@@ -36,7 +36,16 @@ namespace raytracer
                 {
                     auto lights = visibleLights(intersection->position());
                     if (auto hitColor = intersection->color(lights))
+                    {
+                        if (auto reflection = _shapes.intersect(intersection->reflectionRay()))
+                        {
+                            if (auto reflectionColor = reflection->color(lights))
+                            {
+                                *hitColor = *hitColor + *reflectionColor;
+                            }
+                        }
                         img.plot(x, y, *hitColor);
+                    }
                 }
             }
         }
