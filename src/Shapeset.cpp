@@ -5,6 +5,10 @@
 namespace raytracer
 {
 
+    ShapeSet::ShapeSet(std::vector<Shape *> &&shapes) : _shapes{shapes}
+    {
+    }
+
     bool compareIntersection(const Intersection &lhs, const Intersection &rhs)
     {
         return lhs.t() < rhs.t();
@@ -20,7 +24,7 @@ namespace raytracer
         _lights.push_back(&light);
     }
 
-    std::optional<Intersection> ShapeSet::intersect(const Ray &ray)
+    std::optional<Intersection> ShapeSet::intersect(const Ray &ray) const
     {
         std::vector<Intersection> hits;
         for (auto shape : _shapes)
