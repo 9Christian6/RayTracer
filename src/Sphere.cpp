@@ -50,6 +50,8 @@ namespace raytracer
         {
             t = sqrt(t);
             t = -B - t;
+            if (t <= 0)
+                return {};
             t /= 2;
             Vector hit = ray.getPoint(t);
             Vector normal = (hit - _origin).normalize();
