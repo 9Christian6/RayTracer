@@ -58,7 +58,7 @@ namespace raytracer
         return _normal.orthogonal(_origin - point);
     }
 
-    std::optional<Intersection> Plane::intersect(const Ray &ray)
+    std::optional<Intersection> Plane::intersect(const Ray &ray) const
     {
         std::optional<Intersection> hit{};
         Intersection hitPoint{ray};

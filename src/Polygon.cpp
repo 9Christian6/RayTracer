@@ -24,7 +24,7 @@ namespace raytracer
         _normal = l0.cross(l1);
     }
 
-    std::optional<Intersection> Polygon::intersect(const Ray &ray)
+    std::optional<Intersection> Polygon::intersect(const Ray &ray) const
     {
         Plane plane{_points.at(2), _points.at(1), _points.at(0)};
         if (_normal * ray.direction() > plane.normal() * ray.direction())

@@ -12,6 +12,6 @@ namespace raytracer
     private:
     public:
         virtual ~Shape() = default;
-        virtual std::optional<Intersection> intersect(const Ray &ray) = 0;
+        virtual std::optional<Intersection> intersect(const Ray &ray) const = 0;
     };
 }

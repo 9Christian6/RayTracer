@@ -21,7 +21,7 @@ namespace raytracer
         Polygon() = delete;
         Polygon(std::vector<Vector> points);
         std::vector<Vector> points() const;
-        std::optional<Intersection> intersect(const Ray &ray) override;
+        std::optional<Intersection> intersect(const Ray &ray) const override;
         friend std::ostream &operator<<(std::ostream &out, const Polygon &poly);
     };
 }

@@ -26,7 +26,7 @@ namespace raytracer
         double D() const;
 
         bool conatins(const Vector &point) const;
-        std::optional<Intersection> intersect(const Ray &ray) override;
+        std::optional<Intersection> intersect(const Ray &ray) const override;
         friend std::ostream &operator<<(std::ostream &out, Plane &plane);
     };
 }
