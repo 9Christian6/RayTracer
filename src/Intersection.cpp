@@ -53,7 +53,7 @@ namespace raytracer
             }
             auto reflectionRay = Ray{_position, _ray.direction().reflect(_normal)};
             auto reflectionIndex = _material->reflects(_ray.direction(), reflectionRay.direction());
-            return color * brightness * reflectionIndex;
+            return color * brightness;
         }
         return {};
     }
@@ -63,7 +63,7 @@ namespace raytracer
         double brightness{0};
         auto lightDirection = (light.position() - _position).normalize();
         brightness = _normal * lightDirection;
-        return brightness;
+        return std::abs(brightness);
     }
 
     void Intersection::setT(double t)
