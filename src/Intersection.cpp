@@ -49,9 +49,8 @@ namespace raytracer
             Color color{*_color};
             for (auto light : lights)
             {
-                brightness += lambert(light);
+                brightness += lambert(light) / lights.size();
             }
-            brightness /= lights.size();
             auto reflectionRay = Ray{_position, _ray.direction().reflect(_normal)};
             auto reflectionIndex = _material->reflects(_ray.direction(), reflectionRay.direction());
             return color * brightness * reflectionIndex;
