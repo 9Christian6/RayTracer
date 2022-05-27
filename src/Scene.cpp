@@ -43,7 +43,7 @@ namespace raytracer
                 if (auto reflectionHit = _shapes.intersect(ray))
                 {
                     auto lights = visibleLights(reflectionHit->position());
-                    pixel = pixel + reflectionHit->color(lights).value();
+                    pixel += reflectionHit->color(lights).value();
                 }
                 img.plot(x, y, pixel);
             }
