@@ -31,22 +31,21 @@ namespace raytracer
         {
             for (int y = 0; y <= height; y++)
             {
+                Color pixel{0, 0, 0};
                 auto ray = _camera.makeRay(width, height, Vector2{x, y});
-                if (auto intersection = _shapes.intersect(ray))
+                if (auto hit = _shapes.intersect(ray))
                 {
-                    auto lights = visibleLights(intersection->position());
-                    if (auto hitColor = intersection->color(lights))
-                    {
-                        if (auto reflection = _shapes.intersect(intersection->reflectionRay()))
-                        {
-                            if (auto reflectionColor = reflection->color(lights))
-                            {
-                                *hitColor = *hitColor + *reflectionColor;
-                            }
-                        }
-                        img.plot(x, y, *hitColor);
-                    }
+                    pixel = *hit->color(visibleLights(hit->position()));
+                    ray = hit->reflectionRay();
                 }
+                else
+                    continue;
+                if (auto reflectionHit = _shapes.intersect(ray))
+                {
+                    auto lights = visibleLights(reflectionHit->position());
+                    pixel = pixel + reflectionHit->color(lights).value();
+                }
+                img.plot(x, y, pixel);
             }
         }
         img._image.close();
