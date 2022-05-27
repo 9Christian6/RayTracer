@@ -178,7 +178,9 @@ namespace raytracer
 
     Ray Ray::operator=(const Ray &ray)
     {
-        return Ray{_origin, _direction};
+        _origin = ray.origin();
+        _direction = ray.direction();
+        return *this;
     }
 
     std::ostream &operator<<(std::ostream &out, const Ray &ray)
