@@ -13,7 +13,9 @@ namespace raytracer
     public:
         Material();
         Material(Color &Color);
+        Material(Color &color, double specularity);
         void setColor(Color color);
+        void setSpecularity(double spec);
         Color color() const;
         double reflects(const Vector &in, const Vector &out) const;
     };
