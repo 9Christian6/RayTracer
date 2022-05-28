@@ -21,6 +21,11 @@ namespace raytracer
         _position = ray.getPoint(t);
     }
 
+    Intersection::Intersection(const Ray &ray, double t, const Vector &normal, const Color &color, double angle, Material &material) : _ray{ray}, _t{t}, _normal{normal}, _color{color}, _angle{angle}, _material{material}
+    {
+        _position = ray.getPoint(t);
+    }
+
     bool Intersection::intersected() const
     {
         return (_pShape != NULL);

@@ -27,6 +27,7 @@ namespace raytracer
         Intersection(Ray &ray, Shape *shape);
         explicit Intersection(const Ray &ray);
         explicit Intersection(const Ray &ray, double t, const Vector &normal, const Color &color, double angle);
+        explicit Intersection(const Ray &ray, double t, const Vector &normal, const Color &color, double angle, Material &material);
         bool intersected() const;
         void setT(double t);
         void setNormal(const Vector &norm);
