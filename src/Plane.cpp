@@ -67,14 +67,16 @@ namespace raytracer
             return {};
         if (denom == 0 && conatins(ray.origin()))
         {
-            return Intersection{ray, 1, _normal, color(), _normal.angle(ray.direction())};
+            Material mat = static_cast<Material>(*this);
+            return Intersection{ray, 1, _normal, color(), _normal.angle(ray.direction()), mat};
         }
         double t = ((_origin - ray.origin()) * _normal) / denom;
         if (t <= Ray::RAY_T_MIN || t >= Ray::RAY_T_MAX)
         {
             return {};
         }
-        return Intersection{ray, t, _normal, color(), _normal.angle(ray.direction())};
+        Material mat = static_cast<Material>(*this);
+        return Intersection{ray, t, _normal, color(), _normal.angle(ray.direction()), mat};
     }
 
     std::ostream &operator<<(std::ostream &out, Plane &plane)
