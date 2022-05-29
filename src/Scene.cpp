@@ -37,13 +37,14 @@ namespace raytracer
                 {
                     pixel = *hit->color(visibleLights(hit->position()));
                     ray = hit->reflectionRay();
-                }
-                else
-                    continue;
-                if (auto reflectionHit = _shapes.intersect(ray))
-                {
-                    auto lights = visibleLights(reflectionHit->position());
-                    pixel += reflectionHit->color(lights).value();
+                    if (auto reflectionHit = _shapes.intersect(ray))
+                    {
+                        auto lights = visibleLights(reflectionHit->position());
+                        if (reflectionHit->material())
+                        {
+                            pixel += reflectionHit->color(lights).value() * hit->material()->specularity();
+                        }
+                    }
                 }
                 img.plot(x, y, pixel);
             }
