@@ -13,6 +13,11 @@ namespace raytracer
         return in.angle(out) / 180.;
     }
 
+    double Material::specularity() const
+    {
+        return _specularity;
+    }
+
     Color Material::color() const
     {
         return Color{_color};
