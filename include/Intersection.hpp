@@ -39,6 +39,7 @@ namespace raytracer
         double angle() const;
         std::optional<Color> color(const std::vector<Light> &lights) const;
         double lambert(const Light &light) const;
+        std::optional<Material> material() const;
         Ray reflectionRay() const;
 
         Intersection operator=(const Intersection &intersection) { return {intersection}; };

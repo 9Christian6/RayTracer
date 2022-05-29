@@ -99,6 +99,11 @@ namespace raytracer
         return _angle;
     }
 
+    std::optional<Material> Intersection::material() const
+    {
+        return _material;
+    }
+
     Ray Intersection::reflectionRay() const
     {
         return Ray{_position, _ray.direction().reflect(_normal)};
