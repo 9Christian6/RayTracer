@@ -1,4 +1,4 @@
 # TODO
-- [] A
-- [] B
-- [] C
+- [ ] Implement Bounding Boxes
+- [ ] Improve Shadows
+- [ ] Parallelize raycasting
