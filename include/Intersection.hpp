@@ -43,6 +43,7 @@ namespace raytracer
         Ray reflectionRay() const;
 
         Intersection operator=(const Intersection &intersection) { return {intersection}; };
+        bool operator<(const Intersection &intersection);
         friend std::ostream &operator<<(std::ostream &out, Intersection &intersection);
     };
 }
