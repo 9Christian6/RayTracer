@@ -31,18 +31,10 @@ namespace raytracer
         {
             if (auto hitPoint = shape->intersect(ray))
             {
-                hits.push_back(hitPoint.value());
+                hits.insert(std::lower_bound(hits.begin(), hits.end(), hitPoint.value()), hitPoint.value());
             }
         }
-        if (hits.size() == 0)
-            return {};
-        std::size_t minHit = 0;
-        for (std::size_t i = 0; i < hits.size(); i++)
-        {
-            if (hits[minHit].t() > hits[i].t())
-                minHit = i;
-        }
-        return hits[minHit];
+        return hits.size() == 0 ? std::optional<Intersection>() : hits[0];
     }
 
     std::vector<Intersection> ShapeSet::visibleLights(const Vector &point)
