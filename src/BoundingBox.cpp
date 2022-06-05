@@ -7,7 +7,6 @@
 
 namespace raytracer
 {
-
     BoundingBox::BoundingBox(Vector &&minExt, Vector &&maxExt) : _minExt{std::move(minExt)}, _maxExt{std::move(maxExt)}
     {
     }
@@ -22,6 +21,16 @@ namespace raytracer
 
     BoundingBox::BoundingBox(Vector &minExt, Vector &maxExt) : _minExt{minExt}, _maxExt{maxExt}
     {
+    }
+
+    Vector BoundingBox::minExt() const
+    {
+        return _minExt;
+    }
+
+    Vector BoundingBox::maxExt() const
+    {
+        return _maxExt;
     }
 
     enum Dimension
