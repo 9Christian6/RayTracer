@@ -2,6 +2,7 @@
 #include "Vector.hpp"
 #include "Shape.hpp"
 #include "Material.hpp"
+#include "BoundingBox.hpp"
 #include <ostream>
 #include <optional>
 

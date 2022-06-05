@@ -1,6 +1,7 @@
 #include "Sphere.hpp"
 #include "Ray.hpp"
 #include "Intersection.hpp"
+#include "BoundingBox.hpp"
 #include <math.h>
 #include <optional>
 
@@ -21,9 +22,10 @@ namespace raytracer
         return _rs;
     }
 
-    Sphere::Sphere(Vector origin, double radius) : _origin{origin}, _radius{radius}
+    Sphere::Sphere(Vector origin, double radius) : Shape{{origin, origin}}, _origin{origin}, _radius{radius}
     {
         _rs = std::pow(_radius, 2);
+        _BBox = BoundingBox{_origin - Vector{radius, radius, radius}, _origin + Vector{radius, radius, radius}};
     }
 
     bool Sphere::contains(const Vector &point) const
@@ -61,6 +63,11 @@ namespace raytracer
         }
         return {};
     }
+
+    // BoundingBox Sphere::boundingBox()
+    // {
+    //     return BoundingBox{_origin - Vector{1, 1, 1} * _radius, _origin + Vector{1, 1, 1} * _radius};
+    // }
 
     std::ostream &
     operator<<(std::ostream &out, const Sphere &sphere)
