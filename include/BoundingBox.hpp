@@ -17,6 +17,6 @@ namespace raytracer
         BoundingBox(Vector &minExt, Vector &maxExt);
         Vector minExt() const;
         Vector maxExt() const;
-        bool intersect(const Ray &ray);
+        bool intersect(const Ray &ray) const;
     };
 }

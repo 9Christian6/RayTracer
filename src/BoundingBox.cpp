@@ -77,7 +77,7 @@ namespace raytracer
         return true;
     }
 
-    bool BoundingBox::intersect(const Ray &ray)
+    bool BoundingBox::intersect(const Ray &ray) const
     {
         double tNear = std::numeric_limits<double>::lowest();
         double tFar = std::numeric_limits<double>::max();
