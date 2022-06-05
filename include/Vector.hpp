@@ -11,7 +11,7 @@ namespace raytracer
 
     public:
         // constructors
-        Vector();
+        Vector() = default;
         Vector(int x, int y, int z);
         Vector(double x, double y, double z);
 

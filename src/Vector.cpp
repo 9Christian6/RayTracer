@@ -6,7 +6,6 @@ namespace raytracer
 {
     static double PI = 3.14159265359;
 
-    Vector::Vector() : _x{0}, _y{0}, _z{0} {};
     Vector::Vector(int x, int y, int z) : _x{(double)x}, _y{(double)y}, _z{(double)z} {};
     Vector::Vector(double x, double y, double z) : _x{x}, _y{y}, _z{z} {};
 
