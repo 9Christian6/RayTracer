@@ -16,6 +16,7 @@ namespace raytracer
         double _radius, _rs;
 
     public:
+        Sphere() = delete;
         Sphere(Vector origin, double radius);
         Vector origin() const;
         double radius() const;

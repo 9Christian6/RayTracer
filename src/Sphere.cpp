@@ -67,11 +67,6 @@ namespace raytracer
         return {};
     }
 
-    // BoundingBox Sphere::boundingBox()
-    // {
-    //     return BoundingBox{_origin - Vector{1, 1, 1} * _radius, _origin + Vector{1, 1, 1} * _radius};
-    // }
-
     std::ostream &
     operator<<(std::ostream &out, const Sphere &sphere)
     {
