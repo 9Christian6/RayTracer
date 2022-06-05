@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(RayTracer VERSION 0.1.0 LANGUAGES CXX)
+project(RayTracer VERSION 0.1.0 LANGUAGES CUDA CXX)
+
+enable_language(CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -27,6 +29,8 @@ src/Light.cpp
 src/Scene.cpp
 src/Material.cpp
 src/BoundingBox.cpp
+src/CUDA.cu
+src/RenderKernel.cu
 include/Vector2.hpp
 include/Camera.hpp
 include/fEquals.hpp
@@ -49,6 +53,8 @@ include/Light.hpp
 include/Scene.hpp
 include/Material.hpp
 include/BoundingBox.hpp
+include/CUDA.h
+include/RenderKernel.h
 )
 
 if(PNGwriter_FOUND)
