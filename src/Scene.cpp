@@ -3,6 +3,7 @@
 #include "Camera.hpp"
 #include "Ray.hpp"
 #include "Vector2.hpp"
+#include <chrono>
 
 namespace raytracer
 {
@@ -26,6 +27,12 @@ namespace raytracer
 
     void Scene::render(int width, int height) const
     {
+        using std::chrono::duration;
+        using std::chrono::duration_cast;
+        using std::chrono::high_resolution_clock;
+        using std::chrono::milliseconds;
+        auto t1 = high_resolution_clock::now();
+
         Image img{width, height};
         for (int x = 0; x <= width; x++)
         {
@@ -50,6 +57,11 @@ namespace raytracer
             }
         }
         img._image.close();
+
+        auto t2 = high_resolution_clock::now();
+        /* Getting number of milliseconds as an integer. */
+        auto ms_int = duration_cast<milliseconds>(t2 - t1);
+        std::cout << "It took " << ms_int.count() << " milliseconds to render\n";
     }
 
     bool Scene::isVisible(const Vector &point, const Light &light) const
