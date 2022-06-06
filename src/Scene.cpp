@@ -3,6 +3,7 @@
 #include "Camera.hpp"
 #include "Ray.hpp"
 #include "Vector2.hpp"
+#include "RenderKernel.h"
 #include <chrono>
 
 namespace raytracer
@@ -25,43 +26,42 @@ namespace raytracer
         _camera.setPosition(position, upGuide, forward);
     }
 
+    std::chrono::_V2::system_clock::time_point timerStart()
+    {
+        return std::chrono::_V2::high_resolution_clock::now();
+    }
+
+    int timerStop(std::chrono::_V2::high_resolution_clock::time_point start)
+    {
+        auto stop = std::chrono::_V2::high_resolution_clock::now();
+        return (std::chrono::duration_cast<std::chrono::milliseconds>(stop - start)).count();
+    }
+
     void Scene::render(int width, int height) const
     {
-        using std::chrono::duration;
-        using std::chrono::duration_cast;
-        using std::chrono::high_resolution_clock;
-        using std::chrono::milliseconds;
-        auto t1 = high_resolution_clock::now();
-
         Image img{width, height};
-        for (int x = 0; x <= width; x++)
+        auto start = timerStart();
+        for (size_t y = 0; y < height; y++)
         {
-            for (int y = 0; y <= height; y++)
+            for (size_t x = 0; x < width; x++)
             {
-                Color pixel{0, 0, 0};
-                auto ray = _camera.makeRay(width, height, Vector2{x, y});
-                if (auto hit = _shapes.intersect(ray))
-                {
-                    pixel = *hit->color(visibleLights(hit->position()));
-                    ray = hit->reflectionRay();
-                    if (auto reflectionHit = _shapes.intersect(ray))
-                    {
-                        auto lights = visibleLights(reflectionHit->position());
-                        if (reflectionHit->material())
-                        {
-                            pixel += reflectionHit->color(lights).value() * hit->material()->specularity();
-                        }
-                    }
-                }
+                auto pixel = renderPixel(width, height, x, y, *this, 2);
                 img.plot(x, y, pixel);
             }
         }
         img._image.close();
+        auto renderTime = timerStop(start);
+        std::cout << "It took " << renderTime / 1000 << "," << renderTime % 1000 << " seconds to render\n";
+    }
 
-        auto t2 = high_resolution_clock::now();
-        /* Getting number of milliseconds as an integer. */
-        auto ms_int = duration_cast<milliseconds>(t2 - t1);
-        std::cout << "It took " << ms_int.count() << " milliseconds to render\n";
+    const ShapeSet &Scene::shapes() const
+    {
+        return _shapes;
+    }
+
+    const Camera &Scene::camera() const
+    {
+        return _camera;
     }
 
     bool Scene::isVisible(const Vector &point, const Light &light) const
