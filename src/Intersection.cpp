@@ -53,11 +53,7 @@ namespace raytracer
         {
             Color color{*_color};
             for (auto light : lights)
-            {
-                brightness += lambert(light) / lights.size();
-            }
-            auto reflectionRay = Ray{_position, _ray.direction().reflect(_normal)};
-            auto reflectionIndex = _material->reflects(_ray.direction(), reflectionRay.direction());
+                brightness += lambert(light);
             return color * brightness;
         }
         return {};
@@ -107,6 +103,11 @@ namespace raytracer
     Ray Intersection::reflectionRay() const
     {
         return Ray{_position, _ray.direction().reflect(_normal)};
+    }
+
+    bool Intersection::operator<(const Intersection &intersection)
+    {
+        return _t < intersection.t();
     }
 
     std::ostream &operator<<(std::ostream &out, Intersection &intersection)
