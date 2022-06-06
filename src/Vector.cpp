@@ -1,5 +1,6 @@
 #include "Vector.hpp"
 #include "Exception.hpp"
+#include <random>
 #include <math.h>
 
 namespace raytracer
@@ -162,6 +163,28 @@ namespace raytracer
     Vector Vector::reflect(const Vector &normal) const
     {
         return *this - 2 * (*this * normal) * normal;
+    }
+
+    Vector Vector::addNoise() const
+    {
+        double xNoise = rand() % 100 / 100.;
+        double yNoise = rand() % 100 / 100.;
+        double zNoise = rand() % 100 / 100.;
+        Vector noisy{*this};
+        noisy = noisy + Vector{xNoise, yNoise, zNoise};
+        return noisy.normalize();
+    }
+
+    Vector Vector::rotate(const Vector &normal, int degrees) const
+    {
+        degrees *= 180;
+        degrees /= PI;
+        Vector v = *this;
+        auto rotated{v};
+        rotated = rotated * std::cos(degrees);
+        rotated = rotated + (normal.cross(v)) * std::sin(degrees);
+        rotated = rotated + normal * (normal * v) * (1 - std::cos(degrees));
+        return rotated;
     }
 
     std::ostream &operator<<(std::ostream &stream, Vector point)
