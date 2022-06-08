@@ -167,9 +167,9 @@ namespace raytracer
 
     Vector Vector::addNoise() const
     {
-        double xNoise = rand() % 100 / 100.;
-        double yNoise = rand() % 100 / 100.;
-        double zNoise = rand() % 100 / 100.;
+        double xNoise = (rand() % 100 - 50) / 100.;
+        double yNoise = (rand() % 100 - 50) / 100.;
+        double zNoise = (rand() % 100 - 50) / 100.;
         Vector noisy{*this};
         noisy = noisy + Vector{xNoise, yNoise, zNoise};
         return noisy.normalize();
