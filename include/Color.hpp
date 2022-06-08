@@ -29,5 +29,6 @@ namespace raytracer
         friend Color operator*(const Color &lhs, const Color &rhs);
         friend Color operator*(const Color &op, float f);
         Color operator*=(float f);
+        bool operator==(const Color &color) const;
     };
 }

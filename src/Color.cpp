@@ -54,4 +54,8 @@ namespace raytracer
         return *this;
     }
 
+    bool Color::operator==(const Color &color) const
+    {
+        return (_r == color.r()) && (_b == color.b()) && (_g == color.g());
+    }
 }
