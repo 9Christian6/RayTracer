@@ -39,7 +39,6 @@ include/Vector.hpp
 include/Exception.hpp
 include/Plane.hpp
 include/Sphere.hpp
-include/Hit.hpp
 include/Image.hpp
 include/Intersection.hpp
 include/Shape.hpp
