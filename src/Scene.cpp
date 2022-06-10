@@ -37,7 +37,7 @@ namespace raytracer
         return (std::chrono::duration_cast<std::chrono::milliseconds>(stop - start)).count();
     }
 
-    void Scene::render(int width, int height) const
+    void Scene::render(int width, int height, int bounces, int samples) const
     {
         Image img{width, height};
         auto start = timerStart();
@@ -45,7 +45,7 @@ namespace raytracer
         {
             for (size_t x = 0; x < width; x++)
             {
-                auto pixel = renderPixel(width, height, x, y, *this, 2);
+                auto pixel = renderPixel(width, height, x, y, *this, samples, bounces);
                 img.plot(x, y, pixel);
             }
         }
