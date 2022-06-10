@@ -29,8 +29,6 @@ namespace raytracer
         bool parallel(const Vector &vec) const;
         Vector normalize() const;
         Vector cross(const Vector &vec) const;
-        Vector addNoise() const;
-        Vector rotate(const Vector &normal, int degrees) const;
         Vector2 project(int dim) const;
         Vector reflect(const Vector &normal) const;
 
