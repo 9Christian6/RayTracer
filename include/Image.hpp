@@ -2,8 +2,6 @@
 #include <vector>
 #include <pngwriter.h>
 #include "Color.hpp"
-#include "Camera.hpp"
-#include "Shapeset.hpp"
 
 namespace raytracer
 {
