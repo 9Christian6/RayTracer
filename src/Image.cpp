@@ -14,6 +14,13 @@ namespace raytracer
         _image = pngwriter(_width, _height, 0, "Image.png");
     }
 
+    Image::Image(std::string path)
+    {
+        char *cstringPath = new char[path.length() + 1];
+        std::strcpy(cstringPath, path.c_str());
+        _image.readfromfile(cstringPath);
+    }
+
     int Image::width() const
     {
         return _width;

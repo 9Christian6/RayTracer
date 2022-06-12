@@ -14,6 +14,7 @@ namespace raytracer
     public:
         pngwriter _image;
         Image(int width, int height);
+        Image(std::string path);
         int width() const;
         int height() const;
         void loadImage(std::string path);
