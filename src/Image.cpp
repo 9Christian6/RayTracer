@@ -2,6 +2,8 @@
 #include "Color.hpp"
 #include <iostream>
 #include <vector>
+#include <string>
+#include <cstring>
 
 namespace raytracer
 {
@@ -30,5 +32,12 @@ namespace raytracer
     void Image::plot(int x, int y, Color &color)
     {
         _image.plot(x, y, color.r(), color.g(), color.b());
+    }
+
+    void Image::loadImage(std::string path)
+    {
+        char *cstringPath = new char[path.length() + 1];
+        std::strcpy(cstringPath, path.c_str());
+        _image.readfromfile(cstringPath);
     }
 }
