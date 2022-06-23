@@ -13,6 +13,7 @@ namespace raytracer
 
     public:
         pngwriter _image;
+        Image() = default;
         Image(int width, int height);
         Image(std::string path);
         int width() const;
