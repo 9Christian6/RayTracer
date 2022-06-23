@@ -21,10 +21,11 @@ namespace raytracer
         void addLight(Light &light);
         const Camera &camera() const;
         void setCamera(const Vector &position, const Vector &upGuide, const Vector &forward);
-        void render(int width, int height, int bounces, int samples) const;
+        void renderSeq(int width, int height, int bounces, int samples) const;
         const ShapeSet &shapes() const;
         bool isVisible(const Vector &point, const Light &light) const;
         std::vector<Light> visibleLights(const Vector &point) const;
+        void renderPar(int width, int height, int bounces, int smaples) const;
     };
 
 }
