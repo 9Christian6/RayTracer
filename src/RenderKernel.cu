@@ -10,10 +10,6 @@
 #include "Material.hpp"
 namespace raytracer
 {
-    __global__ void renderPar()
-    {
-    }
-
     Color renderPixel(int width, int height, int x, int y, const Scene &scene, int bounces, int samples)
     {
         Color pixel{0, 0, 0};
@@ -22,7 +18,7 @@ namespace raytracer
         if (auto hit = scene.shapes().intersect(ray))
         {
             pixel = *hit->color(scene.visibleLights(hit->position()));
-            //pixel += globalLight(*hit, scene, samples);
+            // pixel += globalLight(*hit, scene, samples);
             ray = hit->reflectionRay();
             reflectivity = hit->material()->specularity();
         }
@@ -46,7 +42,7 @@ namespace raytracer
         std::vector<Ray> sampleRays;
         for (int i = 0; i < samples; i++)
         {
-            Vector noisyNormal = hit.normal().addNoise();
+            // Vector noisyNormal = hit.normal().addNoise();
             Ray noisyRay{hit.position() + 0.1 * hit.normal(), noisyNormal};
             sampleRays.push_back(noisyRay);
         }
