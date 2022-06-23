@@ -58,5 +58,6 @@ int main(int, char **)
     scene.addLight(l2);
     scene.addLight(l3);
     scene.setCamera(yVec - 5 * zVec, yVec, zVec);
-    scene.render(100, 100, 2, 1);
+    scene.renderSeq(100, 100, 1, 1);
+    scene.renderPar(100, 100, 1, 1);
 }
