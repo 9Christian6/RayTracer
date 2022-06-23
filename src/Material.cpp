@@ -28,6 +28,16 @@ namespace raytracer
         _color = color;
     }
 
+    void Material::setTexture(const Image &img)
+    {
+        _texture = img;
+    }
+
+    const Image Material::texture() const
+    {
+        return _texture;
+    }
+
     void Material::setSpecularity(double spec)
     {
         _specularity = spec;
