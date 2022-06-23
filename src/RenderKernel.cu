@@ -42,7 +42,7 @@ namespace raytracer
         std::vector<Ray> sampleRays;
         for (int i = 0; i < samples; i++)
         {
-            // Vector noisyNormal = hit.normal().addNoise();
+            Vector noisyNormal = hit.normal().addNoise();
             Ray noisyRay{hit.position() + 0.1 * hit.normal(), noisyNormal};
             sampleRays.push_back(noisyRay);
         }
