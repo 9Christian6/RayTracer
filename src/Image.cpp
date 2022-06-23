@@ -19,6 +19,8 @@ namespace raytracer
         char *cstringPath = new char[path.length() + 1];
         std::strcpy(cstringPath, path.c_str());
         _image.readfromfile(cstringPath);
+        _width = _image.getwidth();
+        _height = _image.getheight();
     }
 
     int Image::width() const
@@ -46,5 +48,7 @@ namespace raytracer
         char *cstringPath = new char[path.length() + 1];
         std::strcpy(cstringPath, path.c_str());
         _image.readfromfile(cstringPath);
+        _width = _image.getwidth();
+        _height = _image.getheight();
     }
 }
