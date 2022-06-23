@@ -31,6 +31,7 @@ namespace raytracer
         Vector cross(const Vector &vec) const;
         Vector2 project(int dim) const;
         Vector reflect(const Vector &normal) const;
+        Vector addNoise() const;
 
         friend Vector operator+(const Vector &lhs, const Vector &rhs);
         friend Vector operator-(const Vector &lhs, const Vector &rhs);

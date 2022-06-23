@@ -165,6 +165,11 @@ namespace raytracer
         return *this - 2 * (*this * normal) * normal;
     }
 
+    Vector Vector::addNoise() const
+    {
+        throw Exception("Not implemented");
+    }
+
     std::ostream &operator<<(std::ostream &stream, Vector point)
     {
         stream << "(" << point.x() << ", " << point.y() << ", " << point.z() << ")";
