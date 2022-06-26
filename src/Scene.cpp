@@ -129,6 +129,7 @@ namespace raytracer
                 break;
         }
         img.plot(x, y, pixel);
+        std::cout << "Pixel " << x << ", " << y << " rendered\n";
     }
 
     void Scene::renderPar(int width, int height, int bounces, int samples) const
