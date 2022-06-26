@@ -18,11 +18,42 @@
 #include "BoundingBox.hpp"
 #include "CUDA.h"
 #include "RenderKernel.h"
+#include "shape.hpp"
 #include <cmath>
 
 using namespace raytracer;
 int main(int, char **)
 {
+    S_vector3 o;
+    o._x = 0;
+    o._y = 0;
+    o._z = 0;
+
+    S_vector3 s_xvec;
+    s_xvec._x = 1;
+    s_xvec._y = 0;
+    s_xvec._z = 0;
+
+    S_sphere s;
+    s._origin = o;
+    s._r = 1;
+
+    S_plane p;
+    p._origin = o;
+    p._normal = s_xvec;
+
+    S_ray r;
+    r._o = o;
+    r._d = s_xvec;
+
+    T_shape shape;
+    shape.tag = SPHERE;
+    shape.shape._sphere = s;
+
+    auto intersection = intersect(shape, r);
+
+    std::cout << intersection.t << "\n";
+
     Vector origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
     Vector2 origin2{0, 0}, xVec2{1, 0}, yVec2{0, 1};
     //
