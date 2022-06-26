@@ -29,18 +29,18 @@ int main(int, char **)
     o._y = 0;
     o._z = 0;
 
-    S_vector3 s_xvec;
+    S_vector3 s_xvec, s_yvec;
     s_xvec._x = 1;
     s_xvec._y = 0;
     s_xvec._z = 0;
 
-    S_sphere s;
-    s._origin = o;
-    s._r = 1;
+    s_yvec._x = 0;
+    s_yvec._y = 1;
+    s_yvec._z = 0;
 
-    S_plane p;
-    p._origin = o;
-    p._normal = s_xvec;
+    S_sphere s;
+    s._o = 5 * s_xvec;
+    s._r = 1;
 
     S_ray r;
     r._o = o;
@@ -52,7 +52,13 @@ int main(int, char **)
 
     auto intersection = intersect(shape, r);
 
-    std::cout << intersection.t << "\n";
+    if (intersection.hit)
+    {
+        // std::cout << intersection.t << "\n";
+    }
+
+    auto negXvec = s_xvec * -1;
+    std::cout << lambert(s_yvec, s_xvec, negXvec) << "\n";
 
     Vector origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
     Vector2 origin2{0, 0}, xVec2{1, 0}, yVec2{0, 1};
@@ -89,6 +95,6 @@ int main(int, char **)
     scene.addLight(l2);
     scene.addLight(l3);
     scene.setCamera(yVec - 5 * zVec, yVec, zVec);
-    scene.renderSeq(100, 100, 1, 1);
-    scene.renderPar(100, 100, 1, 1);
+    // scene.renderSeq(100, 100, 1, 1);
+    // scene.renderPar(100, 100, 1, 1);
 }

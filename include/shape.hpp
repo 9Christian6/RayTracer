@@ -44,9 +44,19 @@ namespace raytracer
         return prod;
     }
 
+    double operator*(S_vector3 &lhs, S_vector3 &rhs)
+    {
+        return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
+    }
+
     double length(S_vector3 &op)
     {
-        return std::sqrt(op._x * op._x + op._y * op._y + op._z * op._z);
+        return std::sqrt(op * op);
+    }
+
+    S_vector3 normalize(S_vector3 &op)
+    {
+        return (op * (1 / length((op))));
     }
 
     double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
@@ -63,6 +73,9 @@ namespace raytracer
     {
         S_vector3 _o, _d;
     };
+
+    static constexpr double RAY_T_MIN = 1.0e-9;
+    static constexpr double RAY_T_MAX = 1.0e30;
 
     struct S_sphere
     {
@@ -83,8 +96,9 @@ namespace raytracer
     struct S_intersection
     {
         bool hit;
+        S_vector3 position;
         S_ray _r;
-        double t;
+        double t, lambert;
     };
 
     union U_shape
@@ -98,6 +112,15 @@ namespace raytracer
         shapeTag tag;
         U_shape shape;
     };
+
+    double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
+    {
+        double brightness{0};
+        auto lightDirection = light - position;
+        lightDirection = normalize(lightDirection);
+        brightness = normal * lightDirection;
+        return std::abs(brightness);
+    }
 
     S_intersection intersect(T_shape s, S_ray r)
     {
@@ -119,12 +142,15 @@ namespace raytracer
             C += std::pow((r._o._z - sphere._o._z), 2);
             C -= std::pow(sphere._r, 2);
             t = std::pow(B, 2) - (4 * C);
-            if (t > 1.0e-09 && t < 1.0e+30)
+            if (t > RAY_T_MIN && t < RAY_T_MAX)
             {
                 t = std::sqrt(t);
                 t = -B - t;
                 if (t <= 0)
+                {
                     intersection.hit = false;
+                    break;
+                }
                 t /= 2;
                 intersection.hit = true;
                 intersection.t = t;
