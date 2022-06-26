@@ -104,12 +104,32 @@ namespace raytracer
         S_intersection intersection;
         S_plane plane;
         S_sphere sphere;
-        double denom{0}, t{0};
+        double denom{0}, t{0}, B, C;
         bool contains{false};
         switch (s.tag)
         {
         case SPHERE:
-            intersection.t = 0;
+            sphere = s.shape._sphere;
+            B = r._d._x * (r._o._x - sphere._o._x);
+            B += r._d._y * (r._o._y - sphere._o._y);
+            B += r._d._z * (r._o._z - sphere._o._z);
+            B *= 2;
+            C = std::pow((r._o._x - sphere._o._x), 2);
+            C += std::pow((r._o._y - sphere._o._y), 2);
+            C += std::pow((r._o._z - sphere._o._z), 2);
+            C -= std::pow(sphere._r, 2);
+            t = std::pow(B, 2) - (4 * C);
+            if (t > 1.0e-09 && t < 1.0e+30)
+            {
+                t = std::sqrt(t);
+                t = -B - t;
+                if (t <= 0)
+                    intersection.hit = false;
+                t /= 2;
+                intersection.hit = true;
+                intersection.t = t;
+                intersection._r = r;
+            }
             break;
 
         case PLANE:
