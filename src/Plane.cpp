@@ -73,8 +73,8 @@ namespace raytracer
         p._n = p_n;
         p._o = p_o;
         T_shape shape;
-        shape.shape._plane = p;
-        shape.tag = PLANE;
+        shape._shape._plane = p;
+        shape._tag = PLANE;
         auto cHit = intersectShape(shape, r);
         float cHitLambert = cHit.lambert;
         Color hitColor{cHitLambert, cHitLambert, cHitLambert};

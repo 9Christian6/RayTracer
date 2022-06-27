@@ -59,8 +59,8 @@ namespace raytracer
                 s._o = S_vector3_new(_origin);
                 s._r = _radius;
                 T_shape sphere;
-                sphere.shape._sphere = s;
-                sphere.tag = SPHERE;
+                sphere._shape._sphere = s;
+                sphere._tag = SPHERE;
                 auto cHit = intersectShape(sphere, r);
                 float hitColor = (float)cHit.lambert;
                 Color cHitColor = Color{hitColor, hitColor, hitColor};

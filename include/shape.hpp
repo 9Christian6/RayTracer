@@ -132,9 +132,9 @@ namespace raytracer
     struct S_intersection
     {
         bool hit;
-        S_vector3 position;
-        S_ray _r;
         double t, lambert;
+        S_vector3 _position;
+        S_ray _r;
     };
 
     union U_shape
@@ -145,8 +145,8 @@ namespace raytracer
 
     struct T_shape
     {
-        shapeTag tag;
-        U_shape shape;
+        shapeTag _tag;
+        U_shape _shape;
     };
 
     static double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
@@ -166,10 +166,10 @@ namespace raytracer
         double denom{0}, t{0}, B, C;
         bool contains{false};
         S_vector3 sum, prod, normal;
-        switch (s.tag)
+        switch (s._tag)
         {
         case SPHERE:
-            sphere = s.shape._sphere;
+            sphere = s._shape._sphere;
             B = r._d._x * (r._o._x - sphere._o._x);
             B += r._d._y * (r._o._y - sphere._o._y);
             B += r._d._z * (r._o._z - sphere._o._z);
@@ -200,7 +200,7 @@ namespace raytracer
             break;
 
         case PLANE:
-            plane = s.shape._plane;
+            plane = s._shape._plane;
             denom = dotPorduct(plane._n, r._d);
             contains = orthogonal(plane._n, plane._o - r._o);
             if (equals(denom, 0) && !(plane_contains(plane, r._o)))
