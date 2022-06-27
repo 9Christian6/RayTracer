@@ -6,6 +6,7 @@
 #include <math.h>
 #include <ostream>
 #include <optional>
+#include "shape.hpp"
 
 namespace raytracer
 {
@@ -60,6 +61,23 @@ namespace raytracer
 
     std::optional<Intersection> Plane::intersect(const Ray &ray) const
     {
+        S_ray r;
+        S_plane p;
+        S_vector3 p_o, p_n, r_o, r_d;
+        p_o = S_vector3_new(_origin);
+        p_n = S_vector3_new(_normal);
+        r_o = S_vector3_new(ray.origin());
+        r_d = S_vector3_new(ray.direction());
+        r._d = r_d;
+        r._o = r_o;
+        p._n = p_n;
+        p._o = p_o;
+        T_shape shape;
+        shape.shape._plane = p;
+        shape.tag = PLANE;
+        auto cHit = intersectShape(shape, r);
+        float cHitLambert = cHit.lambert;
+        Color hitColor{cHitLambert, cHitLambert, cHitLambert};
         std::optional<Intersection> hit{};
         Intersection hitPoint{ray};
         double denom{_normal * ray.direction()};
@@ -76,7 +94,8 @@ namespace raytracer
             return {};
         }
         Material mat = static_cast<Material>(*this);
-        return Intersection{ray, t, _normal, color(), _normal.angle(ray.direction()), mat};
+        // return Intersection{ray, t, _normal, color(), _normal.angle(ray.direction()), mat};
+        return Intersection{ray, t, _normal, hitColor, _normal.angle(ray.direction()), mat};
     }
 
     std::ostream &operator<<(std::ostream &out, Plane &plane)

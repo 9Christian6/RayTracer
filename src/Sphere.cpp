@@ -2,6 +2,7 @@
 #include "Ray.hpp"
 #include "Intersection.hpp"
 #include "BoundingBox.hpp"
+#include "shape.hpp"
 #include <math.h>
 #include <optional>
 
@@ -52,6 +53,18 @@ namespace raytracer
             double t = std::pow(B, 2) - (4 * C);
             if (t > Ray::RAY_T_MIN && t < Ray::RAY_T_MAX)
             {
+
+                S_ray r = S_ray_new(ray);
+                S_sphere s;
+                s._o = S_vector3_new(_origin);
+                s._r = _radius;
+                T_shape sphere;
+                sphere.shape._sphere = s;
+                sphere.tag = SPHERE;
+                auto cHit = intersectShape(sphere, r);
+                float hitColor = (float)cHit.lambert;
+                Color cHitColor = Color{hitColor, hitColor, hitColor};
+
                 t = sqrt(t);
                 t = -B - t;
                 if (t <= 0)
@@ -61,7 +74,8 @@ namespace raytracer
                 Vector normal = (hit - _origin).normalize();
                 double angle = normal.angle(ray.direction());
                 Material mat = static_cast<Material>(*this);
-                return Intersection{ray, t, normal, color(), angle, mat};
+                // return Intersection{ray, t, normal, color(), angle, mat};
+                return Intersection{ray, t, normal, cHitColor, angle, mat};
             }
         }
         return {};
