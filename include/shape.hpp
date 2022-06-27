@@ -1,4 +1,5 @@
 #include "fEquals.hpp"
+#include "Vector.hpp"
 
 namespace raytracer
 {
@@ -17,7 +18,34 @@ namespace raytracer
         double _x, _y, _z;
     };
 
-    S_vector3 operator-(const S_vector3 &lhs, const S_vector3 &rhs)
+    static inline S_vector3 S_vector3_new(double x, double y, double z)
+    {
+        S_vector3 s_vec3;
+        s_vec3._x = x;
+        s_vec3._y = y;
+        s_vec3._z = z;
+        return s_vec3;
+    }
+
+    static inline S_vector3 S_vector3_new(const Vector &vec)
+    {
+        S_vector3 s_vec3;
+        s_vec3._x = vec.x();
+        s_vec3._y = vec.y();
+        s_vec3._z = vec.z();
+        return s_vec3;
+    }
+
+    static inline S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
+    {
+        S_vector3 sum;
+        sum._x = lhs._x + rhs._x;
+        sum._y = lhs._y + rhs._y;
+        sum._z = lhs._z + rhs._z;
+        return sum;
+    }
+
+    static inline S_vector3 operator-(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         S_vector3 diff;
         diff._x = lhs._x - rhs._x;
@@ -26,7 +54,7 @@ namespace raytracer
         return diff;
     }
 
-    S_vector3 operator*(double scale, S_vector3 &op)
+    static inline S_vector3 operator*(double scale, S_vector3 &op)
     {
         S_vector3 prod;
         prod._x = op._x * scale;
@@ -35,7 +63,7 @@ namespace raytracer
         return prod;
     }
 
-    S_vector3 operator*(S_vector3 &op, double scale)
+    static inline S_vector3 operator*(S_vector3 &op, double scale)
     {
         S_vector3 prod;
         prod._x = op._x * scale;
@@ -44,27 +72,27 @@ namespace raytracer
         return prod;
     }
 
-    double operator*(S_vector3 &lhs, S_vector3 &rhs)
+    static inline double operator*(S_vector3 &lhs, S_vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    double length(S_vector3 &op)
+    static inline double length(S_vector3 &op)
     {
         return std::sqrt(op * op);
     }
 
-    S_vector3 normalize(S_vector3 &op)
+    static inline S_vector3 normalize(S_vector3 &op)
     {
         return (op * (1 / length((op))));
     }
 
-    double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
+    static inline double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
+    static inline bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return equals(dotPorduct(lhs, rhs), 0);
     }
@@ -73,6 +101,14 @@ namespace raytracer
     {
         S_vector3 _o, _d;
     };
+
+    static inline S_ray S_ray_new(const Ray &ray)
+    {
+        S_ray r;
+        r._d = S_vector3_new(ray.direction());
+        r._o = S_vector3_new(ray.origin());
+        return r;
+    }
 
     static constexpr double RAY_T_MIN = 1.0e-9;
     static constexpr double RAY_T_MAX = 1.0e30;
@@ -88,7 +124,7 @@ namespace raytracer
         S_vector3 _o, _n;
     };
 
-    bool plane_contains(S_plane plane, S_vector3 point)
+    static bool plane_contains(S_plane plane, S_vector3 point)
     {
         return orthogonal(plane._n, plane._o - point);
     }
@@ -113,7 +149,7 @@ namespace raytracer
         U_shape shape;
     };
 
-    double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
+    static double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
     {
         double brightness{0};
         auto lightDirection = light - position;
@@ -122,13 +158,14 @@ namespace raytracer
         return std::abs(brightness);
     }
 
-    S_intersection intersect(T_shape s, S_ray r)
+    static S_intersection intersectShape(T_shape s, S_ray r)
     {
         S_intersection intersection;
         S_plane plane;
         S_sphere sphere;
         double denom{0}, t{0}, B, C;
         bool contains{false};
+        S_vector3 sum, prod, normal;
         switch (s.tag)
         {
         case SPHERE:
@@ -155,6 +192,10 @@ namespace raytracer
                 intersection.hit = true;
                 intersection.t = t;
                 intersection._r = r;
+                prod = t * r._d;
+                sum = r._o + prod;
+                normal = sum - sphere._o;
+                intersection.lambert = lambert(r._o, sum, normal);
             }
             break;
 
@@ -178,6 +219,9 @@ namespace raytracer
             intersection.hit = true;
             intersection._r = r;
             intersection.t = t;
+            prod = t * r._d;
+            sum = r._o + prod;
+            intersection.lambert = lambert(r._o, sum, plane._n);
             break;
 
         default:
