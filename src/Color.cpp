@@ -7,6 +7,10 @@ namespace raytracer
     {
     }
 
+    Color::Color() : _r{1}, _g{1}, _b{1}
+    {
+    }
+
     Color Color::clamp(float min, float max) const
     {
         float newR{_r}, newG{_g}, newB{_b};

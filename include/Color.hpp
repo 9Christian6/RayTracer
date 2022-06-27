@@ -8,6 +8,7 @@ namespace raytracer
         float _r, _g, _b;
 
     public:
+        Color();
         Color(float r, float g, float b);
         float r() const
         {
