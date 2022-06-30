@@ -20,6 +20,7 @@ add_executable(RayTracer
   src/Vector2.cpp
   src/Image.cpp
   src/Intersection.cpp
+  src/CUDAShape.cpp
   src/Shapeset.cpp
   src/Polygon.cpp
   src/Line2.cpp
@@ -29,6 +30,7 @@ add_executable(RayTracer
   src/Scene.cpp
   src/Material.cpp
   src/BoundingBox.cpp
+  src/CUDAScene.cpp
   src/CUDA.cu
   src/RenderKernel.cu
   include/Vector2.hpp
@@ -42,7 +44,7 @@ add_executable(RayTracer
   include/Image.hpp
   include/Intersection.hpp
   include/Shape.hpp
-  include/shape.hpp
+  include/CUDAShape.hpp
   include/Shapeset.hpp
   include/Polygon.hpp
   include/Line2.hpp
@@ -53,6 +55,7 @@ add_executable(RayTracer
   include/Scene.hpp
   include/Material.hpp
   include/BoundingBox.hpp
+  include/CUDAScene.hpp
   include/CUDA.h
   include/RenderKernel.h
 )
@@ -60,7 +63,6 @@ add_executable(RayTracer
 if(PNGwriter_FOUND)
   target_link_libraries(RayTracer PRIVATE PNGwriter::PNGwriter)
 endif(PNGwriter_FOUND)
-
 
 target_include_directories(RayTracer PRIVATE include)
 target_include_directories(RayTracer PRIVATE 3rd-party)

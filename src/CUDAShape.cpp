@@ -1,24 +1,8 @@
-#include "fEquals.hpp"
-#include "Vector.hpp"
+#include "CUDAShape.hpp"
 
 namespace raytracer
 {
-
-#ifndef SHAPE_H
-#define SHAPE_H
-
-    enum shapeTag
-    {
-        SPHERE,
-        PLANE
-    };
-
-    struct S_vector3
-    {
-        double _x, _y, _z;
-    };
-
-    static inline S_vector3 S_vector3_new(double x, double y, double z)
+    S_vector3 S_vector3_new(double x, double y, double z)
     {
         S_vector3 s_vec3;
         s_vec3._x = x;
@@ -27,7 +11,7 @@ namespace raytracer
         return s_vec3;
     }
 
-    static inline S_vector3 S_vector3_new(const Vector &vec)
+    S_vector3 S_vector3_new(const Vector &vec)
     {
         S_vector3 s_vec3;
         s_vec3._x = vec.x();
@@ -36,7 +20,7 @@ namespace raytracer
         return s_vec3;
     }
 
-    static inline S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
+    S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         S_vector3 sum;
         sum._x = lhs._x + rhs._x;
@@ -45,7 +29,7 @@ namespace raytracer
         return sum;
     }
 
-    static inline S_vector3 operator-(const S_vector3 &lhs, const S_vector3 &rhs)
+    S_vector3 operator-(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         S_vector3 diff;
         diff._x = lhs._x - rhs._x;
@@ -54,7 +38,7 @@ namespace raytracer
         return diff;
     }
 
-    static inline S_vector3 operator*(double scale, S_vector3 &op)
+    S_vector3 operator*(double scale, S_vector3 &op)
     {
         S_vector3 prod;
         prod._x = op._x * scale;
@@ -63,7 +47,7 @@ namespace raytracer
         return prod;
     }
 
-    static inline S_vector3 operator*(S_vector3 &op, double scale)
+    S_vector3 operator*(S_vector3 &op, double scale)
     {
         S_vector3 prod;
         prod._x = op._x * scale;
@@ -72,37 +56,32 @@ namespace raytracer
         return prod;
     }
 
-    static inline double operator*(S_vector3 &lhs, S_vector3 &rhs)
+    double operator*(S_vector3 &lhs, S_vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    static inline double length(S_vector3 &op)
+    double length(S_vector3 &op)
     {
         return std::sqrt(op * op);
     }
 
-    static inline S_vector3 normalize(S_vector3 &op)
+    S_vector3 normalize(S_vector3 &op)
     {
         return (op * (1 / length((op))));
     }
 
-    static inline double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
+    double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    static inline bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
+    bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return equals(dotPorduct(lhs, rhs), 0);
     }
 
-    struct S_ray
-    {
-        S_vector3 _o, _d;
-    };
-
-    static inline S_ray S_ray_new(const Ray &ray)
+    S_ray S_ray_new(const Ray &ray)
     {
         S_ray r;
         r._d = S_vector3_new(ray.direction());
@@ -110,46 +89,12 @@ namespace raytracer
         return r;
     }
 
-    static constexpr double RAY_T_MIN = 1.0e-9;
-    static constexpr double RAY_T_MAX = 1.0e30;
-
-    struct S_sphere
-    {
-        S_vector3 _o;
-        double _r, _rs;
-    };
-
-    struct S_plane
-    {
-        S_vector3 _o, _n;
-    };
-
-    static bool plane_contains(S_plane plane, S_vector3 point)
+    bool plane_contains(S_plane plane, S_vector3 point)
     {
         return orthogonal(plane._n, plane._o - point);
     }
 
-    struct S_intersection
-    {
-        bool hit;
-        double t, lambert;
-        S_vector3 _position;
-        S_ray _r;
-    };
-
-    union U_shape
-    {
-        S_sphere _sphere;
-        S_plane _plane;
-    };
-
-    struct T_shape
-    {
-        shapeTag _tag;
-        U_shape _shape;
-    };
-
-    static double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
+    double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
     {
         double brightness{0};
         auto lightDirection = light - position;
@@ -158,7 +103,7 @@ namespace raytracer
         return std::abs(brightness);
     }
 
-    static S_intersection intersectShape(T_shape s, S_ray r)
+    S_intersection intersectShape(T_shape s, S_ray r)
     {
         S_intersection intersection;
         S_plane plane;
@@ -196,6 +141,8 @@ namespace raytracer
                 sum = r._o + prod;
                 normal = sum - sphere._o;
                 intersection.lambert = lambert(r._o, sum, normal);
+                intersection._color = s._color;
+                // intersection._color = intersection._color * intersection.lambert;
             }
             break;
 
@@ -229,7 +176,4 @@ namespace raytracer
         }
         return intersection;
     };
-
-#endif
-    // SHAPE_H
 }
