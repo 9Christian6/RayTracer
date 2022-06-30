@@ -13,13 +13,15 @@ namespace raytracer
 
     struct CUDAScene
     {
-        int _width, _height;
-        S_vector3 _cam;
+        S_Image _img;
+        S_Camera _cam;
         thrust::host_vector<S_vector3> _lights;
         thrust::host_vector<T_shape> _hostShapes;
     };
 
     void addShape(CUDAScene scene, T_shape shape);
+
+    void render(size_t x, size_t y);
 
     // void setImageDim(CUDAScene scene, int width, int height)
     // {

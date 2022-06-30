@@ -20,6 +20,15 @@ namespace raytracer
         return s_vec3;
     }
 
+    S_Color S_Color_new(double r, double g, double b)
+    {
+        S_Color c;
+        c._r = r;
+        c._g = g;
+        c._b = b;
+        return c;
+    }
+
     S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         S_vector3 sum;
@@ -47,7 +56,7 @@ namespace raytracer
         return prod;
     }
 
-    S_vector3 operator*(S_vector3 &op, double scale)
+    S_vector3 operator*(const S_vector3 &op, double scale)
     {
         S_vector3 prod;
         prod._x = op._x * scale;
@@ -56,17 +65,17 @@ namespace raytracer
         return prod;
     }
 
-    double operator*(S_vector3 &lhs, S_vector3 &rhs)
+    double operator*(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    double length(S_vector3 &op)
+    double length(const S_vector3 &op)
     {
         return std::sqrt(op * op);
     }
 
-    S_vector3 normalize(S_vector3 &op)
+    S_vector3 normalize(const S_vector3 &op)
     {
         return (op * (1 / length((op))));
     }
@@ -74,6 +83,13 @@ namespace raytracer
     double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
+    }
+
+    S_vector3 crossProduct(const S_vector3 &lhs, const S_vector3 &rhs)
+    {
+        double x, y, z;
+        x = lhs._y * rhs._z - lhs._z;
+        return S_vector3_new(x, x, x);
     }
 
     bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
@@ -89,12 +105,33 @@ namespace raytracer
         return r;
     }
 
+    S_ray S_ray_new(const S_vector3 &origin, const S_vector3 &direction)
+    {
+        S_ray r;
+        r._o = origin;
+        r._d = direction;
+        return r;
+    }
+
+    S_Camera S_Camera_new(S_vector3 position, S_vector3 forward, S_vector3 up, double fov, double aspectRatio)
+    {
+        S_Camera cam;
+        forward = position + forward;
+        up = position + up;
+        cam._forward = normalize(forward - position);
+        cam._right = normalize(crossProduct(cam._forward, cam._up));
+        cam._up = crossProduct(cam._right, cam._forward);
+        cam._h = std::tan(fov);
+        cam._w = cam._h * aspectRatio;
+        return cam;
+    }
+
     bool plane_contains(S_plane plane, S_vector3 point)
     {
         return orthogonal(plane._n, plane._o - point);
     }
 
-    double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal)
+    double lambert(const S_vector3 &light, const S_vector3 &position, const S_vector3 &normal)
     {
         double brightness{0};
         auto lightDirection = light - position;
@@ -176,4 +213,27 @@ namespace raytracer
         }
         return intersection;
     };
+
+    S_Color getPixel(S_Image img, size_t x, size_t y)
+    {
+        int position = y * img._width + x;
+        return img._pixels[position];
+    }
+
+    void setColor(S_Image img, size_t x, size_t y, S_Color color)
+    {
+        int position = y * img._width + x;
+        img._pixels[position] = color;
+    }
+
+    S_ray makeRay(S_Camera cam, size_t width, size_t height, size_t x, size_t y)
+    {
+        double xR = ((x / (double)width) * 2) - 1;
+        double yR = ((y / (double)height) * 2) - 1;
+        auto vec = cam._forward + xR * cam._w * cam._right;
+        auto direction = cam._forward + xR * cam._w * cam._right + yR * cam._h * cam._up;
+        direction = normalize(direction);
+        return S_ray_new(cam._pos, direction);
+    }
+
 }

@@ -1,7 +1,7 @@
 #include "fEquals.hpp"
 #include "Vector.hpp"
-#include "Color.hpp"
 #include "Ray.hpp"
+#include <thrust/host_vector.h>
 
 namespace raytracer
 {
@@ -20,6 +20,11 @@ namespace raytracer
     struct S_ray
     {
         S_vector3 _o, _d;
+    };
+
+    struct S_Color
+    {
+        double _r, _g, _b;
     };
 
     struct S_sphere
@@ -49,7 +54,7 @@ namespace raytracer
     {
         shapeTag _tag;
         U_shape _shape;
-        Color _color;
+        S_Color _color;
     };
 
     struct S_intersection
@@ -58,12 +63,30 @@ namespace raytracer
         double t, lambert;
         S_vector3 _position;
         S_ray _r;
-        Color _color;
+        S_Color _color;
+    };
+
+    struct S_Image
+    {
+        int _width, _height;
+        thrust::host_vector<S_Color> _pixels;
+    };
+
+    struct S_Camera
+    {
+        S_vector3 _pos, _forward, _up, _right;
+        double _h, _w;
     };
 
     S_vector3 S_vector3_new(double x, double y, double z);
 
     S_vector3 S_vector3_new(const Vector &vec);
+
+    S_Color S_Color_new(double r, double g, double b);
+
+    S_ray S_ray_new(const Ray &ray);
+
+    S_Camera S_Camera_new(S_vector3 position, S_vector3 forward, S_vector3 up, double fov, double aspectRatio);
 
     S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs);
 
@@ -71,25 +94,31 @@ namespace raytracer
 
     S_vector3 operator*(double scale, S_vector3 &op);
 
-    S_vector3 operator*(S_vector3 &op, double scale);
+    S_vector3 operator*(const S_vector3 &op, double scale);
 
-    double operator*(S_vector3 &lhs, S_vector3 &rhs);
+    double operator*(const S_vector3 &lhs, const S_vector3 &rhs);
 
-    double length(S_vector3 &op);
+    double length(const S_vector3 &op);
 
-    S_vector3 normalize(S_vector3 &op);
+    S_vector3 normalize(const S_vector3 &op);
 
     double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs);
 
-    bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs);
+    S_vector3 crossProduct(const S_vector3 &lhs, const S_vector3 &rhs);
 
-    S_ray S_ray_new(const Ray &ray);
+    bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs);
 
     bool plane_contains(S_plane plane, S_vector3 point);
 
-    static double lambert(S_vector3 &light, S_vector3 &position, S_vector3 &normal);
+    double lambert(const S_vector3 &light, const S_vector3 &position, const S_vector3 &normal);
 
-    static S_intersection intersectShape(T_shape s, S_ray r);
+    S_intersection intersectShape(T_shape s, S_ray r);
+
+    S_Color getPixel(S_Image img, size_t x, size_t y);
+
+    void setPixel(S_Image img, size_t x, size_t y, S_Color color);
+
+    S_ray makeRay(S_Camera cam, size_t x, size_t y);
 
 #endif
     // SHAPE_H
