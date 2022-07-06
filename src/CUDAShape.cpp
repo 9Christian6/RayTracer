@@ -29,6 +29,36 @@ namespace raytracer
         return c;
     }
 
+    S_ray S_ray_new(const Ray &ray)
+    {
+        S_ray r;
+        r._d = S_vector3_new(ray.direction());
+        r._o = S_vector3_new(ray.origin());
+        return r;
+    }
+
+    S_ray S_ray_new(const S_vector3 &origin, const S_vector3 &direction)
+    {
+        S_ray r;
+        r._o = origin;
+        r._d = direction;
+        return r;
+    }
+
+    S_Camera S_Camera_new(S_vector3 position, S_vector3 forward, S_vector3 up, double fov, double aspectRatio)
+    {
+        S_Camera cam;
+        cam._pos = position;
+        forward = position + forward;
+        up = position + up;
+        cam._forward = normalize(forward - position);
+        cam._right = normalize(crossProduct(cam._forward, up));
+        cam._up = crossProduct(cam._right, cam._forward);
+        cam._h = std::tan(fov);
+        cam._w = cam._h * aspectRatio;
+        return cam;
+    }
+
     S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         S_vector3 sum;
@@ -88,42 +118,15 @@ namespace raytracer
     S_vector3 crossProduct(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         double x, y, z;
-        x = lhs._y * rhs._z - lhs._z;
-        return S_vector3_new(x, x, x);
+        x = lhs._y * rhs._z - lhs._z * rhs._y;
+        y = lhs._z * rhs._x - lhs._x * rhs._z;
+        z = lhs._x * rhs._y - lhs._y * rhs._x;
+        return S_vector3_new(x, y, z);
     }
 
     bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
     {
         return equals(dotPorduct(lhs, rhs), 0);
-    }
-
-    S_ray S_ray_new(const Ray &ray)
-    {
-        S_ray r;
-        r._d = S_vector3_new(ray.direction());
-        r._o = S_vector3_new(ray.origin());
-        return r;
-    }
-
-    S_ray S_ray_new(const S_vector3 &origin, const S_vector3 &direction)
-    {
-        S_ray r;
-        r._o = origin;
-        r._d = direction;
-        return r;
-    }
-
-    S_Camera S_Camera_new(S_vector3 position, S_vector3 forward, S_vector3 up, double fov, double aspectRatio)
-    {
-        S_Camera cam;
-        forward = position + forward;
-        up = position + up;
-        cam._forward = normalize(forward - position);
-        cam._right = normalize(crossProduct(cam._forward, cam._up));
-        cam._up = crossProduct(cam._right, cam._forward);
-        cam._h = std::tan(fov);
-        cam._w = cam._h * aspectRatio;
-        return cam;
     }
 
     bool plane_contains(S_plane plane, S_vector3 point)
@@ -179,6 +182,7 @@ namespace raytracer
                 normal = sum - sphere._o;
                 intersection.lambert = lambert(r._o, sum, normal);
                 intersection._color = s._color;
+                intersection._position = calculateRayPoint(intersection._r, intersection.t);
                 // intersection._color = intersection._color * intersection.lambert;
             }
             break;
@@ -203,6 +207,7 @@ namespace raytracer
             intersection.hit = true;
             intersection._r = r;
             intersection.t = t;
+            intersection._position = calculateRayPoint(intersection._r, t);
             prod = t * r._d;
             sum = r._o + prod;
             intersection.lambert = lambert(r._o, sum, plane._n);
@@ -231,9 +236,29 @@ namespace raytracer
         double xR = ((x / (double)width) * 2) - 1;
         double yR = ((y / (double)height) * 2) - 1;
         auto vec = cam._forward + xR * cam._w * cam._right;
-        auto direction = cam._forward + xR * cam._w * cam._right + yR * cam._h * cam._up;
+        auto direction = cam._forward + xR * cam._w * cam._right;
+        direction = direction + yR * cam._h * cam._up;
         direction = normalize(direction);
         return S_ray_new(cam._pos, direction);
+    }
+
+    S_vector3 calculateRayPoint(S_ray ray, double t)
+    {
+        return ray._o + ray._d * t;
+    }
+
+    S_intersection intersectShapes(thrust::host_vector<T_shape> shapes, S_ray ray)
+    {
+        S_intersection hit;
+        hit.hit = false;
+        hit.t = 0;
+        for (auto shape : shapes)
+        {
+            auto temp = intersectShape(shape, ray);
+            if (temp.hit && temp.t > hit.t)
+                hit = temp;
+        }
+        return hit;
     }
 
 }

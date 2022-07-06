@@ -118,8 +118,11 @@ namespace raytracer
 
     void setPixel(S_Image img, size_t x, size_t y, S_Color color);
 
-    S_ray makeRay(S_Camera cam, size_t x, size_t y);
+    S_ray makeRay(S_Camera cam, size_t width, size_t height, size_t x, size_t y);
 
+    S_vector3 calculateRayPoint(S_ray ray, double t);
+
+    S_intersection intersectShapes(thrust::host_vector<T_shape> shapes, S_ray ray);
 #endif
     // SHAPE_H
 }
