@@ -21,24 +21,7 @@ namespace raytracer
 
     void addShape(CUDAScene scene, T_shape shape);
 
-    void render(size_t x, size_t y);
-
-    // void setImageDim(CUDAScene scene, int width, int height)
-    // {
-    //     scene._img = Image{width, height};
-    // }
-
-    // S_intersection intersectShapes(CUDAScene scene, S_ray ray)
-    // {
-    //     S_intersection potHit;
-    //     for (int i = 0; i < sizeof(scene._shapes) / sizeof(T_shape); i++)
-    //     {
-    //         potHit = intersectShape(scene._shapes, ray);
-    //         if (potHit.hit)
-    //             return potHit;
-    //     }
-    //     return potHit;
-    // }
+    void render(CUDAScene scene, size_t width, size_t height);
 
 #endif
 }

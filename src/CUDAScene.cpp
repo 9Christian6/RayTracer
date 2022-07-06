@@ -1,5 +1,6 @@
 #include "CUDAShape.hpp"
 #include "CUDAScene.hpp"
+#include "Image.hpp"
 namespace raytracer
 {
     void addShape(CUDAScene scene, T_shape shape)
@@ -7,17 +8,19 @@ namespace raytracer
         scene._hostShapes.push_back(shape);
     }
 
-    void render(size_t x, size_t y)
+    void render(CUDAScene scene, size_t width, size_t height)
     {
-        for (size_t i = 0; i < x; i++)
+        Image img{width, height};
+        for (size_t x = 0; x < width; x++)
         {
-            for (size_t j = 0; j < y; j++)
+            for (size_t y = 0; y < height; y++)
             {
-                // create ray
-                // intersect scene with ray
-                // enter color
+                auto ray = makeRay(scene._cam, width, height, x, y);
+                auto hit = intersectShapes(scene._hostShapes, ray);
+                Color hitColor{hit.lambert, hit.lambert, hit.lambert};
+                img.plot(x, y, hitColor);
             }
         }
-        // plot picture
+        img._image.close();
     }
 }
