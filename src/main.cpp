@@ -27,7 +27,7 @@ int main(int, char **)
 {
     Vector origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
     Vector2 origin2{0, 0}, xVec2{1, 0}, yVec2{0, 1};
-    // Camera camera{yVec, zVec, yVec, 10, 1};
+    Camera camera{yVec, zVec, yVec, 10, 1};
     // Sphere sphere{yVec + zVec, 0.5}, sphere2{3 * yVec + 0.5 * xVec + 2 * zVec, 0.5}, sphere3{-2 * xVec + 2 * zVec, 0.5};
     // Plane xzPlane{origin, yVec};
     // Plane yzPlane{2 * xVec, -xVec};
@@ -57,7 +57,11 @@ int main(int, char **)
     // scene.renderSeq(100, 100, 2, 1);
     // scene.renderPar(100, 100, 2, 1);
 
+    // CUDA STUFF
+
     CUDAScene parScene;
+    S_Camera cam = S_Camera_new(S_vector3_new(yVec), S_vector3_new(zVec), S_vector3_new(yVec), 10, 1);
+    parScene._cam = cam;
     S_plane plane;
     plane._n = S_vector3_new(yVec);
     plane._o = S_vector3_new(origin);
@@ -65,30 +69,34 @@ int main(int, char **)
     tPlane._shape._plane = plane;
     tPlane._tag = PLANE;
     S_sphere sphere;
-    sphere._o = S_vector3_new(origin);
-    sphere._r = 2.;
+    sphere._o = S_vector3_new(3 * zVec + yVec);
+    sphere._r = 0.5;
     T_shape tSphere;
     tSphere._shape._sphere = sphere;
     tSphere._tag = SPHERE;
 
     parScene._hostShapes.push_back(tSphere);
-    parScene._hostShapes.push_back(tPlane);
+    // parScene._hostShapes.push_back(tPlane);
 
-    S_ray ray = S_ray_new(Ray{yVec, -yVec});
-    for (auto shape : parScene._hostShapes)
-    {
-        switch (shape._tag)
-        {
-        case PLANE:
-            std::cout << "Plane\n";
-            break;
+    render(parScene, 200, 200);
 
-        case SPHERE:
-            std::cout << "Sphere\n";
-            break;
+    // TAGGED UNION STUFF
 
-        default:
-            break;
-        }
-    }
+    // S_ray ray = S_ray_new(Ray{yVec, -yVec});
+    // for (auto shape : parScene._hostShapes)
+    // {
+    //     switch (shape._tag)
+    //     {
+    //     case PLANE:
+    //         std::cout << "Plane\n";
+    //         break;
+
+    //     case SPHERE:
+    //         std::cout << "Sphere\n";
+    //         break;
+
+    //     default:
+    //         break;
+    //     }
+    // }
 }
