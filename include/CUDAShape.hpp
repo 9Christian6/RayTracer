@@ -62,6 +62,7 @@ namespace raytracer
         bool hit;
         double t, lambert;
         S_vector3 _position;
+        S_vector3 _normal;
         S_ray _r;
         S_Color _color;
     };
@@ -112,8 +113,6 @@ namespace raytracer
 
     double lambert(const S_vector3 &light, const S_vector3 &position, const S_vector3 &normal);
 
-    S_intersection intersectShape(T_shape s, S_ray r);
-
     S_Color getPixel(S_Image img, size_t x, size_t y);
 
     void setPixel(S_Image img, size_t x, size_t y, S_Color color);
@@ -122,7 +121,13 @@ namespace raytracer
 
     S_vector3 calculateRayPoint(S_ray ray, double t);
 
+    S_intersection intersectShape(T_shape s, S_ray r);
+
     S_intersection intersectShapes(thrust::host_vector<T_shape> shapes, S_ray ray);
+
+    double calculateLambert(S_intersection hit, S_vector3 light);
+
+    double calculateLambert(thrust::host_vector<T_shape> shapes, S_intersection hit, thrust::host_vector<S_vector3> lights);
 #endif
     // SHAPE_H
 }

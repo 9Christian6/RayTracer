@@ -151,6 +151,29 @@ namespace raytracer
         return std::abs(brightness);
     }
 
+    bool visible(thrust::host_vector<T_shape> scene, S_vector3 position, S_vector3 light)
+    {
+        auto lightRay = S_ray_new(position, light - position);
+        return !intersectShapes(scene, lightRay).hit;
+    }
+
+    double calculateLambert(S_intersection hit, S_vector3 light)
+    {
+        double shade = lambert(light, hit._position, hit._normal);
+        return shade;
+    }
+
+    double calculateLambert(thrust::host_vector<T_shape> shapes, S_intersection hit, thrust::host_vector<S_vector3> lights)
+    {
+        double shade{0};
+        for (auto light : lights)
+        {
+            if (visible(shapes, hit._position, light))
+                shade += lambert(light, hit._position, hit._normal);
+        }
+        return shade;
+    }
+
     S_intersection intersectShape(T_shape shape, S_ray r)
     {
         S_intersection intersection = S_intersection_new();
@@ -189,8 +212,8 @@ namespace raytracer
                 normal = sum - sphere._o;
                 intersection.lambert = lambert(r._o, sum, normal);
                 intersection._color = shape._color;
+                intersection._normal = normal;
                 intersection._position = calculateRayPoint(intersection._r, intersection.t);
-                // intersection._color = intersection._color * intersection.lambert;
             }
             break;
 
@@ -208,6 +231,7 @@ namespace raytracer
                 intersection.hit = true;
                 intersection._r = r;
                 intersection.t = 1;
+                intersection._normal = plane._n;
                 break;
             }
             t = dotPorduct(plane._o - r._o, plane._n) / denom;
@@ -220,6 +244,7 @@ namespace raytracer
                 prod = t * r._d;
                 sum = r._o + prod;
                 intersection.lambert = lambert(r._o, sum, plane._n);
+                intersection._normal = plane._n;
                 break;
             }
 
