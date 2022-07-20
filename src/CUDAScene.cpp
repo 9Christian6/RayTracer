@@ -17,8 +17,11 @@ namespace raytracer
             {
                 auto ray = makeRay(scene._cam, width, height, x, y);
                 auto hit = intersectShapes(scene._hostShapes, ray);
-                Color hitColor{hit.lambert, hit.lambert, hit.lambert};
-                img.plot(x, y, hitColor);
+                if (hit.hit)
+                {
+                    Color hitColor{hit.lambert, hit.lambert, hit.lambert};
+                    img.plot(x, y, hitColor);
+                }
             }
         }
         img._image.close();
