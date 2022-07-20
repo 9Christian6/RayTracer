@@ -1,4 +1,5 @@
 #include "CUDAShape.hpp"
+#include <limits.h>
 
 namespace raytracer
 {
@@ -57,6 +58,13 @@ namespace raytracer
         cam._h = std::tan(fov);
         cam._w = cam._h * aspectRatio;
         return cam;
+    }
+
+    S_intersection S_intersection_new()
+    {
+        S_intersection intersection;
+        intersection.hit = false;
+        return intersection;
     }
 
     S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
@@ -143,18 +151,18 @@ namespace raytracer
         return std::abs(brightness);
     }
 
-    S_intersection intersectShape(T_shape s, S_ray r)
+    S_intersection intersectShape(T_shape shape, S_ray r)
     {
-        S_intersection intersection;
+        S_intersection intersection = S_intersection_new();
         S_plane plane;
         S_sphere sphere;
         double denom{0}, t{0}, B, C;
         bool contains{false};
         S_vector3 sum, prod, normal;
-        switch (s._tag)
+        switch (shape._tag)
         {
         case SPHERE:
-            sphere = s._shape._sphere;
+            sphere = shape._shape._sphere;
             B = r._d._x * (r._o._x - sphere._o._x);
             B += r._d._y * (r._o._y - sphere._o._y);
             B += r._d._z * (r._o._z - sphere._o._z);
@@ -168,9 +176,8 @@ namespace raytracer
             {
                 t = std::sqrt(t);
                 t = -B - t;
-                if (t <= 0)
+                if (t <= RAY_T_MIN)
                 {
-                    intersection.hit = false;
                     break;
                 }
                 t /= 2;
@@ -181,14 +188,14 @@ namespace raytracer
                 sum = r._o + prod;
                 normal = sum - sphere._o;
                 intersection.lambert = lambert(r._o, sum, normal);
-                intersection._color = s._color;
+                intersection._color = shape._color;
                 intersection._position = calculateRayPoint(intersection._r, intersection.t);
                 // intersection._color = intersection._color * intersection.lambert;
             }
             break;
 
         case PLANE:
-            plane = s._shape._plane;
+            plane = shape._shape._plane;
             denom = dotPorduct(plane._n, r._d);
             contains = orthogonal(plane._n, plane._o - r._o);
             if (equals(denom, 0) && !(plane_contains(plane, r._o)))
@@ -204,14 +211,17 @@ namespace raytracer
                 break;
             }
             t = dotPorduct(plane._o - r._o, plane._n) / denom;
-            intersection.hit = true;
-            intersection._r = r;
-            intersection.t = t;
-            intersection._position = calculateRayPoint(intersection._r, t);
-            prod = t * r._d;
-            sum = r._o + prod;
-            intersection.lambert = lambert(r._o, sum, plane._n);
-            break;
+            if (t > 0)
+            {
+                intersection.hit = true;
+                intersection._r = r;
+                intersection.t = t;
+                intersection._position = calculateRayPoint(intersection._r, t);
+                prod = t * r._d;
+                sum = r._o + prod;
+                intersection.lambert = lambert(r._o, sum, plane._n);
+                break;
+            }
 
         default:
             break;
@@ -251,11 +261,11 @@ namespace raytracer
     {
         S_intersection hit;
         hit.hit = false;
-        hit.t = 0;
+        hit.t = __DBL_MAX__;
         for (auto shape : shapes)
         {
             auto temp = intersectShape(shape, ray);
-            if (temp.hit && temp.t > hit.t)
+            if (temp.hit && temp.t < hit.t)
                 hit = temp;
         }
         return hit;
