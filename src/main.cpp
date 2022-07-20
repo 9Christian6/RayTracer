@@ -76,9 +76,9 @@ int main(int, char **)
     tSphere._tag = SPHERE;
 
     parScene._hostShapes.push_back(tSphere);
-    // parScene._hostShapes.push_back(tPlane);
+    parScene._hostShapes.push_back(tPlane);
 
-    render(parScene, 200, 200);
+    render(parScene, 1000, 1000);
 
     // TAGGED UNION STUFF
 
