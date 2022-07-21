@@ -19,7 +19,8 @@ namespace raytracer
                 auto hit = intersectShapes(scene._hostShapes, ray);
                 if (hit.hit)
                 {
-                    Color hitColor{hit.lambert, hit.lambert, hit.lambert};
+                    double lambert = calculateLambert(scene._hostShapes, hit, scene._lights);
+                    Color hitColor{lambert, lambert, lambert};
                     img.plot(x, y, hitColor);
                 }
             }

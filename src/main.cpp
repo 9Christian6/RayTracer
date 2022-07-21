@@ -60,14 +60,15 @@ int main(int, char **)
     // CUDA STUFF
 
     CUDAScene parScene;
+    parScene._lights.push_back(S_vector3_new(3 * zVec + 4 * yVec + 4 * xVec));
     S_Camera cam = S_Camera_new(S_vector3_new(yVec), S_vector3_new(zVec), S_vector3_new(yVec), 10, 1);
     parScene._cam = cam;
     S_plane plane;
     plane._n = S_vector3_new(yVec);
     plane._o = S_vector3_new(origin);
-    T_shape tPlane;
-    tPlane._shape._plane = plane;
-    tPlane._tag = PLANE;
+    T_shape txzPlane;
+    txzPlane._shape._plane = plane;
+    txzPlane._tag = PLANE;
     S_sphere sphere;
     sphere._o = S_vector3_new(3 * zVec + yVec);
     sphere._r = 0.5;
@@ -76,7 +77,7 @@ int main(int, char **)
     tSphere._tag = SPHERE;
 
     parScene._hostShapes.push_back(tSphere);
-    parScene._hostShapes.push_back(tPlane);
+    parScene._hostShapes.push_back(txzPlane);
 
     render(parScene, 1000, 1000);
 
