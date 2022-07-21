@@ -8,13 +8,13 @@ namespace raytracer
     class Image
     {
     private:
-        int _width, _height;
+        size_t _width, _height;
         std::vector<bool> _pixels;
 
     public:
         pngwriter _image;
         Image() = default;
-        Image(int width, int height);
+        Image(size_t width, size_t height);
         Image(std::string path);
         int width() const;
         int height() const;

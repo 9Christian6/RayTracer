@@ -7,7 +7,7 @@
 
 namespace raytracer
 {
-    Image::Image(int width, int height) : _width{width}, _height{height}
+    Image::Image(size_t width, size_t height) : _width{width}, _height{height}
     {
         _pixels.resize(width * height);
         std::fill(_pixels.begin(), _pixels.end(), false);

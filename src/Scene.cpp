@@ -48,7 +48,7 @@ namespace raytracer
         return (std::chrono::duration_cast<std::chrono::milliseconds>(stop - start)).count();
     }
 
-    void Scene::renderSeq(int width, int height, int bounces, int samples) const
+    void Scene::renderSeq(size_t width, size_t height, int bounces, int samples) const
     {
         Image img{width, height};
         auto start = timerStart();
@@ -132,7 +132,7 @@ namespace raytracer
         std::cout << "Pixel " << x << ", " << y << " rendered\n";
     }
 
-    void Scene::renderPar(int width, int height, int bounces, int samples) const
+    void Scene::renderPar(size_t width, size_t height, int bounces, int samples) const
     {
         Image img{width, height};
         auto start = timerStart();
