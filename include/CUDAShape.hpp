@@ -63,8 +63,9 @@ namespace raytracer
         double t, lambert;
         S_vector3 _position;
         S_vector3 _normal;
-        S_ray _r;
+        S_ray _ray;
         S_Color _color;
+        enum shapeTag _shape;
     };
 
     struct S_Image

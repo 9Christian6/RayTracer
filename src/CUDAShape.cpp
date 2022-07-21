@@ -153,8 +153,11 @@ namespace raytracer
 
     bool visible(thrust::host_vector<T_shape> scene, S_vector3 position, S_vector3 light)
     {
-        auto lightRay = S_ray_new(position, light - position);
-        return !intersectShapes(scene, lightRay).hit;
+        double t = length(position - light);
+        auto lightDirection = normalize(position - light);
+        auto lightRay = S_ray_new(light - 0.1 * lightDirection, lightDirection);
+        auto firstLightHit = intersectShapes(scene, lightRay).t;
+        return (t < firstLightHit);
     }
 
     double calculateLambert(S_intersection hit, S_vector3 light)
@@ -174,7 +177,7 @@ namespace raytracer
         return shade;
     }
 
-    S_intersection intersectShape(T_shape shape, S_ray r)
+    S_intersection intersectShape(T_shape shape, S_ray ray)
     {
         S_intersection intersection = S_intersection_new();
         S_plane plane;
@@ -186,13 +189,13 @@ namespace raytracer
         {
         case SPHERE:
             sphere = shape._shape._sphere;
-            B = r._d._x * (r._o._x - sphere._o._x);
-            B += r._d._y * (r._o._y - sphere._o._y);
-            B += r._d._z * (r._o._z - sphere._o._z);
+            B = ray._d._x * (ray._o._x - sphere._o._x);
+            B += ray._d._y * (ray._o._y - sphere._o._y);
+            B += ray._d._z * (ray._o._z - sphere._o._z);
             B *= 2;
-            C = std::pow((r._o._x - sphere._o._x), 2);
-            C += std::pow((r._o._y - sphere._o._y), 2);
-            C += std::pow((r._o._z - sphere._o._z), 2);
+            C = std::pow((ray._o._x - sphere._o._x), 2);
+            C += std::pow((ray._o._y - sphere._o._y), 2);
+            C += std::pow((ray._o._z - sphere._o._z), 2);
             C -= std::pow(sphere._r, 2);
             t = std::pow(B, 2) - (4 * C);
             if (t > RAY_T_MIN && t < RAY_T_MAX)
@@ -206,45 +209,48 @@ namespace raytracer
                 t /= 2;
                 intersection.hit = true;
                 intersection.t = t;
-                intersection._r = r;
-                prod = t * r._d;
-                sum = r._o + prod;
+                intersection._ray = ray;
+                prod = t * ray._d;
+                sum = ray._o + prod;
                 normal = sum - sphere._o;
-                intersection.lambert = lambert(r._o, sum, normal);
+                intersection.lambert = lambert(ray._o, sum, normal);
                 intersection._color = shape._color;
                 intersection._normal = normal;
-                intersection._position = calculateRayPoint(intersection._r, intersection.t);
+                intersection._position = calculateRayPoint(intersection._ray, intersection.t);
+                intersection._shape = SPHERE;
             }
             break;
 
         case PLANE:
             plane = shape._shape._plane;
-            denom = dotPorduct(plane._n, r._d);
-            contains = orthogonal(plane._n, plane._o - r._o);
-            if (equals(denom, 0) && !(plane_contains(plane, r._o)))
+            denom = dotPorduct(plane._n, ray._d);
+            contains = orthogonal(plane._n, plane._o - ray._o);
+            if (equals(denom, 0) && !(plane_contains(plane, ray._o)))
             {
                 intersection.hit = false;
                 break;
             }
-            if (equals(denom, 0) && (plane_contains(plane, r._o)))
+            if (equals(denom, 0) && (plane_contains(plane, ray._o)))
             {
                 intersection.hit = true;
-                intersection._r = r;
+                intersection._ray = ray;
                 intersection.t = 1;
                 intersection._normal = plane._n;
+                intersection._shape = PLANE;
                 break;
             }
-            t = dotPorduct(plane._o - r._o, plane._n) / denom;
+            t = dotPorduct(plane._o - ray._o, plane._n) / denom;
             if (t > 0)
             {
                 intersection.hit = true;
-                intersection._r = r;
+                intersection._ray = ray;
                 intersection.t = t;
-                intersection._position = calculateRayPoint(intersection._r, t);
-                prod = t * r._d;
-                sum = r._o + prod;
-                intersection.lambert = lambert(r._o, sum, plane._n);
+                intersection._position = calculateRayPoint(intersection._ray, t);
+                prod = t * ray._d;
+                sum = ray._o + prod;
+                intersection.lambert = lambert(ray._o, sum, plane._n);
                 intersection._normal = plane._n;
+                intersection._shape = PLANE;
                 break;
             }
 
