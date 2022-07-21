@@ -5,11 +5,12 @@ namespace raytracer
     class Color
     {
     private:
-        float _r, _g, _b;
+        double _r, _g, _b;
 
     public:
         Color();
-        Color(float r, float g, float b);
+        // Color(float r, float g, float b);
+        Color(double r, double g, double b);
         float r() const
         {
             return _r;

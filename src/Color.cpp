@@ -3,7 +3,11 @@
 namespace raytracer
 {
 
-    Color::Color(float r, float g, float b) : _r{r}, _g{g}, _b{b}
+    // Color::Color(float r, float g, float b) : _r{r}, _g{g}, _b{b}
+    // {
+    // }
+
+    Color::Color(double r, double g, double b) : _r{r}, _g{g}, _b{b}
     {
     }
 
@@ -13,7 +17,7 @@ namespace raytracer
 
     Color Color::clamp(float min, float max) const
     {
-        float newR{_r}, newG{_g}, newB{_b};
+        double newR{_r}, newG{_g}, newB{_b};
         if (_r < min)
             newR = min;
         if (_r > max)
