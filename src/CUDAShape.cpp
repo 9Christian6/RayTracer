@@ -155,7 +155,7 @@ namespace raytracer
     {
         double t = length(position - light);
         auto lightDirection = normalize(position - light);
-        auto lightRay = S_ray_new(light - 0.1 * lightDirection, lightDirection);
+        auto lightRay = S_ray_new(light + 0.1 * lightDirection, lightDirection);
         auto firstLightHit = intersectShapes(scene, lightRay).t;
         return (t < firstLightHit);
     }
