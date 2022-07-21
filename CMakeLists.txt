@@ -16,7 +16,7 @@ find_package(PNGwriter 0.7.0)
 
 add_subdirectory(src)
 add_executable(RayTracer
-  src/main.cpp
+  src/main.cu
   src/Ray.cpp
   src/Vector.cpp
   src/Plane.cpp
