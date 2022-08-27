@@ -2,32 +2,18 @@
 #include <cstring>
 #include <string>
 #include <math.h>
-#include "Ray.hpp"
-#include "Vector.hpp"
 #include "Exception.hpp"
-#include "Sphere.hpp"
-#include "Camera.hpp"
-#include "Image.hpp"
-#include "Intersection.hpp"
-#include "Shapeset.hpp"
-#include "Polygon.hpp"
-#include "Ray2.hpp"
-#include "Line2.hpp"
-#include "Light.hpp"
-#include "Scene.hpp"
-#include "BoundingBox.hpp"
 #include "CUDA.h"
-#include "RenderKernel.h"
-#include <cmath>
 #include "CUDAShape.hpp"
 #include "CUDAScene.hpp"
+#include <cmath>
 
 using namespace raytracer;
 int main(int, char **)
 {
-    Vector origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
-    Vector2 origin2{0, 0}, xVec2{1, 0}, yVec2{0, 1};
-    Camera camera{yVec, zVec, yVec, 10, 1};
+    Vector3 origin{0, 0, 0}, xVec{1, 0, 0}, yVec{0, 1, 0}, zVec{0, 0, 1};
+    // Vector2 origin2{0, 0}, xVec2{1, 0}, yVec2{0, 1};
+    // Camera camera{yVec, zVec, yVec, 10, 1};
     // Sphere sphere{yVec + zVec, 0.5}, sphere2{3 * yVec + 0.5 * xVec + 2 * zVec, 0.5}, sphere3{-2 * xVec + 2 * zVec, 0.5};
     // Plane xzPlane{origin, yVec};
     // Plane yzPlane{2 * xVec, -xVec};
@@ -60,21 +46,21 @@ int main(int, char **)
     // CUDA STUFF
 
     CUDAScene parScene;
-    parScene._lights.push_back(S_vector3_new(3 * zVec + 4 * yVec + 4 * xVec));
-    S_Camera cam = S_Camera_new(S_vector3_new(yVec), S_vector3_new(zVec), S_vector3_new(yVec), 10, 1);
+    parScene._lights.push_back(Vector3(3 * zVec + 4 * yVec + 4 * xVec));
+    Camera cam = S_Camera_new(Vector3(yVec), Vector3(zVec), Vector3(yVec), 10, 1);
     parScene._cam = cam;
-    S_plane plane;
-    plane._n = S_vector3_new(yVec);
-    plane._o = S_vector3_new(origin);
-    T_shape txzPlane;
-    txzPlane._shape._plane = plane;
-    txzPlane._tag = PLANE;
-    S_sphere sphere;
-    sphere._o = S_vector3_new(3 * zVec + yVec);
+    Plane3 plane;
+    plane._n = Vector3(yVec);
+    plane._o = Vector3(origin);
+    TaggedShape txzPlane{PLANE, plane, Color3{}};
+    // txzPlane._shape._plane = plane;
+    // txzPlane._tag = PLANE;
+    Sphere3 sphere;
+    sphere._o = Vector3(3 * zVec + yVec);
     sphere._r = 0.5;
-    T_shape tSphere;
-    tSphere._shape._sphere = sphere;
-    tSphere._tag = SPHERE;
+    TaggedShape tSphere{SPHERE, sphere, Color3{}};
+    // tSphere._shape._sphere = sphere;
+    // tSphere._tag = SPHERE;
 
     parScene._hostShapes.push_back(tSphere);
     parScene._hostShapes.push_back(txzPlane);
@@ -83,7 +69,7 @@ int main(int, char **)
 
     // TAGGED UNION STUFF
 
-    // S_ray ray = S_ray_new(Ray{yVec, -yVec});
+    // Ray3 ray = S_ray_new(Ray{yVec, -yVec});
     // for (auto shape : parScene._hostShapes)
     // {
     //     switch (shape._tag)

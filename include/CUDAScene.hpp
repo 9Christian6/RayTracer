@@ -1,8 +1,4 @@
 #include "CUDAShape.hpp"
-#include "Camera.hpp"
-#include "Image.hpp"
-#include "Color.hpp"
-#include "Vector2.hpp"
 #include <thrust/host_vector.h>
 
 namespace raytracer
@@ -13,13 +9,13 @@ namespace raytracer
 
     struct CUDAScene
     {
-        S_Image _img;
-        S_Camera _cam;
-        thrust::host_vector<S_vector3> _lights;
-        thrust::host_vector<T_shape> _hostShapes;
+        Image _img;
+        Camera _cam;
+        thrust::host_vector<Vector3> _lights;
+        thrust::host_vector<TaggedShape> _hostShapes;
     };
 
-    void addShape(CUDAScene scene, T_shape shape);
+    void addShape(CUDAScene scene, TaggedShape shape);
 
     void render(CUDAScene scene, size_t width, size_t height);
 

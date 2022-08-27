@@ -1,9 +1,8 @@
 #include "CUDAShape.hpp"
 #include "CUDAScene.hpp"
-#include "Image.hpp"
 namespace raytracer
 {
-    void addShape(CUDAScene scene, T_shape shape)
+    void addShape(CUDAScene scene, TaggedShape shape)
     {
         scene._hostShapes.push_back(shape);
     }
@@ -20,11 +19,11 @@ namespace raytracer
                 if (hit.hit)
                 {
                     double lambert = calculateLambert(scene._hostShapes, hit, scene._lights);
-                    Color hitColor{lambert, lambert, lambert};
-                    img.plot(x, y, hitColor);
+                    Color3 hitColor{lambert, lambert, lambert};
+                    // img.plot(x, y, hitColor);
                 }
             }
         }
-        img._image.close();
+        // img._image.close();
     }
 }

@@ -1,6 +1,4 @@
 #include "fEquals.hpp"
-#include "Vector.hpp"
-#include "Ray.hpp"
 #include <thrust/host_vector.h>
 
 namespace raytracer
@@ -12,30 +10,81 @@ namespace raytracer
     static constexpr double RAY_T_MIN = 1.0e-9;
     static constexpr double RAY_T_MAX = 1.0e30;
 
-    struct S_vector3
+    struct Vector3
     {
         double _x, _y, _z;
+        Vector3()
+        {
+            _x = 0;
+            _y = 0;
+            _z = 0;
+        }
+        Vector3(double x, double y, double z)
+        {
+            _x = x;
+            _y = y;
+            _z = z;
+        }
     };
 
-    struct S_ray
+    struct Ray3
     {
-        S_vector3 _o, _d;
+        Vector3 _o, _d;
+        Ray3(Vector3 origin, Vector3 direction)
+        {
+            _o = origin;
+            _d = direction;
+        }
+        Ray3()
+        {
+            _o = Vector3();
+            _d = Vector3();
+        }
     };
 
-    struct S_Color
+    struct Color3
     {
         double _r, _g, _b;
+        Color3()
+        {
+            _r = 0;
+            _g = 0;
+            _b = 0;
+        }
+        Color3(double r, double g, double b)
+        {
+            _r = r;
+            _g = g;
+            _b = b;
+        }
     };
 
-    struct S_sphere
+    struct Sphere3
     {
-        S_vector3 _o;
+        Vector3 _o;
         double _r, _rs;
+        Sphere3()
+        {
+            _o = Vector3();
+            _r = 1;
+            _rs = 1;
+        }
+        Sphere3(Vector3 origin, double radius)
+        {
+            _o = origin;
+            _r = radius;
+            _rs = _r * _r;
+        }
     };
 
-    struct S_plane
+    struct Plane3
     {
-        S_vector3 _o, _n;
+        Vector3 _o, _n;
+        Plane3()
+        {
+            _o = Vector3();
+            _n = Vector3(0, 1, 0);
+        }
     };
 
     enum shapeTag
@@ -44,91 +93,107 @@ namespace raytracer
         PLANE
     };
 
-    union U_shape
+    union Shape
     {
-        S_sphere _sphere;
-        S_plane _plane;
+        Sphere3 _sphere;
+        Plane3 _plane;
+        Shape(Sphere3 sphere)
+        {
+            _sphere = sphere;
+        }
+        Shape(Plane3 plane)
+        {
+            _plane = plane;
+        }
+        Shape(){};
     };
 
-    struct T_shape
+    struct TaggedShape
     {
         shapeTag _tag;
-        U_shape _shape;
-        S_Color _color;
+        Shape _shape;
+        Color3 _color;
+        TaggedShape(shapeTag tag, Shape shape, Color3 color)
+        {
+            _tag = tag;
+            _shape = shape;
+            _color = color;
+        }
+        TaggedShape() = delete;
     };
 
-    struct S_intersection
+    struct Intersection
     {
         bool hit;
         double t, lambert;
-        S_vector3 _position;
-        S_vector3 _normal;
-        S_ray _ray;
-        S_Color _color;
+        Vector3 _position;
+        Vector3 _normal;
+        Ray3 _ray;
+        Color3 _color;
         enum shapeTag _shape;
     };
 
-    struct S_Image
+    struct Image
     {
         int _width, _height;
-        thrust::host_vector<S_Color> _pixels;
+        thrust::host_vector<Color3> _pixels;
+        Image(size_t width, size_t height)
+        {
+            _width = (int)width;
+            _height = (int)height;
+        }
+        Image() = default;
     };
 
-    struct S_Camera
+    struct Camera
     {
-        S_vector3 _pos, _forward, _up, _right;
+        Vector3 _pos, _forward, _up, _right;
         double _h, _w;
     };
 
-    S_vector3 S_vector3_new(double x, double y, double z);
+    Color3 S_Color_new(double r, double g, double b);
 
-    S_vector3 S_vector3_new(const Vector &vec);
+    Camera S_Camera_new(Vector3 position, Vector3 forward, Vector3 up, double fov, double aspectRatio);
 
-    S_Color S_Color_new(double r, double g, double b);
+    Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);
 
-    S_ray S_ray_new(const Ray &ray);
+    Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs);
 
-    S_Camera S_Camera_new(S_vector3 position, S_vector3 forward, S_vector3 up, double fov, double aspectRatio);
+    Vector3 operator*(double scale, Vector3 &op);
 
-    S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs);
+    Vector3 operator*(const Vector3 &op, double scale);
 
-    S_vector3 operator-(const S_vector3 &lhs, const S_vector3 &rhs);
+    double operator*(const Vector3 &lhs, const Vector3 &rhs);
 
-    S_vector3 operator*(double scale, S_vector3 &op);
+    double length(const Vector3 &op);
 
-    S_vector3 operator*(const S_vector3 &op, double scale);
+    Vector3 normalize(const Vector3 &op);
 
-    double operator*(const S_vector3 &lhs, const S_vector3 &rhs);
+    double dotPorduct(const Vector3 &lhs, const Vector3 &rhs);
 
-    double length(const S_vector3 &op);
+    Vector3 crossProduct(const Vector3 &lhs, const Vector3 &rhs);
 
-    S_vector3 normalize(const S_vector3 &op);
+    bool orthogonal(const Vector3 &lhs, const Vector3 &rhs);
 
-    double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs);
+    bool plane_contains(Plane3 plane, Vector3 point);
 
-    S_vector3 crossProduct(const S_vector3 &lhs, const S_vector3 &rhs);
+    double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal);
 
-    bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs);
+    Color3 getPixel(Image img, size_t x, size_t y);
 
-    bool plane_contains(S_plane plane, S_vector3 point);
+    void setPixel(Image img, size_t x, size_t y, Color3 color);
 
-    double lambert(const S_vector3 &light, const S_vector3 &position, const S_vector3 &normal);
+    Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y);
 
-    S_Color getPixel(S_Image img, size_t x, size_t y);
+    Vector3 calculateRayPoint(Ray3 ray, double t);
 
-    void setPixel(S_Image img, size_t x, size_t y, S_Color color);
+    Intersection intersectShape(TaggedShape s, Ray3 r);
 
-    S_ray makeRay(S_Camera cam, size_t width, size_t height, size_t x, size_t y);
+    Intersection intersectShapes(thrust::host_vector<TaggedShape> shapes, Ray3 ray);
 
-    S_vector3 calculateRayPoint(S_ray ray, double t);
+    double calculateLambert(Intersection hit, Vector3 light);
 
-    S_intersection intersectShape(T_shape s, S_ray r);
-
-    S_intersection intersectShapes(thrust::host_vector<T_shape> shapes, S_ray ray);
-
-    double calculateLambert(S_intersection hit, S_vector3 light);
-
-    double calculateLambert(thrust::host_vector<T_shape> shapes, S_intersection hit, thrust::host_vector<S_vector3> lights);
+    double calculateLambert(thrust::host_vector<TaggedShape> shapes, Intersection hit, thrust::host_vector<Vector3> lights);
 #endif
     // SHAPE_H
 }
