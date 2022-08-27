@@ -3,52 +3,26 @@
 
 namespace raytracer
 {
-    S_vector3 S_vector3_new(double x, double y, double z)
+    Color3 S_Color_new(double r, double g, double b)
     {
-        S_vector3 s_vec3;
-        s_vec3._x = x;
-        s_vec3._y = y;
-        s_vec3._z = z;
-        return s_vec3;
-    }
-
-    S_vector3 S_vector3_new(const Vector &vec)
-    {
-        S_vector3 s_vec3;
-        s_vec3._x = vec.x();
-        s_vec3._y = vec.y();
-        s_vec3._z = vec.z();
-        return s_vec3;
-    }
-
-    S_Color S_Color_new(double r, double g, double b)
-    {
-        S_Color c;
+        Color3 c;
         c._r = r;
         c._g = g;
         c._b = b;
         return c;
     }
 
-    S_ray S_ray_new(const Ray &ray)
+    Ray3 S_ray_new(const Vector3 &origin, const Vector3 &direction)
     {
-        S_ray r;
-        r._d = S_vector3_new(ray.direction());
-        r._o = S_vector3_new(ray.origin());
-        return r;
-    }
-
-    S_ray S_ray_new(const S_vector3 &origin, const S_vector3 &direction)
-    {
-        S_ray r;
+        Ray3 r;
         r._o = origin;
         r._d = direction;
         return r;
     }
 
-    S_Camera S_Camera_new(S_vector3 position, S_vector3 forward, S_vector3 up, double fov, double aspectRatio)
+    Camera S_Camera_new(Vector3 position, Vector3 forward, Vector3 up, double fov, double aspectRatio)
     {
-        S_Camera cam;
+        Camera cam;
         cam._pos = position;
         forward = position + forward;
         up = position + up;
@@ -60,89 +34,89 @@ namespace raytracer
         return cam;
     }
 
-    S_intersection S_intersection_new()
+    Intersection S_intersection_new()
     {
-        S_intersection intersection;
+        Intersection intersection;
         intersection.hit = false;
         return intersection;
     }
 
-    S_vector3 operator+(const S_vector3 &lhs, const S_vector3 &rhs)
+    Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
     {
-        S_vector3 sum;
+        Vector3 sum;
         sum._x = lhs._x + rhs._x;
         sum._y = lhs._y + rhs._y;
         sum._z = lhs._z + rhs._z;
         return sum;
     }
 
-    S_vector3 operator-(const S_vector3 &lhs, const S_vector3 &rhs)
+    Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs)
     {
-        S_vector3 diff;
+        Vector3 diff;
         diff._x = lhs._x - rhs._x;
         diff._y = lhs._y - rhs._y;
         diff._z = lhs._z - rhs._z;
         return diff;
     }
 
-    S_vector3 operator*(double scale, S_vector3 &op)
+    Vector3 operator*(double scale, Vector3 &op)
     {
-        S_vector3 prod;
+        Vector3 prod;
         prod._x = op._x * scale;
         prod._y = op._y * scale;
         prod._z = op._z * scale;
         return prod;
     }
 
-    S_vector3 operator*(const S_vector3 &op, double scale)
+    Vector3 operator*(const Vector3 &op, double scale)
     {
-        S_vector3 prod;
+        Vector3 prod;
         prod._x = op._x * scale;
         prod._y = op._y * scale;
         prod._z = op._z * scale;
         return prod;
     }
 
-    double operator*(const S_vector3 &lhs, const S_vector3 &rhs)
+    double operator*(const Vector3 &lhs, const Vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    double length(const S_vector3 &op)
+    double length(const Vector3 &op)
     {
         return std::sqrt(op * op);
     }
 
-    S_vector3 normalize(const S_vector3 &op)
+    Vector3 normalize(const Vector3 &op)
     {
         return (op * (1 / length((op))));
     }
 
-    double dotPorduct(const S_vector3 &lhs, const S_vector3 &rhs)
+    double dotPorduct(const Vector3 &lhs, const Vector3 &rhs)
     {
         return lhs._x * rhs._x + lhs._y * rhs._y + lhs._z * rhs._z;
     }
 
-    S_vector3 crossProduct(const S_vector3 &lhs, const S_vector3 &rhs)
+    Vector3 crossProduct(const Vector3 &lhs, const Vector3 &rhs)
     {
         double x, y, z;
         x = lhs._y * rhs._z - lhs._z * rhs._y;
         y = lhs._z * rhs._x - lhs._x * rhs._z;
         z = lhs._x * rhs._y - lhs._y * rhs._x;
-        return S_vector3_new(x, y, z);
+        return Vector3(x, y, z);
     }
 
-    bool orthogonal(const S_vector3 &lhs, const S_vector3 &rhs)
+    bool orthogonal(const Vector3 &lhs, const Vector3 &rhs)
     {
         return equals(dotPorduct(lhs, rhs), 0);
     }
 
-    bool plane_contains(S_plane plane, S_vector3 point)
+    bool plane_contains(Plane3 plane, Vector3 point)
     {
         return orthogonal(plane._n, plane._o - point);
     }
 
-    double lambert(const S_vector3 &light, const S_vector3 &position, const S_vector3 &normal)
+    double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal)
     {
         double brightness{0};
         auto lightDirection = light - position;
@@ -151,7 +125,7 @@ namespace raytracer
         return std::abs(brightness);
     }
 
-    bool visible(thrust::host_vector<T_shape> scene, S_vector3 position, S_vector3 light)
+    bool visible(thrust::host_vector<TaggedShape> scene, Vector3 position, Vector3 light)
     {
         double t = length(position - light);
         auto lightDirection = normalize(position - light);
@@ -160,13 +134,13 @@ namespace raytracer
         return (t < firstLightHit);
     }
 
-    double calculateLambert(S_intersection hit, S_vector3 light)
+    double calculateLambert(Intersection hit, Vector3 light)
     {
         double shade = lambert(light, hit._position, hit._normal);
         return shade;
     }
 
-    double calculateLambert(thrust::host_vector<T_shape> shapes, S_intersection hit, thrust::host_vector<S_vector3> lights)
+    double calculateLambert(thrust::host_vector<TaggedShape> shapes, Intersection hit, thrust::host_vector<Vector3> lights)
     {
         double shade{0};
         for (auto light : lights)
@@ -177,14 +151,14 @@ namespace raytracer
         return shade;
     }
 
-    S_intersection intersectShape(T_shape shape, S_ray ray)
+    Intersection intersectShape(TaggedShape shape, Ray3 ray)
     {
-        S_intersection intersection = S_intersection_new();
-        S_plane plane;
-        S_sphere sphere;
+        Intersection intersection = S_intersection_new();
+        Plane3 plane;
+        Sphere3 sphere;
         double denom{0}, t{0}, B, C;
         bool contains{false};
-        S_vector3 sum, prod, normal;
+        Vector3 sum, prod, normal;
         switch (shape._tag)
         {
         case SPHERE:
@@ -260,19 +234,19 @@ namespace raytracer
         return intersection;
     };
 
-    S_Color getPixel(S_Image img, size_t x, size_t y)
+    Color3 getPixel(Image img, size_t x, size_t y)
     {
         int position = y * img._width + x;
         return img._pixels[position];
     }
 
-    void setColor(S_Image img, size_t x, size_t y, S_Color color)
+    void setColor(Image img, size_t x, size_t y, Color3 color)
     {
         int position = y * img._width + x;
         img._pixels[position] = color;
     }
 
-    S_ray makeRay(S_Camera cam, size_t width, size_t height, size_t x, size_t y)
+    Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y)
     {
         double xR = ((x / (double)width) * 2) - 1;
         double yR = ((y / (double)height) * 2) - 1;
@@ -283,14 +257,14 @@ namespace raytracer
         return S_ray_new(cam._pos, direction);
     }
 
-    S_vector3 calculateRayPoint(S_ray ray, double t)
+    Vector3 calculateRayPoint(Ray3 ray, double t)
     {
         return ray._o + ray._d * t;
     }
 
-    S_intersection intersectShapes(thrust::host_vector<T_shape> shapes, S_ray ray)
+    Intersection intersectShapes(thrust::host_vector<TaggedShape> shapes, Ray3 ray)
     {
-        S_intersection hit;
+        Intersection hit;
         hit.hit = false;
         hit.t = __DBL_MAX__;
         for (auto shape : shapes)
