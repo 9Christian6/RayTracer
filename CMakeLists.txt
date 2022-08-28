@@ -19,13 +19,13 @@ add_executable(RayTracer
   src/main.cpp
   src/CUDAShape.cpp
   src/CUDAScene.cpp
-  src/CUDA.cu
+  src/Vector3.cpp
+  include/Vector3.hpp
   include/fEquals.hpp
   include/Exception.hpp
   include/CUDAShape.hpp
   include/SafeDivision.hpp
   include/CUDAScene.hpp
-  include/CUDA.h
 )
 
 if(PNGwriter_FOUND)
