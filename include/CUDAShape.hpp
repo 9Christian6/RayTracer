@@ -1,3 +1,4 @@
+#include "Vector3.hpp"
 #include "fEquals.hpp"
 #include <thrust/host_vector.h>
 
@@ -9,23 +10,6 @@ namespace raytracer
 
     static constexpr double RAY_T_MIN = 1.0e-9;
     static constexpr double RAY_T_MAX = 1.0e30;
-
-    struct Vector3
-    {
-        double _x, _y, _z;
-        Vector3()
-        {
-            _x = 0;
-            _y = 0;
-            _z = 0;
-        }
-        Vector3(double x, double y, double z)
-        {
-            _x = x;
-            _y = y;
-            _z = z;
-        }
-    };
 
     struct Ray3
     {
@@ -124,64 +108,55 @@ namespace raytracer
 
     struct Intersection
     {
-        bool hit;
+        bool _hit;
         double t, lambert;
         Vector3 _position;
         Vector3 _normal;
         Ray3 _ray;
         Color3 _color;
         enum shapeTag _shape;
-    };
-
-    struct Image
-    {
-        int _width, _height;
-        thrust::host_vector<Color3> _pixels;
-        Image(size_t width, size_t height)
+        Intersection()
         {
-            _width = (int)width;
-            _height = (int)height;
+            _hit = false;
         }
-        Image() = default;
     };
 
     struct Camera
     {
         Vector3 _pos, _forward, _up, _right;
         double _h, _w;
+        Camera(Vector3 position, Vector3 forward, Vector3 up, double fov, double aspectRatio)
+        {
+            _pos = position;
+            forward = position + forward;
+            up = position + up;
+            _forward = normalize(forward - position);
+            _right = normalize(crossProduct(_forward, up));
+            _up = crossProduct(_right, _forward);
+            _h = std::tan(fov);
+            _w = _h * aspectRatio;
+        }
+        Camera() = default;
     };
 
-    Color3 S_Color_new(double r, double g, double b);
+    struct Image
+    {
+        int _width, _height;
+        std::vector<std::vector<Color3>> _pixels;
+        Image(size_t width, size_t height)
+        {
+            _width = (int)width;
+            _height = (int)height;
+            _pixels = std::vector<std::vector<Color3>>(_height, std::vector<Color3>(_width));
+        }
+        Image() = default;
+    };
 
-    Camera S_Camera_new(Vector3 position, Vector3 forward, Vector3 up, double fov, double aspectRatio);
-
-    Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);
-
-    Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs);
-
-    Vector3 operator*(double scale, Vector3 &op);
-
-    Vector3 operator*(const Vector3 &op, double scale);
-
-    double operator*(const Vector3 &lhs, const Vector3 &rhs);
-
-    double length(const Vector3 &op);
-
-    Vector3 normalize(const Vector3 &op);
-
-    double dotPorduct(const Vector3 &lhs, const Vector3 &rhs);
-
-    Vector3 crossProduct(const Vector3 &lhs, const Vector3 &rhs);
-
-    bool orthogonal(const Vector3 &lhs, const Vector3 &rhs);
+    void printImage(Image img);
 
     bool plane_contains(Plane3 plane, Vector3 point);
 
     double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal);
-
-    Color3 getPixel(Image img, size_t x, size_t y);
-
-    void setPixel(Image img, size_t x, size_t y, Color3 color);
 
     Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y);
 
@@ -192,7 +167,6 @@ namespace raytracer
     Intersection intersectShapes(thrust::host_vector<TaggedShape> shapes, Ray3 ray);
 
     double calculateLambert(Intersection hit, Vector3 light);
-
     double calculateLambert(thrust::host_vector<TaggedShape> shapes, Intersection hit, thrust::host_vector<Vector3> lights);
 #endif
     // SHAPE_H

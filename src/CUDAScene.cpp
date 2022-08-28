@@ -16,14 +16,17 @@ namespace raytracer
             {
                 auto ray = makeRay(scene._cam, width, height, x, y);
                 auto hit = intersectShapes(scene._hostShapes, ray);
-                if (hit.hit)
+                if (hit._hit)
                 {
                     double lambert = calculateLambert(scene._hostShapes, hit, scene._lights);
+                    lambert *= 100;
                     Color3 hitColor{lambert, lambert, lambert};
+                    img._pixels[y][x] = hitColor;
                     // img.plot(x, y, hitColor);
                 }
             }
         }
+        printImage(img);
         // img._image.close();
     }
 }
