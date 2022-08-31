@@ -13,16 +13,16 @@ namespace raytracer
 
     struct Ray3
     {
-        Vector3 _o, _d;
+        Vector3 _origin, _direction;
         Ray3(Vector3 origin, Vector3 direction)
         {
-            _o = origin;
-            _d = direction;
+            _origin = origin;
+            _direction = direction;
         }
         Ray3()
         {
-            _o = Vector3();
-            _d = Vector3();
+            _origin = Vector3();
+            _direction = Vector3();
         }
     };
 
@@ -45,17 +45,17 @@ namespace raytracer
 
     struct Sphere3
     {
-        Vector3 _o;
+        Vector3 _origin;
         double _r, _rs;
         Sphere3()
         {
-            _o = Vector3();
+            _origin = Vector3();
             _r = 1;
             _rs = 1;
         }
         Sphere3(Vector3 origin, double radius)
         {
-            _o = origin;
+            _origin = origin;
             _r = radius;
             _rs = _r * _r;
         }
@@ -63,24 +63,48 @@ namespace raytracer
 
     struct Plane3
     {
-        Vector3 _o, _n;
+        Vector3 _origin, _normal;
         Plane3()
         {
-            _o = Vector3();
-            _n = Vector3(0, 1, 0);
+            _origin = Vector3();
+            _normal = Vector3(0, 1, 0);
+        }
+        Plane3(Vector3 origin, Vector3 normal)
+        {
+            _origin = origin;
+            _normal = normal;
+        }
+        Plane3(Vector3 p1, Vector3 p2, Vector3 p3)
+        {
+            _normal = crossProduct(p1 - p2, p1 - p3);
+            _origin = p1;
+        }
+    };
+
+    bool plane_contains(Plane3 plane, Vector3 point);
+
+    struct Polygon3
+    {
+        Vector3 _normal;
+        std::vector<Vector3> _points;
+        ~Polygon3()
+        {
+            _points.~vector();
         }
     };
 
     enum shapeTag
     {
         SPHERE,
-        PLANE
+        PLANE,
+        POLYGON
     };
 
     union Shape
     {
         Sphere3 _sphere;
         Plane3 _plane;
+        // Polygon3 _polygon;
         Shape(Sphere3 sphere)
         {
             _sphere = sphere;
@@ -89,7 +113,10 @@ namespace raytracer
         {
             _plane = plane;
         }
-        Shape(){};
+        // Shape(Polygon3 polygon)
+        // {
+        //     _polygon = polygon;
+        // }
     };
 
     struct TaggedShape
@@ -97,13 +124,7 @@ namespace raytracer
         shapeTag _tag;
         Shape _shape;
         Color3 _color;
-        TaggedShape(shapeTag tag, Shape shape, Color3 color)
-        {
-            _tag = tag;
-            _shape = shape;
-            _color = color;
-        }
-        TaggedShape() = delete;
+        TaggedShape(shapeTag tag, Shape shape, Color3 color) : _tag{tag}, _shape{shape}, _color{color} {}
     };
 
     struct Intersection
@@ -154,8 +175,6 @@ namespace raytracer
 
     void printImage(Image img);
 
-    bool plane_contains(Plane3 plane, Vector3 point);
-
     double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal);
 
     Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y);
@@ -167,6 +186,7 @@ namespace raytracer
     Intersection intersectShapes(thrust::host_vector<TaggedShape> shapes, Ray3 ray);
 
     double calculateLambert(Intersection hit, Vector3 light);
+
     double calculateLambert(thrust::host_vector<TaggedShape> shapes, Intersection hit, thrust::host_vector<Vector3> lights);
 #endif
     // SHAPE_H

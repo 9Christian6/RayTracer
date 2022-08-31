@@ -43,7 +43,7 @@ namespace raytracer
 
     bool plane_contains(Plane3 plane, Vector3 point)
     {
-        return orthogonal(plane._n, plane._o - point);
+        return orthogonal(plane._normal, plane._origin - point);
     }
 
     double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal)
@@ -93,13 +93,13 @@ namespace raytracer
         {
         case SPHERE:
             sphere = shape._shape._sphere;
-            B = ray._d._x * (ray._o._x - sphere._o._x);
-            B += ray._d._y * (ray._o._y - sphere._o._y);
-            B += ray._d._z * (ray._o._z - sphere._o._z);
+            B = ray._direction._x * (ray._origin._x - sphere._origin._x);
+            B += ray._direction._y * (ray._origin._y - sphere._origin._y);
+            B += ray._direction._z * (ray._origin._z - sphere._origin._z);
             B *= 2;
-            C = std::pow((ray._o._x - sphere._o._x), 2);
-            C += std::pow((ray._o._y - sphere._o._y), 2);
-            C += std::pow((ray._o._z - sphere._o._z), 2);
+            C = std::pow((ray._origin._x - sphere._origin._x), 2);
+            C += std::pow((ray._origin._y - sphere._origin._y), 2);
+            C += std::pow((ray._origin._z - sphere._origin._z), 2);
             C -= std::pow(sphere._r, 2);
             t = std::pow(B, 2) - (4 * C);
             if (t > RAY_T_MIN && t < RAY_T_MAX)
@@ -114,10 +114,10 @@ namespace raytracer
                 intersection._hit = true;
                 intersection.t = t;
                 intersection._ray = ray;
-                prod = t * ray._d;
-                sum = ray._o + prod;
-                normal = sum - sphere._o;
-                intersection.lambert = lambert(ray._o, sum, normal);
+                prod = t * ray._direction;
+                sum = ray._origin + prod;
+                normal = sum - sphere._origin;
+                intersection.lambert = lambert(ray._origin, sum, normal);
                 intersection._color = shape._color;
                 intersection._normal = normal;
                 intersection._position = calculateRayPoint(intersection._ray, intersection.t);
@@ -127,37 +127,69 @@ namespace raytracer
 
         case PLANE:
             plane = shape._shape._plane;
-            denom = dotPorduct(plane._n, ray._d);
-            contains = orthogonal(plane._n, plane._o - ray._o);
-            if (equals(denom, 0) && !(plane_contains(plane, ray._o)))
+            denom = dotPorduct(plane._normal, ray._direction);
+            contains = orthogonal(plane._normal, plane._origin - ray._origin);
+            if (equals(denom, 0) && !(plane_contains(plane, ray._origin)))
             {
                 intersection._hit = false;
                 break;
             }
-            if (equals(denom, 0) && (plane_contains(plane, ray._o)))
+            if (equals(denom, 0) && (plane_contains(plane, ray._origin)))
             {
                 intersection._hit = true;
                 intersection._ray = ray;
                 intersection.t = 1;
-                intersection._normal = plane._n;
+                intersection._normal = plane._normal;
                 intersection._shape = PLANE;
                 break;
             }
-            t = dotPorduct(plane._o - ray._o, plane._n) / denom;
+            t = dotPorduct(plane._origin - ray._origin, plane._normal) / denom;
             if (t > 0)
             {
                 intersection._hit = true;
                 intersection._ray = ray;
                 intersection.t = t;
                 intersection._position = calculateRayPoint(intersection._ray, t);
-                prod = t * ray._d;
-                sum = ray._o + prod;
-                intersection.lambert = lambert(ray._o, sum, plane._n);
-                intersection._normal = plane._n;
+                prod = t * ray._direction;
+                sum = ray._origin + prod;
+                intersection.lambert = lambert(ray._origin, sum, plane._normal);
+                intersection._normal = plane._normal;
                 intersection._shape = PLANE;
                 break;
             }
 
+        // case POLYGON:
+        //     plane = shape._shape._plane;
+        //     denom = dotPorduct(plane._n, ray._direction);
+        //     contains = orthogonal(plane._n, plane._origin - ray._origin);
+        //     if (equals(denom, 0) && !(plane_contains(plane, ray._origin)))
+        //     {
+        //         intersection._hit = false;
+        //         break;
+        //     }
+        //     if (equals(denom, 0) && (plane_contains(plane, ray._origin)))
+        //     {
+        //         intersection._hit = true;
+        //         intersection._ray = ray;
+        //         intersection.t = 1;
+        //         intersection._normal = plane._n;
+        //         intersection._shape = PLANE;
+        //         break;
+        //     }
+        //     t = dotPorduct(plane._origin - ray._origin, plane._n) / denom;
+        //     if (t > 0)
+        //     {
+        //         intersection._hit = true;
+        //         intersection._ray = ray;
+        //         intersection.t = t;
+        //         intersection._position = calculateRayPoint(intersection._ray, t);
+        //         prod = t * ray._direction;
+        //         sum = ray._origin + prod;
+        //         intersection.lambert = lambert(ray._origin, sum, plane._n);
+        //         intersection._normal = plane._n;
+        //         intersection._shape = PLANE;
+        //         break;
+        //     }
         default:
             break;
         }
@@ -177,7 +209,7 @@ namespace raytracer
 
     Vector3 calculateRayPoint(Ray3 ray, double t)
     {
-        return ray._o + ray._d * t;
+        return ray._origin + ray._direction * t;
     }
 
     Intersection intersectShapes(thrust::host_vector<TaggedShape> shapes, Ray3 ray)
