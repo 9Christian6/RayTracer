@@ -5,7 +5,6 @@
 
 namespace raytracer
 {
-
 #ifndef SHAPE_H
 #define SHAPE_H
 
@@ -73,48 +72,21 @@ namespace raytracer
     {
         Vector3 _normal;
         std::vector<Vector3> _points;
-        Polygon3()
-        {
-            _normal = Vector3();
-            _points = std::vector<Vector3>();
-        }
+        Polygon3() = default;
         Polygon3(Vector3 normal, std::vector<Vector3> points) : _normal(normal), _points(points) {}
-        Polygon3(const Polygon3 &poly)
-        {
-            _normal = poly._normal;
-            _points = std::vector<Vector3>(_points.size());
-            _points = poly._points;
-        }
-        ~Polygon3()
-        {
-            _points.clear();
-            _points.shrink_to_fit();
-        }
     };
 
     struct Plane3
     {
         Vector3 _origin, _normal;
-        Plane3()
-        {
-            _origin = Vector3();
-            _normal = Vector3(0, 1, 0);
-        }
-        Plane3(Vector3 origin, Vector3 normal)
-        {
-            _origin = origin;
-            _normal = normal;
-        }
+        Plane3() : _origin{}, _normal{0, 1, 0} {}
+        Plane3(Vector3 origin, Vector3 normal) : _origin{origin}, _normal{normal} {}
         Plane3(Vector3 p1, Vector3 p2, Vector3 p3)
         {
             _normal = crossProduct(p1 - p2, p1 - p3);
             _origin = p1;
         }
-        Plane3(Polygon3 polygon)
-        {
-            _normal = polygon._normal;
-            _origin = polygon._points.at(0);
-        }
+        Plane3(Polygon3 polygon) : _normal{polygon._normal}, _origin{polygon._points.at(0)} {}
     };
 
     struct Line2
@@ -148,12 +120,7 @@ namespace raytracer
         Color3 _color;
         TaggedShape(shapeTag tag, Sphere3 sphere, Color3 color) : _tag{tag}, _color{color}, _sphere{sphere} {}
         TaggedShape(shapeTag tag, Plane3 plane, Color3 color) : _tag{tag}, _color{color}, _plane{plane} {}
-        TaggedShape(shapeTag tag, Polygon3 polygon, Color3 color) // : _tag{tag}, _color{color}, _polygon{polygon}
-        {
-            _tag = tag;
-            _color = color;
-            _polygon = Polygon3{polygon};
-        }
+        TaggedShape(shapeTag tag, Polygon3 polygon, Color3 color) : _tag{tag}, _color{color}, _polygon{polygon} {}
         TaggedShape(const TaggedShape &taggedShape)
         {
             _tag = taggedShape._tag;
@@ -228,9 +195,9 @@ namespace raytracer
         Image() = default;
     };
 
-    void printImage(Image img);
+    void printImage(const Image &img);
 
-    bool plane_contains(Plane3 plane, Vector3 point);
+    bool plane_contains(const Plane3 &plane, const Vector3 &point);
 
     double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal);
 
@@ -238,15 +205,15 @@ namespace raytracer
 
     Vector3 calculateRayPoint(Ray3 ray, double t);
 
-    Intersection intersectShape(TaggedShape s, Ray3 r);
+    Intersection intersectShape(const TaggedShape &shape, const Ray3 &ray);
 
     std::optional<Vector2> intersectLine(const Line2 &line, const Ray2 &ray);
 
-    Intersection intersectShapes(std::vector<TaggedShape> shapes, Ray3 ray);
+    Intersection intersectShapes(const std::vector<TaggedShape> &shapes, Ray3 ray);
 
-    double calculateLambert(Intersection hit, Vector3 light);
+    double calculateLambert(const Intersection &hit, const Vector3 &light);
 
-    double calculateLambert(std::vector<TaggedShape> shapes, Intersection hit, std::vector<Vector3> lights);
+    double calculateLambert(const std::vector<TaggedShape> &shapes, const Intersection &hit, const std::vector<Vector3> &lights);
 
     std::optional<double> getT(const Ray2 &line, const Vector2 &point);
 

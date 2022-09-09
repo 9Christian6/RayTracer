@@ -9,7 +9,7 @@
 
 namespace raytracer
 {
-    void printImage(Image img)
+    void printImage(const Image &img)
     {
         std::string image;
         image.append("P2\n");
@@ -43,7 +43,7 @@ namespace raytracer
         output.close();
     }
 
-    bool plane_contains(Plane3 plane, Vector3 point)
+    bool plane_contains(const Plane3 &plane, const Vector3 &point)
     {
         return orthogonal(plane._normal, plane._origin - point);
     }
@@ -57,7 +57,7 @@ namespace raytracer
         return std::abs(brightness);
     }
 
-    bool visible(std::vector<TaggedShape> scene, Vector3 position, Vector3 light)
+    bool visible(const std::vector<TaggedShape> &scene, const Vector3 &position, const Vector3 &light)
     {
         double t = length(position - light);
         auto lightDirection = normalize(position - light);
@@ -66,16 +66,16 @@ namespace raytracer
         return (t < firstLightHit);
     }
 
-    double calculateLambert(Intersection hit, Vector3 light)
+    double calculateLambert(const Intersection &hit, const Vector3 &light)
     {
         double shade = lambert(light, hit._position, hit._normal);
         return shade;
     }
 
-    double calculateLambert(std::vector<TaggedShape> shapes, Intersection hit, std::vector<Vector3> lights)
+    double calculateLambert(const std::vector<TaggedShape> &shapes, const Intersection &hit, const std::vector<Vector3> &lights)
     {
         double shade{0};
-        for (auto light : lights)
+        for (auto const &light : lights)
         {
             if (visible(shapes, hit._position, light))
                 shade += lambert(light, hit._position, hit._normal);
@@ -145,7 +145,7 @@ namespace raytracer
         return {};
     }
 
-    Intersection intersectShape(TaggedShape shape, Ray3 ray)
+    Intersection intersectShape(const TaggedShape &shape, const Ray3 &ray)
     {
         int intersectionCount;
         Intersection intersection{};
@@ -320,12 +320,12 @@ namespace raytracer
         return ray._origin + ray._direction * t;
     }
 
-    Intersection intersectShapes(std::vector<TaggedShape> shapes, Ray3 ray)
+    Intersection intersectShapes(const std::vector<TaggedShape> &shapes, Ray3 ray)
     {
         Intersection hit;
         hit._hit = false;
         hit.t = __DBL_MAX__;
-        for (auto shape : shapes)
+        for (const auto &shape : shapes)
         {
             auto temp = intersectShape(shape, ray);
             if (temp._hit && temp.t < hit.t)
