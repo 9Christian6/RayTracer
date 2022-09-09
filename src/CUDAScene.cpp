@@ -22,11 +22,9 @@ namespace raytracer
                     lambert *= 100;
                     Color3 hitColor{lambert, lambert, lambert};
                     img._pixels[y][x] = hitColor;
-                    // img.plot(x, y, hitColor);
                 }
             }
         }
         printImage(img);
-        // img._image.close();
     }
 }

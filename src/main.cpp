@@ -26,8 +26,15 @@ int main(int, char **)
     sphere._origin = Vector3(10 * zVec + yVec);
     sphere._r = 0.5;
     TaggedShape tSphere{SPHERE, sphere, Color3{}};
+    Polygon3 poly;
+    poly._normal = Vector3{0, 0, -1};
+    poly._points.push_back(Vector3{-1, 0, 3});
+    poly._points.push_back(Vector3{0, 1, 3});
+    poly._points.push_back(Vector3{1, 0, 3});
+    TaggedShape tPoly{POLYGON, poly, Color3{}};
     parScene._hostShapes.push_back(tSphere);
     parScene._hostShapes.push_back(txzPlane);
+    parScene._hostShapes.push_back(tPoly);
 
     render(parScene, 1000, 1000);
 }
