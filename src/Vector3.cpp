@@ -3,7 +3,6 @@
 #include <cmath>
 namespace raytracer
 {
-
     Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
     {
         Vector3 sum;
@@ -50,6 +49,11 @@ namespace raytracer
         return std::sqrt(op * op);
     }
 
+    double length(const Vector2 &op)
+    {
+        return std::sqrt(op * op);
+    }
+
     Vector3 normalize(const Vector3 &op)
     {
         return (op * (1 / length((op))));
@@ -73,4 +77,88 @@ namespace raytracer
     {
         return equals(dotPorduct(lhs, rhs), 0);
     }
+
+    Vector2 project(const Vector3 &vec, int dimToLoose)
+    {
+        switch (dimToLoose)
+        {
+        case 0:
+            return Vector2{vec._y, vec._x};
+            break;
+
+        case 1:
+            return Vector2{vec._x, vec._z};
+            break;
+
+        case 2:
+            return Vector2{vec._y, vec._z};
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    bool parallel(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return (normalize(lhs) == normalize(rhs));
+    }
+
+    Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        Vector2 sum;
+        sum._x = lhs._x + rhs._x;
+        sum._y = lhs._y + rhs._y;
+        return sum;
+    }
+
+    Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        Vector2 diff;
+        diff._x = lhs._x - rhs._x;
+        diff._y = lhs._y - rhs._y;
+        return diff;
+    }
+
+    Vector2 operator*(double scale, Vector2 &op)
+    {
+        Vector2 prod;
+        prod._x = op._x * scale;
+        prod._y = op._y * scale;
+        return prod;
+    }
+
+    Vector2 operator*(const Vector2 &op, double scale)
+    {
+        Vector2 prod;
+        prod._x = op._x * scale;
+        prod._y = op._y * scale;
+        return prod;
+    }
+
+    double operator*(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return lhs._x * rhs._x + lhs._y * rhs._y;
+    }
+
+    bool operator==(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return (equals(lhs._x, rhs._x) && equals(lhs._y, rhs._y));
+    }
+
+    Vector2 normalize(const Vector2 &op)
+    {
+        return (op * (1 / length((op))));
+    }
+
+    double dotPorduct(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return lhs._x * rhs._x + lhs._y * rhs._y;
+    }
+
+    bool orthogonal(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return equals(dotPorduct(lhs, rhs), 0);
+    }
+
 }
