@@ -1,5 +1,5 @@
 #include "CUDAShape.hpp"
-#include <thrust/host_vector.h>
+#include <vector>
 
 namespace raytracer
 {
@@ -11,8 +11,8 @@ namespace raytracer
     {
         Image _img;
         Camera _cam;
-        thrust::host_vector<Vector3> _lights;
-        thrust::host_vector<TaggedShape> _hostShapes;
+        std::vector<Vector3> _lights;
+        std::vector<TaggedShape> _hostShapes;
     };
 
     void addShape(CUDAScene scene, TaggedShape shape);
