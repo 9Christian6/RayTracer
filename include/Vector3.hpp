@@ -42,7 +42,7 @@ namespace raytracer
 
     Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs);
 
-    Vector3 operator*(double scale, Vector3 &op);
+    Vector3 operator*(double scale, const Vector3 &op);
 
     Vector3 operator*(const Vector3 &op, double scale);
 

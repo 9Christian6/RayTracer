@@ -21,7 +21,7 @@ namespace raytracer
         return diff;
     }
 
-    Vector3 operator*(double scale, Vector3 &op)
+    Vector3 operator*(double scale, const Vector3 &op)
     {
         Vector3 prod;
         prod._x = op._x * scale;
