@@ -1,6 +1,7 @@
 #include "Vector3.hpp"
 #include "fEquals.hpp"
-#include <thrust/host_vector.h>
+#include <vector>
+#include <optional>
 
 namespace raytracer
 {
@@ -19,11 +20,18 @@ namespace raytracer
             _origin = origin;
             _direction = direction;
         }
-        Ray3()
+        Ray3() = default;
+    };
+
+    struct Ray2
+    {
+        Vector2 _origin, _direction;
+        Ray2(Vector2 origin, Vector2 direction)
         {
-            _origin = Vector3();
-            _direction = Vector3();
+            _origin = origin;
+            _direction = direction;
         }
+        Ray2() = default;
     };
 
     struct Color3
@@ -61,6 +69,29 @@ namespace raytracer
         }
     };
 
+    struct Polygon3
+    {
+        Vector3 _normal;
+        std::vector<Vector3> _points;
+        Polygon3()
+        {
+            _normal = Vector3();
+            _points = std::vector<Vector3>();
+        }
+        Polygon3(Vector3 normal, std::vector<Vector3> points) : _normal(normal), _points(points) {}
+        Polygon3(const Polygon3 &poly)
+        {
+            _normal = poly._normal;
+            _points = std::vector<Vector3>(_points.size());
+            _points = poly._points;
+        }
+        ~Polygon3()
+        {
+            _points.clear();
+            _points.shrink_to_fit();
+        }
+    };
+
     struct Plane3
     {
         Vector3 _origin, _normal;
@@ -79,52 +110,76 @@ namespace raytracer
             _normal = crossProduct(p1 - p2, p1 - p3);
             _origin = p1;
         }
+        Plane3(Polygon3 polygon)
+        {
+            _normal = polygon._normal;
+            _origin = polygon._points.at(0);
+        }
     };
 
-    bool plane_contains(Plane3 plane, Vector3 point);
-
-    struct Polygon3
+    struct Line2
     {
-        Vector3 _normal;
-        std::vector<Vector3> _points;
-        ~Polygon3()
+        Vector2 _a, _b;
+        Line2() = default;
+        Line2(Vector2 a, Vector2 b)
         {
-            _points.~vector();
+            _a = a;
+            _b = b;
         }
     };
 
     enum shapeTag
+
     {
         SPHERE,
         PLANE,
         POLYGON
     };
 
-    union Shape
-    {
-        Sphere3 _sphere;
-        Plane3 _plane;
-        // Polygon3 _polygon;
-        Shape(Sphere3 sphere)
-        {
-            _sphere = sphere;
-        }
-        Shape(Plane3 plane)
-        {
-            _plane = plane;
-        }
-        // Shape(Polygon3 polygon)
-        // {
-        //     _polygon = polygon;
-        // }
-    };
-
     struct TaggedShape
     {
         shapeTag _tag;
-        Shape _shape;
+        union
+        {
+            Sphere3 _sphere;
+            Plane3 _plane;
+            Polygon3 _polygon;
+        };
         Color3 _color;
-        TaggedShape(shapeTag tag, Shape shape, Color3 color) : _tag{tag}, _shape{shape}, _color{color} {}
+        TaggedShape(shapeTag tag, Sphere3 sphere, Color3 color) : _tag{tag}, _color{color}, _sphere{sphere} {}
+        TaggedShape(shapeTag tag, Plane3 plane, Color3 color) : _tag{tag}, _color{color}, _plane{plane} {}
+        TaggedShape(shapeTag tag, Polygon3 polygon, Color3 color) // : _tag{tag}, _color{color}, _polygon{polygon}
+        {
+            _tag = tag;
+            _color = color;
+            _polygon = Polygon3{polygon};
+        }
+        TaggedShape(const TaggedShape &taggedShape)
+        {
+            _tag = taggedShape._tag;
+            _color = taggedShape._color;
+            switch (taggedShape._tag)
+            {
+            case PLANE:
+                _plane = taggedShape._plane;
+                break;
+
+            case SPHERE:
+                _sphere = taggedShape._sphere;
+                break;
+
+            case POLYGON:
+                _polygon = taggedShape._polygon;
+                break;
+            default:
+                break;
+            }
+        }
+        ~TaggedShape()
+        {
+            if (_tag == POLYGON)
+                _polygon.~Polygon3();
+        }
     };
 
     struct Intersection
@@ -175,6 +230,8 @@ namespace raytracer
 
     void printImage(Image img);
 
+    bool plane_contains(Plane3 plane, Vector3 point);
+
     double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal);
 
     Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y);
@@ -183,11 +240,19 @@ namespace raytracer
 
     Intersection intersectShape(TaggedShape s, Ray3 r);
 
-    Intersection intersectShapes(thrust::host_vector<TaggedShape> shapes, Ray3 ray);
+    std::optional<Vector2> intersectLine(const Line2 &line, const Ray2 &ray);
+
+    Intersection intersectShapes(std::vector<TaggedShape> shapes, Ray3 ray);
 
     double calculateLambert(Intersection hit, Vector3 light);
 
-    double calculateLambert(thrust::host_vector<TaggedShape> shapes, Intersection hit, thrust::host_vector<Vector3> lights);
+    double calculateLambert(std::vector<TaggedShape> shapes, Intersection hit, std::vector<Vector3> lights);
+
+    std::optional<double> getT(const Ray2 &line, const Vector2 &point);
+
+    Vector2 scale(const Ray2 &ray, double t);
+
+    bool contains(const Line2 &line, const Vector2 &point);
 #endif
     // SHAPE_H
 }
