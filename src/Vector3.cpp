@@ -1,6 +1,7 @@
 #include "Vector3.hpp"
 #include "fEquals.hpp"
 #include <cmath>
+#include <stdexcept>
 namespace raytracer
 {
     Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
@@ -97,6 +98,7 @@ namespace raytracer
         default:
             break;
         }
+        throw std::runtime_error("Projection failed");
     }
 
     bool parallel(const Vector2 &lhs, const Vector2 &rhs)
