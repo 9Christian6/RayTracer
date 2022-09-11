@@ -201,15 +201,15 @@ namespace raytracer
 
     double lambert(const Vector3 &light, const Vector3 &position, const Vector3 &normal);
 
-    Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y);
+    Ray3 makeRay(const Camera &cam, size_t width, size_t height, size_t x, size_t y);
 
-    Vector3 calculateRayPoint(Ray3 ray, double t);
+    Vector3 calculateRayPoint(const Ray3 &ray, double t);
 
     Intersection intersectShape(const TaggedShape &shape, const Ray3 &ray);
 
     std::optional<Vector2> intersectLine(const Line2 &line, const Ray2 &ray);
 
-    Intersection intersectShapes(const std::vector<TaggedShape> &shapes, Ray3 ray);
+    Intersection intersectShapes(const std::vector<TaggedShape> &shapes, const Ray3 &ray);
 
     double calculateLambert(const Intersection &hit, const Vector3 &light);
 

@@ -6,6 +6,7 @@
 #include <numeric>
 #include <fstream>
 #include <optional>
+#include <iostream>
 
 namespace raytracer
 {
@@ -129,7 +130,11 @@ namespace raytracer
             double t = (rayLine._origin._x - ray._origin._x) / ray._direction._x;
             auto hitPoint = scale(ray, t);
             if (contains(line, hitPoint) && t >= 0)
+            {
+                std::cout << "t: " << t << scale(rayLine, t)._x << "\n"
+                          << scale(rayLine, t)._y << "\n";
                 return scale(rayLine, t);
+            }
         }
         if (!equals(rayLine._direction._x, 0))
         {
@@ -227,25 +232,11 @@ namespace raytracer
             }
             break;
         case POLYGON:
+            intersection = intersectShape(TaggedShape{PLANE, Plane3{shape._polygon}, Color3{}}, ray);
+            if (!intersection._hit)
+                return intersection;
             plane = Plane3{shape._polygon};
-            denom = dotPorduct(plane._normal, ray._direction);
-            contains = orthogonal(plane._normal, plane._origin - ray._origin);
-            if (equals(denom, 0) && !(plane_contains(plane, ray._origin)))
-            {
-                intersection._hit = false;
-                break;
-            }
-            if (equals(denom, 0) && (plane_contains(plane, ray._origin)))
-            {
-                intersection._hit = true;
-                intersection._ray = ray;
-                intersection.t = 1;
-                intersection._normal = plane._normal;
-                intersection._shape = POLYGON;
-                break;
-            }
-            t = dotPorduct(plane._origin - ray._origin, plane._normal) / denom;
-            if (t > 0)
+            if (intersection.t > 0)
             {
                 nX = std::abs(plane._normal._x);
                 nY = std::abs(plane._normal._y);
@@ -263,7 +254,7 @@ namespace raytracer
                 {
                     dimToLoose = 2;
                 }
-                auto hit = calculateRayPoint(intersection._ray, t);
+                auto hit = intersection._position; // calculateRayPoint(intersection._ray, t);
                 auto projectedHit = project(hit, dimToLoose);
                 intersectionCount = 0;
                 testRay = Ray2{projectedHit, Vector2{1, 0}};
@@ -304,7 +295,7 @@ namespace raytracer
         return intersection;
     };
 
-    Ray3 makeRay(Camera cam, size_t width, size_t height, size_t x, size_t y)
+    Ray3 makeRay(const Camera &cam, size_t width, size_t height, size_t x, size_t y)
     {
         double xR = ((x / (double)width) * 2) - 1;
         double yR = ((y / (double)height) * 2) - 1;
@@ -315,12 +306,12 @@ namespace raytracer
         return Ray3(cam._pos, direction);
     }
 
-    Vector3 calculateRayPoint(Ray3 ray, double t)
+    Vector3 calculateRayPoint(const Ray3 &ray, double t)
     {
         return ray._origin + ray._direction * t;
     }
 
-    Intersection intersectShapes(const std::vector<TaggedShape> &shapes, Ray3 ray)
+    Intersection intersectShapes(const std::vector<TaggedShape> &shapes, const Ray3 &ray)
     {
         Intersection hit;
         hit._hit = false;
