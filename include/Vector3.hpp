@@ -1,4 +1,6 @@
 #pragma once
+#include <ostream>
+
 namespace raytracer
 {
     struct Vector3
@@ -83,4 +85,6 @@ namespace raytracer
     bool orthogonal(const Vector2 &lhs, const Vector2 &rhs);
 
     bool parallel(const Vector2 &lhs, const Vector2 &rhs);
+
+    std::ostream &operator<<(std::ostream &stream, const Vector2 &point);
 }

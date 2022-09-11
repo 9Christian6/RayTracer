@@ -118,9 +118,9 @@ namespace raytracer
         Ray2 rayLine{line._a, line._b - line._a};
         Vector2 lineVec{line._b, line._a};
         double lineLength = length(line._b - line._a);
-        parallel(rayLine._direction, lineVec);
         if (parallel(lineVec, rayLine._direction))
         {
+            std::cout << "parallel\n";
             if (auto t = getT(rayLine, ray._origin))
                 if (*t >= 0)
                     return scale(rayLine, *t);
@@ -131,8 +131,6 @@ namespace raytracer
             auto hitPoint = scale(ray, t);
             if (contains(line, hitPoint) && t >= 0)
             {
-                std::cout << "t: " << t << scale(rayLine, t)._x << "\n"
-                          << scale(rayLine, t)._y << "\n";
                 return scale(rayLine, t);
             }
         }
@@ -324,4 +322,20 @@ namespace raytracer
         }
         return hit;
     }
+
+    std::ostream &operator<<(std::ostream &out, const Line2 &line)
+    {
+        out << "Line:\n"
+            << "a: " << line._a << ", b: " << line._b << "\n";
+        return out;
+    }
+
+    std::ostream &operator<<(std::ostream &out, const Ray2 &ray)
+    {
+        out << "Ray:\n"
+            << "origin: " << ray._origin << "\n"
+            << "direction: " << ray._direction << "\n";
+        return out;
+    }
+
 }

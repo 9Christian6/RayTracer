@@ -2,6 +2,7 @@
 #include "fEquals.hpp"
 #include <cmath>
 #include <stdexcept>
+#include <ostream>
 namespace raytracer
 {
     Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
@@ -161,6 +162,12 @@ namespace raytracer
     bool orthogonal(const Vector2 &lhs, const Vector2 &rhs)
     {
         return equals(dotPorduct(lhs, rhs), 0);
+    }
+
+    std::ostream &operator<<(std::ostream &stream, const Vector2 &point)
+    {
+        stream << "(" << point._x << ", " << point._y << ")";
+        return stream;
     }
 
 }

@@ -2,6 +2,7 @@
 #include "fEquals.hpp"
 #include <vector>
 #include <optional>
+#include <ostream>
 
 namespace raytracer
 {
@@ -220,6 +221,11 @@ namespace raytracer
     Vector2 scale(const Ray2 &ray, double t);
 
     bool contains(const Line2 &line, const Vector2 &point);
+
+    std::ostream &operator<<(std::ostream &out, const Line2 &line);
+
+    std::ostream &operator<<(std::ostream &out, const Ray2 &ray);
+
 #endif
     // SHAPE_H
 }
