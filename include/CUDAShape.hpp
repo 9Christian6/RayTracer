@@ -199,6 +199,8 @@ namespace raytracer
         {
             _hit = false;
         }
+        Intersection(bool hit, double t, double lambert, Vector3 position, Vector3 normal, Ray3 ray,
+                     Color3 color, shapeTag shapetag) : _hit{hit}, t{t}, lambert{lambert}, _position{position}, _normal{normal}, _ray{ray}, _color{color}, _shape{shapetag} {};
     };
 
     struct Camera
