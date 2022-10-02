@@ -148,6 +148,7 @@ namespace raytracer
             {
                 auto hit2 = scale(rayLine, t);
                 hit._position = Vector3{hit2._x, hit2._y, 0};
+                hit.t = t;
                 hit._hit = true;
             }
         }

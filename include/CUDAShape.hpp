@@ -24,7 +24,7 @@ namespace raytracer
         Ray3(Vector3 origin, Vector3 direction)
         {
             _origin = origin;
-            _direction = direction;
+            _direction = normalize(direction);
         }
         Ray3() = default;
     };
@@ -35,7 +35,7 @@ namespace raytracer
         Ray2(Vector2 origin, Vector2 direction)
         {
             _origin = origin;
-            _direction = direction;
+            _direction = normalize(direction);
         }
         Ray2() = default;
     };
