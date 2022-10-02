@@ -38,6 +38,35 @@ namespace raytracer
             _x = b._x - a._x;
             _y = b._y - a._y;
         }
+        Vector2(const Vector3 &vec, int dimToLoose)
+        {
+            switch (dimToLoose)
+            {
+            case 0:
+            {
+                _x = vec._y;
+                _y = vec._z;
+            }
+            break;
+
+            case 1:
+            {
+                _x = vec._x;
+                _y = vec._z;
+            }
+            break;
+
+            case 2:
+            {
+                _x = vec._y;
+                _y = vec._z;
+            }
+            break;
+
+            default:
+                break;
+            }
+        }
     };
 
     Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);
@@ -62,8 +91,6 @@ namespace raytracer
 
     bool orthogonal(const Vector3 &lhs, const Vector3 &rhs);
 
-    Vector2 project(const Vector3 &vec, int dimToLoose);
-
     Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs);
 
     Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs);
@@ -85,6 +112,8 @@ namespace raytracer
     bool orthogonal(const Vector2 &lhs, const Vector2 &rhs);
 
     bool parallel(const Vector2 &lhs, const Vector2 &rhs);
+
+    Vector2 project(const Vector3 &vec, int dimToLoose);
 
     std::ostream &operator<<(std::ostream &stream, const Vector2 &point);
 }
