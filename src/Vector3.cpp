@@ -85,7 +85,7 @@ namespace raytracer
         switch (dimToLoose)
         {
         case 0:
-            return Vector2{vec._y, vec._x};
+            return Vector2{vec._y, vec._z};
             break;
 
         case 1:
@@ -93,7 +93,7 @@ namespace raytracer
             break;
 
         case 2:
-            return Vector2{vec._y, vec._z};
+            return Vector2{vec._x, vec._y};
             break;
 
         default:
