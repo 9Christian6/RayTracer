@@ -11,6 +11,12 @@ namespace raytracer
 
     static constexpr double RAY_T_MIN = 1.0e-9;
     static constexpr double RAY_T_MAX = 1.0e30;
+    enum Dimension
+    {
+        X,
+        Y,
+        Z
+    };
 
     struct Ray3
     {
@@ -87,17 +93,47 @@ namespace raytracer
             _normal = crossProduct(p1 - p2, p1 - p3);
             _origin = p1;
         }
-        Plane3(Polygon3 polygon) : _normal{polygon._normal}, _origin{polygon._points.at(0)} {}
+        Plane3(Polygon3 polygon) : _origin{polygon._points.at(0)}, _normal{polygon._normal} {}
     };
 
     struct Line2
     {
         Vector2 _a, _b;
         Line2() = default;
+        Line2(Vector2 a)
+        {
+            _a = Vector2{0, 0};
+            _b = a;
+        }
         Line2(Vector2 a, Vector2 b)
         {
             _a = a;
             _b = b;
+        }
+        Line2(Vector3 a, Vector3 b, int dimToLoose)
+        {
+            Vector2 a2, b2;
+            switch (dimToLoose)
+            {
+            case 0:
+                a2 = Vector2{a._y, a._z};
+                b2 = Vector2{b._y, b._z};
+                break;
+
+            case 1:
+                a2 = Vector2{a._x, a._z};
+                b2 = Vector2{b._x, b._z};
+                break;
+
+            case 2:
+                a2 = Vector2{a._x, a._y};
+                b2 = Vector2{b._x, b._y};
+
+            default:
+                break;
+            }
+            _a = a2;
+            _b = b2;
         }
     };
 
@@ -119,9 +155,9 @@ namespace raytracer
             Polygon3 _polygon;
         };
         Color3 _color;
-        TaggedShape(shapeTag tag, Sphere3 sphere, Color3 color) : _tag{tag}, _color{color}, _sphere{sphere} {}
-        TaggedShape(shapeTag tag, Plane3 plane, Color3 color) : _tag{tag}, _color{color}, _plane{plane} {}
-        TaggedShape(shapeTag tag, Polygon3 polygon, Color3 color) : _tag{tag}, _color{color}, _polygon{polygon} {}
+        TaggedShape(shapeTag tag, Sphere3 sphere, Color3 color) : _tag{tag}, _sphere{sphere}, _color{color} {}
+        TaggedShape(shapeTag tag, Plane3 plane, Color3 color) : _tag{tag}, _plane{plane}, _color{color} {}
+        TaggedShape(shapeTag tag, Polygon3 polygon, Color3 color) : _tag{tag}, _polygon{polygon}, _color{color} {}
         TaggedShape(const TaggedShape &taggedShape)
         {
             _tag = taggedShape._tag;
@@ -208,7 +244,9 @@ namespace raytracer
 
     Intersection intersectShape(const TaggedShape &shape, const Ray3 &ray);
 
-    std::optional<Vector2> intersectLine(const Line2 &line, const Ray2 &ray);
+    std::vector<Line2> getLines(const Polygon3 &poly, int dimToLoose);
+
+    Intersection intersectLine(const Line2 &line, const Ray2 &ray);
 
     Intersection intersectShapes(const std::vector<TaggedShape> &shapes, const Ray3 &ray);
 
@@ -225,6 +263,8 @@ namespace raytracer
     std::ostream &operator<<(std::ostream &out, const Line2 &line);
 
     std::ostream &operator<<(std::ostream &out, const Ray2 &ray);
+
+    std::ostream &operator<<(std::ostream &out, const Vector3 &vec);
 
 #endif
     // SHAPE_H
