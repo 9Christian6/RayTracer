@@ -170,13 +170,136 @@ namespace raytracer
         return hit;
     }
 
+    Intersection intersectSphere(const Sphere3 &sphere, const Ray3 &ray)
+    {
+        auto intersection = Intersection{};
+        double B, C, t;
+        Vector3 sum, prod, normal;
+        B = ray._direction._x * (ray._origin._x - sphere._origin._x);
+        B += ray._direction._y * (ray._origin._y - sphere._origin._y);
+        B += ray._direction._z * (ray._origin._z - sphere._origin._z);
+        B *= 2;
+        C = std::pow((ray._origin._x - sphere._origin._x), 2);
+        C += std::pow((ray._origin._y - sphere._origin._y), 2);
+        C += std::pow((ray._origin._z - sphere._origin._z), 2);
+        C -= std::pow(sphere._r, 2);
+        t = std::pow(B, 2) - (4 * C);
+        if (t > RAY_T_MIN && t < RAY_T_MAX)
+        {
+            t = std::sqrt(t);
+            t = -B - t;
+            if (t <= RAY_T_MIN)
+            {
+                return intersection;
+            }
+            t /= 2;
+            intersection._hit = true;
+            intersection.t = t;
+            intersection._ray = ray;
+            prod = t * ray._direction;
+            sum = ray._origin + prod;
+            normal = sum - sphere._origin;
+            intersection.lambert = lambert(ray._origin, sum, normal);
+            intersection._normal = normal;
+            intersection._position = calculateRayPoint(intersection._ray, intersection.t);
+            intersection._shape = SPHERE;
+        }
+        return intersection;
+    };
+
+    Intersection intersectPlane(const Plane3 &plane, const Ray3 &ray)
+    {
+        auto intersection = Intersection{};
+        double denom{0}, t{__DBL_MAX__};
+        Vector3 prod, sum;
+        denom = dotPorduct(plane._normal, ray._direction);
+        if (equals(denom, 0) && !(plane_contains(plane, ray._origin)))
+        {
+            intersection._hit = false;
+            return intersection;
+        }
+        if (equals(denom, 0) && (plane_contains(plane, ray._origin)))
+        {
+            intersection._hit = true;
+            intersection._ray = ray;
+            intersection.t = 1;
+            intersection._normal = plane._normal;
+            intersection._shape = PLANE;
+            return intersection;
+        }
+        t = dotPorduct(plane._origin - ray._origin, plane._normal) / denom;
+        if (t > 0)
+        {
+            intersection._hit = true;
+            intersection._ray = ray;
+            intersection.t = t;
+            intersection._position = calculateRayPoint(intersection._ray, t);
+            prod = t * ray._direction;
+            sum = ray._origin + prod;
+            intersection.lambert = lambert(ray._origin, sum, plane._normal);
+            intersection._normal = plane._normal;
+            intersection._shape = PLANE;
+            return intersection;
+        }
+        return intersection;
+    }
+
+    Intersection intersectPolygon(const Polygon3 &poly, const Ray3 &ray)
+    {
+        double nX, nY, nZ;
+        auto plane = Plane3{poly};
+        auto intersection = intersectPlane(plane, ray);
+        if (!intersection._hit)
+            return intersection;
+        intersection._hit = false;
+        if (intersection.t > RAY_T_MIN)
+        {
+            nX = std::abs(plane._normal._x);
+            nY = std::abs(plane._normal._y);
+            nZ = std::abs(plane._normal._z);
+            int dimToLoose;
+            if (nX >= nY && nX >= nZ)
+            {
+                dimToLoose = 0;
+            }
+            if (nY >= nX && nY >= nZ)
+            {
+                dimToLoose = 1;
+            }
+            if (nZ >= nX && nZ >= nY)
+            {
+                dimToLoose = 2;
+            }
+            auto hit = intersection._position;
+            auto projectedHit = project(hit, dimToLoose);
+            auto intersectionCount = 0;
+            auto testRay = Ray2{projectedHit, Vector2{1, 0}};
+            auto lines = getLines(poly, dimToLoose);
+            for (auto line : lines)
+            {
+                auto hit = intersectLine(line, testRay);
+                if (hit._hit)
+                {
+                    if (!parallel(testRay._direction, (line._b - line._a)))
+                        intersectionCount++;
+                }
+            }
+            if (intersectionCount % 2 == 1)
+            {
+                intersection._hit = true;
+                intersection._shape = POLYGON;
+            }
+        }
+        return intersection;
+    }
+
     Intersection intersectShape(const TaggedShape &shape, const Ray3 &ray)
     {
         int intersectionCount;
         Intersection intersection{};
         Plane3 plane;
         Sphere3 sphere;
-        double denom{0}, t{0}, B, C, nX, nY, nZ;
+        double nX, nY, nZ;
         Vector3 sum, prod, normal;
         Vector2 p0, lastPoint;
         Ray2 testRay;
@@ -184,116 +307,17 @@ namespace raytracer
         switch (shape._tag)
         {
         case SPHERE:
-            sphere = shape._sphere;
-            B = ray._direction._x * (ray._origin._x - sphere._origin._x);
-            B += ray._direction._y * (ray._origin._y - sphere._origin._y);
-            B += ray._direction._z * (ray._origin._z - sphere._origin._z);
-            B *= 2;
-            C = std::pow((ray._origin._x - sphere._origin._x), 2);
-            C += std::pow((ray._origin._y - sphere._origin._y), 2);
-            C += std::pow((ray._origin._z - sphere._origin._z), 2);
-            C -= std::pow(sphere._r, 2);
-            t = std::pow(B, 2) - (4 * C);
-            if (t > RAY_T_MIN && t < RAY_T_MAX)
-            {
-                t = std::sqrt(t);
-                t = -B - t;
-                if (t <= RAY_T_MIN)
-                {
-                    break;
-                }
-                t /= 2;
-                intersection._hit = true;
-                intersection.t = t;
-                intersection._ray = ray;
-                prod = t * ray._direction;
-                sum = ray._origin + prod;
-                normal = sum - sphere._origin;
-                intersection.lambert = lambert(ray._origin, sum, normal);
-                intersection._color = shape._color;
-                intersection._normal = normal;
-                intersection._position = calculateRayPoint(intersection._ray, intersection.t);
-                intersection._shape = SPHERE;
-            }
+            intersection = intersectSphere(shape._sphere, ray);
             break;
 
         case PLANE:
-            plane = shape._plane;
-            denom = dotPorduct(plane._normal, ray._direction);
-            if (equals(denom, 0) && !(plane_contains(plane, ray._origin)))
-            {
-                intersection._hit = false;
-                break;
-            }
-            if (equals(denom, 0) && (plane_contains(plane, ray._origin)))
-            {
-                intersection._hit = true;
-                intersection._ray = ray;
-                intersection.t = 1;
-                intersection._normal = plane._normal;
-                intersection._shape = PLANE;
-                break;
-            }
-            t = dotPorduct(plane._origin - ray._origin, plane._normal) / denom;
-            if (t > 0)
-            {
-                intersection._hit = true;
-                intersection._ray = ray;
-                intersection.t = t;
-                intersection._position = calculateRayPoint(intersection._ray, t);
-                prod = t * ray._direction;
-                sum = ray._origin + prod;
-                intersection.lambert = lambert(ray._origin, sum, plane._normal);
-                intersection._normal = plane._normal;
-                intersection._shape = PLANE;
-                break;
-            }
+            intersection = intersectPlane(shape._plane, ray);
             break;
+
         case POLYGON:
-            plane = Plane3{shape._polygon};
-            intersection = intersectShape(TaggedShape{PLANE, plane, Color3{}}, ray);
-            if (!intersection._hit)
-                return intersection;
-            intersection._hit = false;
-            if (intersection.t > RAY_T_MIN)
-            {
-                nX = std::abs(plane._normal._x);
-                nY = std::abs(plane._normal._y);
-                nZ = std::abs(plane._normal._z);
-                int dimToLoose;
-                if (nX >= nY && nX >= nZ)
-                {
-                    dimToLoose = 0;
-                }
-                if (nY >= nX && nY >= nZ)
-                {
-                    dimToLoose = 1;
-                }
-                if (nZ >= nX && nZ >= nY)
-                {
-                    dimToLoose = 2;
-                }
-                auto hit = intersection._position;
-                auto projectedHit = project(hit, dimToLoose);
-                intersectionCount = 0;
-                testRay = Ray2{projectedHit, Vector2{1, 0}};
-                lines = getLines(shape._polygon, dimToLoose);
-                for (auto line : lines)
-                {
-                    auto hit = intersectLine(line, testRay);
-                    if (hit._hit)
-                    {
-                        if (!parallel(testRay._direction, (line._b - line._a)))
-                            intersectionCount++;
-                    }
-                }
-                if (intersectionCount % 2 == 1)
-                {
-                    intersection._hit = true;
-                    intersection._shape = POLYGON;
-                }
-            }
+            intersection = intersectPolygon(shape._polygon, ray);
             break;
+
         default:
             intersection._hit = false;
             break;
@@ -353,5 +377,4 @@ namespace raytracer
             << "z: " << vec._z << "\n";
         return out;
     }
-
 }
