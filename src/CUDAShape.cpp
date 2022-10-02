@@ -177,7 +177,6 @@ namespace raytracer
         Plane3 plane;
         Sphere3 sphere;
         double denom{0}, t{0}, B, C, nX, nY, nZ;
-        // bool contains{false};
         Vector3 sum, prod, normal;
         Vector2 p0, lastPoint;
         Ray2 testRay;
@@ -221,7 +220,6 @@ namespace raytracer
         case PLANE:
             plane = shape._plane;
             denom = dotPorduct(plane._normal, ray._direction);
-            // contains = orthogonal(plane._normal, plane._origin - ray._origin);
             if (equals(denom, 0) && !(plane_contains(plane, ray._origin)))
             {
                 intersection._hit = false;
@@ -252,12 +250,13 @@ namespace raytracer
             }
             break;
         case POLYGON:
-            intersection = intersectShape(TaggedShape{PLANE, Plane3{shape._polygon}, Color3{}}, ray);
+            plane = Plane3{shape._polygon};
+            intersection = intersectShape(TaggedShape{PLANE, plane, Color3{}}, ray);
             if (!intersection._hit)
                 return intersection;
+            intersection._hit = false;
             if (intersection.t > RAY_T_MIN)
             {
-                plane = Plane3{shape._polygon};
                 nX = std::abs(plane._normal._x);
                 nY = std::abs(plane._normal._y);
                 nZ = std::abs(plane._normal._z);
@@ -274,19 +273,11 @@ namespace raytracer
                 {
                     dimToLoose = 2;
                 }
-                auto hit = intersection._position; // calculateRayPoint(intersection._ray, t);
+                auto hit = intersection._position;
                 auto projectedHit = project(hit, dimToLoose);
                 intersectionCount = 0;
                 testRay = Ray2{projectedHit, Vector2{1, 0}};
-                lines.reserve(shape._polygon._points.size());
-                p0 = project(shape._polygon._points[0], dimToLoose);
-                lastPoint = project(shape._polygon._points.at(shape._polygon._points.size() - 1), dimToLoose);
-                lines.push_back(Line2{p0, lastPoint});
-                for (size_t i = 1; i < shape._polygon._points.size(); i++)
-                {
-                    Vector2 p1{project(shape._polygon._points[i - 1], dimToLoose)}, p2{project(shape._polygon._points[i], dimToLoose)};
-                    lines.push_back(Line2{p1, p2});
-                }
+                lines = getLines(shape._polygon, dimToLoose);
                 for (auto line : lines)
                 {
                     auto hit = intersectLine(line, testRay);
@@ -298,16 +289,7 @@ namespace raytracer
                 }
                 if (intersectionCount % 2 == 1)
                 {
-                    intersection._normal = plane._normal;
-                    intersection._color = shape._color;
                     intersection._hit = true;
-                    intersection._ray = ray;
-                    intersection.t = t;
-                    intersection._position = calculateRayPoint(intersection._ray, t);
-                    prod = t * ray._direction;
-                    sum = ray._origin + prod;
-                    intersection.lambert = lambert(ray._origin, sum, plane._normal);
-                    intersection._normal = plane._normal;
                     intersection._shape = POLYGON;
                 }
             }
