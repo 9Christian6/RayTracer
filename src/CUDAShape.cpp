@@ -338,6 +338,22 @@ namespace raytracer
         return hit;
     }
 
+    std::vector<Vector3> randomSamples(const Vector3 &position, int numSamples)
+    {
+        std::vector<Vector3> points;
+        double phi = M_PI * (3. - sqrt(5.));
+        for (int i = 0; i < numSamples; i++)
+        {
+            double y = 1 - (i / (float)(numSamples - 1)) * 2;
+            double radius = sqrt(1 - y * y);
+            double theta = phi * i;
+            double x = cos(theta) * radius;
+            double z = sin(theta) * radius;
+            points.emplace_back(Vector3{x, y, z} - position);
+        }
+        return points;
+    }
+
     std::ostream &operator<<(std::ostream &out, const Line2 &line)
     {
         out << "Line:\n"

@@ -262,6 +262,8 @@ namespace raytracer
 
     bool contains(const Line2 &line, const Vector2 &point);
 
+    std::vector<Vector3> randomSamples(const Vector3 &position, int numSamples);
+
     std::ostream &operator<<(std::ostream &out, const Line2 &line);
 
     std::ostream &operator<<(std::ostream &out, const Ray2 &ray);
