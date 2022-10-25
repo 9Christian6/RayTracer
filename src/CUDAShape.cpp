@@ -260,28 +260,26 @@ namespace raytracer
         if (!intersection._hit)
             return intersection;
         intersection._hit = false;
-        if (intersection.t > RAY_T_MIN)
+        if (intersection.t <= RAY_T_MIN)
+            return intersection;
+        auto dimToLoose = dimToLose(plane._normal);
+        auto projectedHit = project(intersection._position, dimToLoose);
+        auto testRay = Ray2{projectedHit, Vector2{1, 0}};
+        auto lines = getLines(poly, dimToLoose);
+        auto intersectionCount = 0;
+        for (auto line : lines)
         {
-            auto hit = intersection._position;
-            auto dimToLoose = dimToLose(plane._normal);
-            auto projectedHit = project(hit, dimToLoose);
-            auto testRay = Ray2{projectedHit, Vector2{1, 0}};
-            auto lines = getLines(poly, dimToLoose);
-            auto intersectionCount = 0;
-            for (auto line : lines)
+            auto hit = intersectLine(line, testRay);
+            if (hit._hit)
             {
-                auto hit = intersectLine(line, testRay);
-                if (hit._hit)
-                {
-                    if (!parallel(testRay._direction, (line._b - line._a)))
-                        intersectionCount++;
-                }
+                if (!parallel(testRay._direction, (line._b - line._a)))
+                    intersectionCount++;
             }
-            if (intersectionCount % 2 == 1)
-            {
-                intersection._hit = true;
-                intersection._shape = POLYGON;
-            }
+        }
+        if (intersectionCount % 2 == 1)
+        {
+            intersection._hit = true;
+            intersection._shape = POLYGON;
         }
         return intersection;
     }
