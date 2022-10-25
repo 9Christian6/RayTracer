@@ -75,14 +75,6 @@ namespace raytracer
         }
     };
 
-    struct Polygon3
-    {
-        Vector3 _normal;
-        std::vector<Vector3> _points;
-        Polygon3() = default;
-        Polygon3(Vector3 normal, std::vector<Vector3> points) : _normal(normal), _points(points) {}
-    };
-
     struct Plane3
     {
         Vector3 _origin, _normal;
@@ -93,7 +85,19 @@ namespace raytracer
             _normal = crossProduct(p1 - p2, p1 - p3);
             _origin = p1;
         }
-        Plane3(Polygon3 polygon) : _origin{polygon._points.at(0)}, _normal{polygon._normal} {}
+    };
+
+    struct Polygon3
+    {
+        Vector3 _normal;
+        std::vector<Vector3> _points;
+        Plane3 _plane;
+        Polygon3() = default;
+        Polygon3(Vector3 normal, std::vector<Vector3> points) : _normal(normal), _points(points), _plane{Plane3{_points.at(0), _normal}} {}
+        Plane3 makePlane() const
+        {
+            return Plane3{_points.at(0), _normal};
+        }
     };
 
     struct Line2
