@@ -218,10 +218,7 @@ namespace raytracer
         {
             return Dimension::Y;
         }
-        if (z >= x && z >= y)
-        {
-            return Dimension::Z;
-        }
+        return Dimension::Z;
     }
 
     Dimension dimToLose(const Vector3 &vec)
@@ -255,7 +252,7 @@ namespace raytracer
 
     Intersection intersectPolygon(const Polygon3 &poly, const Ray3 &ray)
     {
-        auto plane = Plane3{poly};
+        auto plane = poly.makePlane();
         auto intersection = intersectPlane(plane, ray);
         if (!intersection._hit)
             return intersection;
@@ -264,16 +261,20 @@ namespace raytracer
             return intersection;
         auto dimToLoose = dimToLose(plane._normal);
         auto projectedHit = project(intersection._position, dimToLoose);
-        auto testRay = Ray2{projectedHit, Vector2{1, 0}};
+        Ray2 testRay;
+        testRay._origin = projectedHit;
         auto lines = getLines(poly, dimToLoose);
         auto intersectionCount = 0;
         for (auto line : lines)
         {
+            if (parallel(Vector2{1, 0}, line._b - line._a))
+                testRay._direction = Vector2{0, 1};
+            else
+                testRay._direction = Vector2{1, 0};
             auto hit = intersectLine(line, testRay);
             if (hit._hit)
             {
-                if (!parallel(testRay._direction, (line._b - line._a)))
-                    intersectionCount++;
+                intersectionCount++;
             }
         }
         if (intersectionCount % 2 == 1)
