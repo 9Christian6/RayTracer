@@ -104,7 +104,13 @@ namespace raytracer
 
     bool parallel(const Vector2 &lhs, const Vector2 &rhs)
     {
-        return (normalize(lhs) == normalize(rhs));
+        auto normLhs = normalize(lhs);
+        auto normRhs = normalize(rhs);
+        normLhs._x = std::abs(normLhs._x);
+        normLhs._y = std::abs(normLhs._y);
+        normRhs._x = std::abs(normLhs._x);
+        normRhs._y = std::abs(normLhs._y);
+        return (normLhs._x == normRhs._x && normLhs._y == normRhs._y);
     }
 
     Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs)
