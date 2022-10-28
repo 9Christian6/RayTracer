@@ -10,9 +10,9 @@ namespace raytracer
     void render(CUDAScene scene, size_t width, size_t height)
     {
         Image img{width, height};
-        for (size_t x = 0; x < width; x++)
+        for (size_t x = 0; x < width; ++x)
         {
-            for (size_t y = 0; y < height; y++)
+            for (size_t y = 0; y < height; ++y)
             {
                 auto ray = makeRay(scene._cam, width, height, x, y);
                 auto hit = intersectShapes(scene._hostShapes, ray);
