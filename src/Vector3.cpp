@@ -110,7 +110,7 @@ namespace raytracer
         normLhs._y = std::abs(normLhs._y);
         normRhs._x = std::abs(normLhs._x);
         normRhs._y = std::abs(normLhs._y);
-        return (normLhs._x == normRhs._x && normLhs._y == normRhs._y);
+        return (normLhs == normRhs || normLhs * -1 == normRhs);
     }
 
     Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs)
