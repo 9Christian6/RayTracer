@@ -4,7 +4,4 @@ build
 CMake
 .cache
 .vs
-
-image
-
 CMakeSettings.json
