@@ -31,8 +31,8 @@ namespace raytracer
 
 	void Image::write(std::string path) {
 		std::ofstream imgGen;
-
-		imgGen.open("Image");
+		imgGen.open(path + "Image");
+		std::cout << path + "Image" << "\n";
 		imgGen << "P3 \n";
 		imgGen << m_width << " " << m_height << "\n";
 		imgGen << 255 << "\n";

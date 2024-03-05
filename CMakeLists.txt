@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(src)
 add_executable(RayTracer 
@@ -50,6 +51,7 @@ include/Scene.hpp
 include/Material.hpp
 include/BoundingBox.hpp
 include/Triangle.hpp
+include/OBJ_Loader.h
 )
 
 if(PNGwriter_FOUND)

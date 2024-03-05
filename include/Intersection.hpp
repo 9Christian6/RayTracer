@@ -11,7 +11,7 @@
 
 namespace raytracer
 {
-    const static double HIT_EPSILON = 0.5;
+    const static double HIT_EPSILON = 0.0001;
     class Shape;
     class Intersection
     {

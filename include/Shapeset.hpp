@@ -15,7 +15,7 @@ namespace raytracer
 
     public:
         explicit ShapeSet(std::vector<Shape *> &&shapes);
-        void addShape(Shape &shape);
+        void addShape(Shape *shape);
         void addLight(Light &light);
         virtual std::optional<Intersection> intersect(const Ray &ray) const;
         std::vector<Intersection> visibleLights(const Vector &point);

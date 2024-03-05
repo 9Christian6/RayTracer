@@ -5,3 +5,6 @@ CMake
 .cache
 .vs
 CMakeSettings.json
+Debug
+models
+image/Image
