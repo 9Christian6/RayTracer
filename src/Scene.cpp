@@ -64,11 +64,11 @@ namespace raytracer
 
   bool Scene::isVisible(const Vector &point, const Light &light) const
   {
-    Ray lightRay{light.position(), point - light.position()};
+    auto lightDirection = point - light.position();
+    Ray lightRay{light.position() - HIT_EPSILON * lightDirection, lightDirection};
     double tLength{(light.position() - point).length()};
     if (auto lightHit = _shapes.intersect(lightRay))
-      //return (tLength < lightHit->t() + Ray::RAY_T_MIN);
-      return (tLength >= lightHit->t());
+      return (tLength < lightHit->t() + Ray::RAY_T_MIN);
     return true;
   }
 
