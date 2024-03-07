@@ -36,6 +36,7 @@ public:
   Vector normalize() const;
   Vector cross(const Vector &vec) const;
   Vector2 project(int dim) const;
+  Vector projectOnto(const Vector &vec) const;
   Vector reflect(const Vector &normal) const;
 
   friend Vector operator+(const Vector &lhs, const Vector &rhs);
