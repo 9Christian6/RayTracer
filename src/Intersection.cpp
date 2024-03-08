@@ -4,7 +4,6 @@
 #include "Light.hpp"
 #include "Material.hpp"
 #include <vector>
-#include <math.h>
 
 namespace raytracer
 {
