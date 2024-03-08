@@ -13,7 +13,7 @@ Triangle::Triangle(objl::Vertex a, objl::Vertex b, objl::Vertex c) {
   m_a = Vector{a.Position.X, a.Position.Y, a.Position.Z};
   m_b = Vector{b.Position.X, b.Position.Y, b.Position.Z};
   m_c = Vector{c.Position.X, c.Position.Y, c.Position.Z};
-  m_normal = m_a.cross(m_b).normalize();
+  m_normal = (m_c - m_a).cross(m_c - m_b).normalize();
   m_bbox = BoundingBox{m_a, m_b};
   m_bbox.extend(m_c);
 }
