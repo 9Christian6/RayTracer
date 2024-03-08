@@ -64,7 +64,7 @@ bool Scene::isVisible(const Vector &point, const Light &light) const {
   Ray lightRay{light.position(), point - light.position()};
   double tLength{(light.position() - point).length()};
   if (auto lightHit = _shapes.intersect(lightRay)) {
-    return (tLength < lightHit->t());
+    return (tLength < lightHit->t() + 0.0001);
   }
   return true;
 }
@@ -79,6 +79,6 @@ std::vector<Light> Scene::visibleLights(const Vector &point) const {
 }
 
 std::vector<Light> Scene::visibleLights(const Intersection &hit) const {
-  return visibleLights(hit.position() + hit.normal() * HIT_EPSILON);
+  return visibleLights(hit.position());
 }
 } // namespace raytracer
