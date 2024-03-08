@@ -55,6 +55,7 @@ void Scene::render(int width, int height) const {
       auto ray = _camera.makeRay(width, height, {x, y});
       auto pixel = renderPixel(ray);
       img.plot(x, y, pixel);
+      std::cout << "Line " << x  << "/" << width << ", pixel " << x * width + y << " rendered\n";
     }
   }
   img.write("../image/");
