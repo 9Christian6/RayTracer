@@ -20,6 +20,8 @@ namespace raytracer
         Vector maxExt() const;
         bool intersect(const Ray &ray);
         void extend(const Vector& point);
+	void extend(const BoundingBox& box);
         Dimension longestDim();
+	friend std::ostream &operator<<(std::ostream &out, const BoundingBox box);
     };
 }
