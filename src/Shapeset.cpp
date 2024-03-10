@@ -14,6 +14,7 @@ struct BVHNode {
 
 public:
   explicit BVHNode(std::vector<Shape *> &&shapes) { m_shapes = shapes; };
+  bool intersect(Ray &ray);
   Dimension longestDim();
 };
 
@@ -44,12 +45,9 @@ void ShapeSet::addLight(Light &light) { _lights.push_back(&light); }
 std::optional<Intersection> ShapeSet::intersect(const Ray &ray) const {
   std::vector<Intersection> hits;
   for (auto shape : _shapes) {
-    auto bBoxHit = shape->boundingBox().intersect(ray);
-    //if (!shape->boundingBox().intersect(ray))
-    //  continue;
+    if (!shape->boundingBox().intersect(ray))
+      continue;
     if (auto hitPoint = shape->intersect(ray)) {
-      shape->boundingBox().intersect(ray);
-      shape->intersect(ray);
       hits.insert(std::lower_bound(hits.begin(), hits.end(), hitPoint.value()),
                   hitPoint.value());
     }
