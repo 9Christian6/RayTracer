@@ -7,6 +7,7 @@
 #include "Triangle.hpp"
 #include "Vector2.hpp"
 #include <iostream>
+#include <string>
 
 namespace raytracer {
 Scene::Scene(std::vector<Light> lights, ShapeSet shapes, Camera &cam)
@@ -55,7 +56,8 @@ void Scene::render(int width, int height) const {
       auto ray = _camera.makeRay(width, height, {x, y});
       auto pixel = renderPixel(ray);
       img.plot(x, y, pixel);
-      std::cout << "Line " << x  << "/" << width << ", pixel " << x * width + y << " rendered\n";
+      auto lineString = "\rLine " + std::to_string(x) + "/" + std::to_string(width) + ", pixel " + std::to_string(x * width + y) + " rendered";
+      std::cout << lineString;
     }
   }
   img.write("../image/");
