@@ -3,6 +3,7 @@
 #include "Intersection.hpp"
 #include "Light.hpp"
 #include "Shapeset.hpp"
+#include <memory>
 #include <vector>
 
 namespace objl
