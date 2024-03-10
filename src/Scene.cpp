@@ -26,9 +26,6 @@ void Scene::addShapes(std::unique_ptr<objl::Loader> loader) {
       auto vert1 = mesh.Vertices[idx1];
       auto vert2 = mesh.Vertices[idx2];
       _shapes.addShape(new Triangle{vert0, vert1, vert2});
-      std::cout << "T" << i / 3 << ": " << raytracer::Vector{vert0.Position}
-                << ", " << raytracer::Vector{vert1.Position} << ", "
-                << raytracer::Vector{vert2.Position} << "\n";
     }
   }
 }
