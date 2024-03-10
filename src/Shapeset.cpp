@@ -4,20 +4,40 @@
 
 namespace raytracer {
 
+BVHNode::BVHNode(std::vector<Shape *> shapes) : m_bBox{std::make_shared<BoundingBox>()} {
+  m_shapes = shapes;
+  buildUp();
+}
+
+void BVHNode::buildUp() {
+  if (m_shapes.empty())
+    return;
+  for (auto shape : m_shapes)
+    m_bBox->extend(shape->boundingBox());
+  std::cout << *m_bBox.get() << "\n";
+}
+
 void buildBVH(std::shared_ptr<BVHNode> leftNode,
               std::shared_ptr<BVHNode> rightNode, std::vector<Shape *> shapes) {
 
   // TODO build up BVH
 }
 
-ShapeSet::ShapeSet(std::vector<Shape *> &&shapes) : m_shapes{shapes}, m_leafNode{shapes}{
-}
+ShapeSet::ShapeSet(std::vector<Shape *> &&shapes)
+  : m_shapes{shapes}, m_leafNode{shapes} {
+    m_leafNode.buildUp();
+  }
+
+void ShapeSet::buildBVH() { m_leafNode.buildUp(); }
 
 bool compareIntersection(const Intersection &lhs, const Intersection &rhs) {
   return lhs.t() < rhs.t();
 }
 
-void ShapeSet::addShape(Shape *shape) { m_shapes.push_back(shape); m_leafNode.m_shapes.push_back(shape);}
+void ShapeSet::addShape(Shape *shape) {
+  m_shapes.push_back(shape);
+  m_leafNode.m_shapes.push_back(shape);
+}
 
 void ShapeSet::addLight(Light &light) { _lights.push_back(&light); }
 

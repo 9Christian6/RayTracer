@@ -17,8 +17,9 @@ struct BVHNode {
 
 public:
   //explicit BVHNode(std::vector<Shape *> &&shapes) { m_shapes = shapes; };
-  explicit BVHNode(std::vector<Shape *> shapes) { m_shapes = shapes; };
+  explicit BVHNode(std::vector<Shape *> shapes);// { m_shapes = shapes; };
   bool intersect(Ray &ray);
+  void buildUp();
   Dimension longestDim();
 };
 
@@ -31,6 +32,7 @@ protected:
 
 public:
   explicit ShapeSet(std::vector<Shape *> &&shapes);
+  void buildBVH();
   void addShape(Shape *shape);
   void addLight(Light &light);
   virtual std::optional<Intersection> intersect(const Ray &ray) const;

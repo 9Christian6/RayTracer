@@ -16,9 +16,9 @@ namespace raytracer
   class Scene
   {
   private:
-    std::vector<Light> _lights;
-    ShapeSet _shapes;
-    Camera &_camera;
+    std::vector<Light> m_lights;
+    ShapeSet m_shapes;
+    Camera &m_camera;
     Color renderPixel(Ray &ray) const;
 
   public:
@@ -28,6 +28,7 @@ namespace raytracer
     void addLight(Light &light);
     void setCamera(const Vector &position, const Vector &upGuide,
                    const Vector &forward);
+    void buildBVH();
     void render(int width, int height) const;
     bool isVisible(const Vector &point, const Light &light) const;
     std::vector<Light> visibleLights(const Vector &point) const;
