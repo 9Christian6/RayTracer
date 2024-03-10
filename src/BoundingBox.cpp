@@ -11,49 +11,49 @@ BoundingBox::BoundingBox(Vector &&minExt, Vector &&maxExt) {
   auto maxX = std::max(minExt.x(), maxExt.x());
   auto maxY = std::max(minExt.y(), maxExt.y());
   auto maxZ = std::max(minExt.z(), maxExt.z());
-  _minExt = {minX, minY, minZ};
-  _maxExt = {maxX, maxY, maxZ};
+  m_min = {minX, minY, minZ};
+  m_max = {maxX, maxY, maxZ};
 }
 
 BoundingBox::BoundingBox(Vector &minExt, Vector &&maxExt)
-    : _minExt{minExt}, _maxExt{std::move(maxExt)} {
+    : m_min{minExt}, m_max{std::move(maxExt)} {
   auto minX = std::min(minExt.x(), maxExt.x());
   auto minY = std::min(minExt.y(), maxExt.y());
   auto minZ = std::min(minExt.z(), maxExt.z());
   auto maxX = std::max(minExt.x(), maxExt.x());
   auto maxY = std::max(minExt.y(), maxExt.y());
   auto maxZ = std::max(minExt.z(), maxExt.z());
-  _minExt = {minX, minY, minZ};
-  _maxExt = {maxX, maxY, maxZ};
+  m_min = {minX, minY, minZ};
+  m_max = {maxX, maxY, maxZ};
 }
 
 BoundingBox::BoundingBox(Vector &&minExt, Vector &maxExt)
-    : _minExt{std::move(minExt)}, _maxExt{maxExt} {
+    : m_min{std::move(minExt)}, m_max{maxExt} {
   auto minX = std::min(minExt.x(), maxExt.x());
   auto minY = std::min(minExt.y(), maxExt.y());
   auto minZ = std::min(minExt.z(), maxExt.z());
   auto maxX = std::max(minExt.x(), maxExt.x());
   auto maxY = std::max(minExt.y(), maxExt.y());
   auto maxZ = std::max(minExt.z(), maxExt.z());
-  _minExt = {minX, minY, minZ};
-  _maxExt = {maxX, maxY, maxZ};
+  m_min = {minX, minY, minZ};
+  m_max = {maxX, maxY, maxZ};
 }
 
 BoundingBox::BoundingBox(Vector &minExt, Vector &maxExt)
-    : _minExt{minExt}, _maxExt{maxExt} {
+    : m_min{minExt}, m_max{maxExt} {
   auto minX = std::min(minExt.x(), maxExt.x());
   auto minY = std::min(minExt.y(), maxExt.y());
   auto minZ = std::min(minExt.z(), maxExt.z());
   auto maxX = std::max(minExt.x(), maxExt.x());
   auto maxY = std::max(minExt.y(), maxExt.y());
   auto maxZ = std::max(minExt.z(), maxExt.z());
-  _minExt = {minX, minY, minZ};
-  _maxExt = {maxX, maxY, maxZ};
+  m_min = {minX, minY, minZ};
+  m_max = {maxX, maxY, maxZ};
 }
 
-Vector BoundingBox::minExt() const { return _minExt; }
+Vector BoundingBox::minExt() const { return m_min; }
 
-Vector BoundingBox::maxExt() const { return _maxExt; }
+Vector BoundingBox::maxExt() const { return m_max; }
 
 enum class Dimension { X, Y, Z };
 
@@ -61,12 +61,12 @@ bool BoundingBox::intersect(const Ray &ray) {
   auto dirfrac =
       raytracer::Vector{1 / ray.direction().x(), 1 / ray.direction().y(),
                         1 / ray.direction().z()};
-  float t1 = (_minExt.x() - ray.origin().x()) * dirfrac.x();
-  float t2 = (_maxExt.x() - ray.origin().x()) * dirfrac.x();
-  float t3 = (_minExt.y() - ray.origin().y()) * dirfrac.y();
-  float t4 = (_maxExt.y() - ray.origin().y()) * dirfrac.y();
-  float t5 = (_minExt.z() - ray.origin().z()) * dirfrac.z();
-  float t6 = (_maxExt.z() - ray.origin().z()) * dirfrac.z();
+  float t1 = (m_min.x() - ray.origin().x()) * dirfrac.x();
+  float t2 = (m_max.x() - ray.origin().x()) * dirfrac.x();
+  float t3 = (m_min.y() - ray.origin().y()) * dirfrac.y();
+  float t4 = (m_max.y() - ray.origin().y()) * dirfrac.y();
+  float t5 = (m_min.z() - ray.origin().z()) * dirfrac.z();
+  float t6 = (m_max.z() - ray.origin().z()) * dirfrac.z();
   float tmin =
       std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
   float tmax =
@@ -81,8 +81,8 @@ bool BoundingBox::intersect(const Ray &ray) {
 }
 	
 void BoundingBox::extend(const Vector &point) {
-  double xMin{_minExt.x()}, yMin{_minExt.y()}, zMin{_minExt.z()},
-      xMax{_maxExt.x()}, yMax{_maxExt.y()}, zMax{_maxExt.z()};
+  double xMin{m_min.x()}, yMin{m_min.y()}, zMin{m_min.z()},
+      xMax{m_max.x()}, yMax{m_max.y()}, zMax{m_max.z()};
   if (point.x() < xMin)
     xMin = point.x();
   if (point.y() < yMin)
@@ -95,8 +95,8 @@ void BoundingBox::extend(const Vector &point) {
     yMax = point.y();
   if (point.z() > zMax)
     zMax = point.z();
-  _minExt = {xMin, yMin, zMin};
-  _maxExt = {xMax, yMax, zMax};
+  m_min = {xMin, yMin, zMin};
+  m_max = {xMax, yMax, zMax};
 }
 
 void BoundingBox::extend(const BoundingBox& box){

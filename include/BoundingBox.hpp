@@ -8,7 +8,7 @@ namespace raytracer
     class BoundingBox
     {
     private:
-        Vector _minExt, _maxExt;
+        Vector m_min, m_max;
 
     public:
         BoundingBox() = default;
