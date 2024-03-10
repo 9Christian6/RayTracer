@@ -7,7 +7,6 @@
 #include "Light.hpp"
 #include <vector>
 #include <iostream>
-#include <memory>
 
 namespace raytracer
 {
