@@ -4,8 +4,7 @@
 namespace raytracer {
 Triangle::Triangle(Vector a, Vector b, Vector c) : m_a(a), m_b(b), m_c(c) {
   m_normal = (m_c - m_a).cross(m_c - m_b).normalize();
-  m_bbox = BoundingBox{m_a, m_a};
-  m_bbox.extend(m_b);
+  m_bbox = BoundingBox{m_a, m_b};
   m_bbox.extend(m_c);
 }
 
