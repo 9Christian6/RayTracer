@@ -46,9 +46,9 @@ std::optional<Intersection> Triangle::intersect(const Ray &ray) const {
     // ray intersection
   auto angle = m_normal * ray.direction();
     if (angle <= 0 || angle > 90)
-      return Intersection{ray, t, -m_normal, ambientColor(),
+      return Intersection{ray, t, -m_normal, Kd(),
                           ray.direction() * -m_normal};
-    return Intersection{ray, t, m_normal, ambientColor(), ray.direction() * m_normal};
+    return Intersection{ray, t, m_normal, Kd(), ray.direction() * m_normal};
   }
   // This means that there is a line intersection but not a ray intersection.
   return {};

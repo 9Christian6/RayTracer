@@ -19,7 +19,6 @@ void BVHNode::buildUp() {
 
 void buildBVH(std::shared_ptr<BVHNode> leftNode,
               std::shared_ptr<BVHNode> rightNode, std::vector<Shape *> shapes) {
-
   // TODO build up BVH
 }
 

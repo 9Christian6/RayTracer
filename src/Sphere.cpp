@@ -57,7 +57,7 @@ namespace raytracer
             Vector normal = (hit - _origin).normalize();
             double angle = normal.angle(ray.direction());
             Material mat = static_cast<Material>(*this);
-            return Intersection{ray, t, normal, ambientColor(), angle, mat};
+            return Intersection{ray, t, normal, Kd(), angle, mat};
         }
         return {};
     }

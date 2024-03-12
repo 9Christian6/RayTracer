@@ -31,7 +31,9 @@ void Scene::addShapes(std::unique_ptr<objl::Loader> loader) {
       auto vert0 = mesh.Vertices[idx0];
       auto vert1 = mesh.Vertices[idx1];
       auto vert2 = mesh.Vertices[idx2];
-      m_shapes.addShape(new Triangle{vert0, vert1, vert2});
+      auto tri = new Triangle{vert0, vert1, vert2};
+      tri->SetMaterial(mesh.MeshMaterial);
+      m_shapes.addShape(tri);
     }
   }
 }

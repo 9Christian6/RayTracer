@@ -1,4 +1,5 @@
 #include "Color.hpp"
+#include "OBJ_Loader.h"
 
 namespace raytracer
 {
@@ -6,6 +7,8 @@ namespace raytracer
 	Color::Color(float r, float g, float b) : _r{ r }, _g{ g }, _b{ b }
 	{
 	}
+
+	Color::Color(objl::Vector3 Kd) : _r{Kd.X}, _g{Kd.Y}, _b{Kd.Z}{}
 
 	float clamp(float color) {
 		if (color < 0)

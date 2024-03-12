@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "OBJ_Loader.h"
 
 namespace raytracer
 {
@@ -10,6 +11,7 @@ namespace raytracer
 
     public:
         Color(float r, float g, float b);
+	Color(objl::Vector3 Kd);
         Color() = default;
         Color clamp(float min, float max) const;
         float r() const;

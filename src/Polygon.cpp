@@ -70,7 +70,7 @@ namespace raytracer
         if (intersectionCount % 2 == 1)
         {
             hit.setNormal(plane.normal());
-            hit.setColor(ambientColor());
+            hit.setColor(Kd());
             return hit;
         }
         return {};
