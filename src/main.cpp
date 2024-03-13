@@ -74,5 +74,5 @@ int main(int, char **) {
   scene.render(100, 100);
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start).count();
-  std::cout << "The render took "<< duration << " seconds" << "\n";
+  std::cout << "The render took "<< duration << " seconds to finish" << "\n";
 }
