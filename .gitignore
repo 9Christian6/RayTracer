@@ -3,3 +3,9 @@
 build
 textures
 CMake
+.cache
+.vs
+CMakeSettings.json
+Debug
+image
+models
