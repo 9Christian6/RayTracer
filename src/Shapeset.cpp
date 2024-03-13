@@ -4,9 +4,21 @@
 
 namespace raytracer {
 
-BVHNode::BVHNode(std::vector<Shape *> shapes) : m_bBox{std::make_shared<BoundingBox>()} {
+BVHNode::BVHNode(std::vector<Shape *> shapes)
+    : m_bBox{std::make_shared<BoundingBox>()}, m_leftNode{{}}, m_rightNode{{}} {
   m_shapes = shapes;
-  buildUp();
+}
+
+void buildBVH(std::shared_ptr<BVHNode> leftNode,
+              std::shared_ptr<BVHNode> rightNode, std::vector<Shape *> shapes) {
+  // TODO build up BVH
+
+}
+
+std::tuple<std::vector<Shape *>,std::vector<Shape *>> seperateShapes(std::vector<Shape *> shapes){
+  std::vector<Shape *> minShapes{}, maxShapes{};
+  //TODO logic of seperation here
+  return {minShapes, maxShapes};
 }
 
 void BVHNode::buildUp() {
@@ -14,18 +26,14 @@ void BVHNode::buildUp() {
     return;
   for (auto shape : m_shapes)
     m_bBox->extend(shape->boundingBox());
-  std::cout << *m_bBox.get() << "\n";
-}
-
-void buildBVH(std::shared_ptr<BVHNode> leftNode,
-              std::shared_ptr<BVHNode> rightNode, std::vector<Shape *> shapes) {
-  // TODO build up BVH
+  
+  buildBVH(m_leftNode, m_rightNode, m_shapes);
 }
 
 ShapeSet::ShapeSet(std::vector<Shape *> &&shapes)
-  : m_shapes{shapes}, m_leafNode{shapes} {
-    m_leafNode.buildUp();
-  }
+    : m_shapes{shapes}, m_leafNode{shapes} {
+  m_leafNode.buildUp();
+}
 
 void ShapeSet::buildBVH() { m_leafNode.buildUp(); }
 

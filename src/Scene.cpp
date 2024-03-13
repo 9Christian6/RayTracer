@@ -11,15 +11,13 @@
 
 namespace raytracer {
 Scene::Scene(std::vector<Light> lights, ShapeSet shapes, Camera &cam)
-  : m_lights{lights}, m_shapes{shapes}, m_camera{cam} {
-    m_shapes.buildBVH();
-  };
-
-void Scene::buildBVH(){
+    : m_lights{lights}, m_shapes{shapes}, m_camera{cam} {
   m_shapes.buildBVH();
-}
+};
 
-void Scene::addShape(Shape *shape) { m_shapes.addShape(shape);}
+void Scene::buildBVH() { m_shapes.buildBVH(); }
+
+void Scene::addShape(Shape *shape) { m_shapes.addShape(shape); }
 
 void Scene::addShapes(std::unique_ptr<objl::Loader> loader) {
   auto meshes = loader.get()->LoadedMeshes;
@@ -56,15 +54,18 @@ Color Scene::renderPixel(Ray &ray) const {
 
 void Scene::render(int width, int height) const {
   Image img{width, height};
+#pragma omp parallel for
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       auto ray = m_camera.makeRay(width, height, {x, y});
       auto pixel = renderPixel(ray);
       img.plot(x, y, pixel);
-      auto lineString = "\rLine " + std::to_string(x) + "/" + std::to_string(width) + ", pixel " + std::to_string(x * width + y) + " rendered";
+      auto lineString = "\rLine " + std::to_string(x) + "/" +
+                        std::to_string(width) + ", pixel " +
+                        std::to_string(x * width + y) + " rendered";
       std::cout << lineString;
     }
-  }
+  } // namespace raytracer
   img.write("../image/");
 }
 
