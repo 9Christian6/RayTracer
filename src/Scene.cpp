@@ -6,7 +6,6 @@
 #include "Ray.hpp"
 #include "Triangle.hpp"
 #include "Vector2.hpp"
-#include <iostream>
 #include <string>
 
 namespace raytracer {

@@ -1,6 +1,24 @@
 #include "Shapeset.hpp"
 #include <memory>
 #include <vector>
+#include <bvh/v2/bvh.h>
+#include <bvh/v2/vec.h>
+#include <bvh/v2/ray.h>
+#include <bvh/v2/node.h>
+#include <bvh/v2/default_builder.h>
+#include <bvh/v2/thread_pool.h>
+#include <bvh/v2/executor.h>
+#include <bvh/v2/stack.h>
+#include <bvh/v2/tri.h>
+
+using Scalar  = float;
+using Vec3    = bvh::v2::Vec<Scalar, 3>;
+using BBox    = bvh::v2::BBox<Scalar, 3>;
+using Tri     = bvh::v2::Tri<Scalar, 3>;
+using Node    = bvh::v2::Node<Scalar, 3>;
+using Bvh     = bvh::v2::Bvh<Node>;
+using Ray     = bvh::v2::Ray<Scalar, 3>;
+using PrecomputedTri = bvh::v2::PrecomputedTri<Scalar>;
 
 namespace raytracer {
 
@@ -12,7 +30,6 @@ BVHNode::BVHNode(std::vector<Shape *> shapes)
 void buildBVH(std::shared_ptr<BVHNode> leftNode,
               std::shared_ptr<BVHNode> rightNode, std::vector<Shape *> shapes) {
   // TODO build up BVH
-
 }
 
 std::tuple<std::vector<Shape *>,std::vector<Shape *>> seperateShapes(std::vector<Shape *> shapes){
