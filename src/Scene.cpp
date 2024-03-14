@@ -60,10 +60,6 @@ void Scene::render(int width, int height) const {
       auto ray = m_camera.makeRay(width, height, {x, y});
       auto pixel = renderPixel(ray);
       img.plot(x, y, pixel);
-      auto lineString = "\rLine " + std::to_string(x) + "/" +
-                        std::to_string(width) + ", pixel " +
-                        std::to_string(x * width + y) + " rendered";
-      std::cout << lineString;
     }
   } // namespace raytracer
   img.write("../image/");
