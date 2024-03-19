@@ -1,6 +1,7 @@
 .vscode
 3rd-party
 build
+buildmake
 CMake
 .cache
 .vs
